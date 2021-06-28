@@ -9,6 +9,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Buffer.cpp \
+    BufferManager.cpp \
     FileExplorer.cpp \
     MainWindow.cpp \
     Node.cpp \
@@ -24,6 +26,8 @@ SOURCES += \
     viewwindow.cpp
 
 HEADERS += \
+    Buffer.h \
+    BufferManager.h \
     FileExplorer.h \
     GSingleton.h \
     MainWindow.h \

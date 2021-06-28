@@ -21,7 +21,6 @@ private:
     ViewArea(QWidget *parent = nullptr);
 
 private:
-    NoteEditor *m_pNoteEditor;
     QVBoxLayout *m_pMainLayout;
 };
 

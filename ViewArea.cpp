@@ -2,6 +2,7 @@
 
 #include <noteeditor.h>
 #include <MainWindow.h>
+#include <utils.h>
 
 #include <QVBoxLayout>
 
@@ -23,12 +24,12 @@ void ViewArea::initUi() {
     m_pMainLayout = new QVBoxLayout(this);
     m_pMainLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_pNoteEditor = NoteEditor::getInstance();
-    m_pMainLayout->addWidget(m_pNoteEditor);
+    auto noteEditor = NoteEditor::getInstance();
+    m_pMainLayout->addWidget(noteEditor);
 }
 
 ViewArea::~ViewArea() {
-    delete m_pMainLayout;
+    //SAFE_DELETE(m_pMainLayout);
 }
 
 }
