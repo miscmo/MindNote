@@ -14,6 +14,9 @@ public:
 
 private:
     FileExplorer(QWidget *parent);
+
+private:
+    static FileExplorer *m_pInstance;
 };
 
 }

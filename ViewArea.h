@@ -22,6 +22,8 @@ private:
 
 private:
     QVBoxLayout *m_pMainLayout;
+
+    static ViewArea *m_pInstance;
 };
 
 }

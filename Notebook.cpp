@@ -1,5 +1,7 @@
 #include "Notebook.h"
-#include <utils.h>
+#include <Utils.h>
+
+#include <QDebug>
 
 namespace gnote {
 
@@ -8,12 +10,11 @@ Notebook::Notebook()
     , m_sPath("") {
 }
 
-Notebook::~Notebook() {}
+Notebook::~Notebook() {
+    qDebug() << "~Notebook" << endl;
+}
 
 void Notebook::resetDir(const QString &path) {
-    if (path == m_sPath)
-        return ;
-
     QSharedPointer<Node> tempRoot(new Node(path));
     loadNode(tempRoot, path);
 

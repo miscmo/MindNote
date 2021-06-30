@@ -18,6 +18,8 @@ public:
 
     void resetDir(const QString &path);
 
+    QString getPath() const {return m_sPath;}
+
 private:
     void initNote();
     void loadNode(QSharedPointer<Node> node, const QString &path);

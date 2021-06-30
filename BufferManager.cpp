@@ -1,6 +1,10 @@
 #include "BufferManager.h"
 
 #include <Buffer.h>
+#include <NoteEditor.h>
+#include <QByteArray>
+#include <Utils.h>
+#include <QDebug>
 
 namespace gnote {
 
@@ -9,7 +13,10 @@ BufferManager* BufferManager::getInstance() {
     return &bufferManager;
 }
 
-BufferManager::BufferManager() {
+BufferManager::BufferManager()
+    : QObject()
+    , m_pBufferHash(nullptr)
+    , m_pCurrentBuffer(nullptr) {
     m_pBufferHash = new QHash<QString, Buffer *>();
 }
 
@@ -24,8 +31,25 @@ Buffer *BufferManager::getBuffer(const QString &path) {
     return it.value();
 }
 
+void BufferManager::saveBuffer() {
+    NoteEditor *editor = NoteEditor::getInstance();
+
+    QString text = editor->getText();
+
+    m_pCurrentBuffer->write(QByteArray().append(text));
+}
+
+void BufferManager::setCurrentBuffer(const QString &path) {
+    m_pCurrentBuffer = getBuffer(path);
+
+    emit currentBufferChanged(m_pCurrentBuffer);
+}
+
 
 BufferManager::~BufferManager() {
+    qDebug() << "~BufferManager()" << endl;
+    SAFE_DELETE(m_pBufferHash);
+    m_pCurrentBuffer = nullptr;
 }
 
 }

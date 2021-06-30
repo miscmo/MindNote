@@ -1,4 +1,4 @@
-#include "viewwindow.h"
+#include "ViewWindow.h"
 
 #include <QWidget>
 

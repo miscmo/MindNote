@@ -1,31 +1,41 @@
 #include "Buffer.h"
 
+#include <QDebug>
+
 namespace gnote {
 
+#define MD_FILE "defnote.md"
+
 Buffer::Buffer(const QString &path) {
-    m_pfile = new QFile(path);
-    if (!m_pfile->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)) {
+    m_pDir = new QDir(path);
+    m_pFile = new QFile(path + "/" + MD_FILE);
+    if (!m_pFile->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)) {
         return ;
     }
 }
 
 Buffer::~Buffer() {
-    m_pfile->close();
-    m_pfile = nullptr;
+    qDebug() << "~Buffer" << endl;
+    m_pFile->close();
+    m_pFile = nullptr;
 }
 
 QByteArray Buffer::read() {
-    if (m_dContent.isEmpty() && m_pfile) {
-        m_dContent = m_pfile->readAll();
+    if (m_dContent.isEmpty() && m_pFile) {
+        m_dContent = m_pFile->readAll();
     }
 
     return m_dContent;
 }
 
+QString Buffer::getName() {
+    return m_pDir->dirName();
+}
+
 void Buffer::write(const QByteArray &ctx) {
     m_dContent = ctx;
 
-    m_pfile->write(m_dContent);
+    m_pFile->write(m_dContent);
 }
 
 }

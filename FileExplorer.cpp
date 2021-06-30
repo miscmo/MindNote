@@ -3,12 +3,17 @@
 #include <MainWindow.h>
 
 #include <QWidget>
+#include <QDebug>
 
 namespace gnote {
 
+FileExplorer *FileExplorer::m_pInstance = nullptr;
+
 FileExplorer *FileExplorer::getInstance() {
-    static FileExplorer fileExplorer(MainWindow::getInstance());
-    return &fileExplorer;
+    if (m_pInstance == nullptr) {
+        m_pInstance = new FileExplorer(MainWindow::getInstance());
+    }
+    return m_pInstance;
 }
 
 FileExplorer::FileExplorer(QWidget *parent)
@@ -17,7 +22,7 @@ FileExplorer::FileExplorer(QWidget *parent)
 }
 
 FileExplorer::~FileExplorer() {
-
+    qDebug() << "~FileExplorer" << endl;
 }
 
 }

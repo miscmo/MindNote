@@ -25,13 +25,12 @@ public:
     void setupSignal();
 
     void onItemClicked(QTreeWidgetItem *p_item, int column);
-    void registerEditor(NoteEditor *editor);
 
 private:
     NoteExplorer(QWidget *p_parent);
 
 private:
-    NoteEditor *m_pNoteEditor;
+    static NoteExplorer* m_pInstance;
 };
 
 }

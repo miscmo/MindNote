@@ -1,18 +1,20 @@
 #include "MainWindow.h"
 
-#include <config.h>
-#include <noteexplorer.h>
+#include <Config.h>
+#include <NoteExplorer.h>
 #include <Notebook.h>
 #include <FileExplorer.h>
-#include <noteeditor.h>
+#include <NoteEditor.h>
 #include <ViewArea.h>
 #include <NotebookManager.h>
+#include <BufferManager.h>
 
 #include <QRect>
 #include <QVariant>
 #include <QDockWidget>
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QDebug>
 
 #define WIN_GEOMETRY_KEY "window_geometry"
 #define WIN_STATE_KEY "window_state"
@@ -47,7 +49,6 @@ void MainWindow::initUi() {
 
     m_pNoteExplorer = NoteExplorer::getInstance();
 
-    m_pNoteExplorer->registerEditor(NoteEditor::getInstance());
     m_pNoteExplorer->setupSignal();
 
     m_pFileExplorer = FileExplorer::getInstance();
@@ -61,37 +62,37 @@ void MainWindow::initUi() {
     setDockNestingEnabled(true);
 
     //设置笔记目录Dock
-    QDockWidget *notebookDock = new QDockWidget("Notebook", this);
-    m_docks.push_back(notebookDock);
+    m_pNotebookDock = new QDockWidget("Notebook", this);
 
-    notebookDock->setWidget(m_pNoteExplorer);
-    notebookDock->setFocusProxy(m_pNoteExplorer);
+    m_pNotebookDock->setWidget(m_pNoteExplorer);
+    m_pNotebookDock->setFocusProxy(m_pNoteExplorer);
 
-    addDockWidget(Qt::LeftDockWidgetArea, notebookDock);
+    addDockWidget(Qt::LeftDockWidgetArea, m_pNotebookDock);
 
     //设置文件系统Dock
-    QDockWidget *fileDock = new QDockWidget("File", this);
-    m_docks.push_back(fileDock);
+    m_pFileDock = new QDockWidget("File", this);
 
-    fileDock->setWidget(m_pFileExplorer);
+    m_pFileDock->setWidget(m_pFileExplorer);
 
-    addDockWidget(Qt::LeftDockWidgetArea, fileDock);
+    addDockWidget(Qt::LeftDockWidgetArea, m_pFileDock);
 
-    for (int i = 1; i < m_docks.size(); ++i) {
-        tabifyDockWidget(m_docks[i-1], m_docks[i]);
-    }
+    tabifyDockWidget(m_pNotebookDock, m_pFileDock);
 }
 
 void MainWindow::initMenuBar() {
     QMenuBar * menuBar = this->menuBar();
 
     auto openDir = [=]() {
-        QString dir = QFileDialog::getExistingDirectory(
-                    this, tr("Open Directory"),
-                    "",
-                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
+//        QString dir = QFileDialog::getExistingDirectory(
+                    //this, tr("Open Directory"),
+                    //"",
+                    //QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
+//
+        //NotebookManager::getInstance()->resetNote(dir);
+    };
 
-        NotebookManager::getInstance()->resetNote(dir);
+    auto saveNote = [=]() {
+        //BufferManager::getInstance()->saveBuffer();
     };
 
     QMenu *menuFile = menuBar->addMenu("File");
@@ -100,6 +101,7 @@ void MainWindow::initMenuBar() {
     QAction *actionExit = menuFile->addAction("Exit");
 
     connect(actionOpenDir, &QAction::triggered, openDir);
+    connect(actionSaveFile, &QAction::triggered, saveNote);
 
 }
 
@@ -124,7 +126,8 @@ void MainWindow::saveStateAndGeometry() {
 }
 
 MainWindow::~MainWindow() {
-    delete m_pViewArea;
+    qDebug() << "~MainWindow" << endl;
+    //delete m_pViewArea;
 }
 
 void MainWindow::closeEvent(QCloseEvent *p_event) {

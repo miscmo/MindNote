@@ -3,6 +3,7 @@
 
 #include <QHash>
 #include <QString>
+#include <QObject>
 
 namespace gnote {
 
@@ -10,19 +11,26 @@ class Buffer;
 
 using BUFFER_HASH_TYPE = QHash<QString, Buffer *>;
 
-class BufferManager {
+class BufferManager : public QObject {
+    Q_OBJECT
 public:
     static BufferManager *getInstance();
     ~BufferManager();
 
     Buffer *getBuffer(const QString &path);
+    void saveBuffer();
+
+    void setCurrentBuffer(const QString &path);
+
+signals:
+    void currentBufferChanged(Buffer *buffer);
 
 private:
     BufferManager();
 
 private:
     BUFFER_HASH_TYPE *m_pBufferHash;
-    QString m_sCurrentBuffer;
+    Buffer *m_pCurrentBuffer;
 };
 
 }

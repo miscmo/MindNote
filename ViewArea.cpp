@@ -1,16 +1,22 @@
 #include "ViewArea.h"
 
-#include <noteeditor.h>
+#include <NoteEditor.h>
 #include <MainWindow.h>
-#include <utils.h>
+#include <Utils.h>
 
 #include <QVBoxLayout>
+#include <QDebug>
 
 namespace gnote {
 
+ViewArea *ViewArea::m_pInstance = nullptr;
 ViewArea *ViewArea::getInstance() {
-    static ViewArea viewArea(MainWindow::getInstance());
-    return &viewArea;
+    if (m_pInstance == nullptr) {
+        m_pInstance = new ViewArea(MainWindow::getInstance());
+
+    }
+
+    return m_pInstance;
 }
 
 ViewArea::ViewArea(QWidget *parent)
@@ -29,7 +35,7 @@ void ViewArea::initUi() {
 }
 
 ViewArea::~ViewArea() {
-    //SAFE_DELETE(m_pMainLayout);
+    qDebug() << "~ViewArea" << endl;
 }
 
 }

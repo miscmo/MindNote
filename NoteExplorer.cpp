@@ -1,15 +1,22 @@
-#include "noteexplorer.h"
+#include "NoteExplorer.h"
 
 #include <Notebook.h>
-#include <noteeditor.h>
+#include <NoteEditor.h>
 #include <mainwindow.h>
 #include <NotebookManager.h>
+#include <BufferManager.h>
+
+#include <QDebug>
 
 namespace gnote {
 
+NoteExplorer* NoteExplorer::m_pInstance = nullptr;
 NoteExplorer *NoteExplorer::getInstance() {
-    static NoteExplorer noteExplorer(MainWindow::getInstance());
-    return &noteExplorer;
+    if (m_pInstance == nullptr) {
+        m_pInstance = new NoteExplorer(MainWindow::getInstance());
+
+    }
+    return m_pInstance;
 }
 
 NoteExplorer::NoteExplorer(QWidget *p_parent)
@@ -39,6 +46,7 @@ void NoteExplorer::resetNote(const Notebook &note) {
 }
 
 NoteExplorer::~NoteExplorer() {
+    qDebug() << "~NoteExplorer" << endl;
 }
 
 void NoteExplorer::initUi() {
@@ -48,13 +56,16 @@ void NoteExplorer::initUi() {
 
 void NoteExplorer::setupSignal() {
     //connect(m_noteExplorer, &QTreeWidget::itemClicked, this, &NoteExplorer::onItemClicked);
-    connect(this, &QTreeWidget::itemClicked, m_pNoteEditor, &NoteEditor::handleItemClicked);
+    connect(this, &QTreeWidget::itemClicked, this, &NoteExplorer::onItemClicked);
     connect(NotebookManager::getInstance(), &NotebookManager::signalNotebookChanged,
             this, &NoteExplorer::resetNote);
 }
 
 void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {
     QString itemText = p_item->text(0);
+
+    BufferManager *manager = BufferManager::getInstance();
+    manager->setCurrentBuffer(itemText);
 }
 
 void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, QSharedPointer<Node> node) {
@@ -68,10 +79,6 @@ void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, QSharedPointer<Node> n
         item->setText(0, subNode->getName());
         loadNode(item, subNode);
     }
-}
-
-void NoteExplorer::registerEditor(NoteEditor *editor) {
-    m_pNoteEditor = editor;
 }
 
 }

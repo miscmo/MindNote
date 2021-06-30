@@ -11,37 +11,39 @@ CONFIG += c++11
 SOURCES += \
     Buffer.cpp \
     BufferManager.cpp \
+    Config.cpp \
     FileExplorer.cpp \
     MainWindow.cpp \
     Node.cpp \
+    NoteEditor.cpp \
+    NoteExplorer.cpp \
     NoteMenuBar.cpp \
+    NoteState.cpp \
     Notebook.cpp \
     NotebookManager.cpp \
+    Utils.cpp \
     ViewArea.cpp \
-    config.cpp \
-    main.cpp \
-    noteeditor.cpp \
-    noteexplorer.cpp \
-    utils.cpp \
-    viewwindow.cpp
+    ViewWindow.cpp \
+    main.cpp
 
 HEADERS += \
     Buffer.h \
     BufferManager.h \
+    Config.h \
     FileExplorer.h \
     GSingleton.h \
     MainWindow.h \
     Node.h \
+    NoteEditor.h \
+    NoteExplorer.h \
     NoteMenuBar.h \
+    NoteState.h \
     Notebook.h \
     NotebookManager.h \
+    Utils.h \
     ViewArea.h \
-    base.h \
-    config.h \
-    noteeditor.h \
-    noteexplorer.h \
-    utils.h \
-    viewwindow.h
+    ViewWindow.h \
+    base.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

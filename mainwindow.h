@@ -41,7 +41,8 @@ private:
     NoteExplorer *m_pNoteExplorer;
     FileExplorer *m_pFileExplorer;
 
-    QVector<QDockWidget *> m_docks;
+    QDockWidget *m_pNotebookDock;
+    QDockWidget *m_pFileDock;
 };
 
 }
