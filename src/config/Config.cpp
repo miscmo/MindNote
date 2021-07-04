@@ -19,7 +19,7 @@ void Config::set(const QString &key, const QVariant &value) {
     m_pSettings->setValue(key, value);
 }
 
-QVariant Config::get(const QString &key) {
-    return m_pSettings->value(key);
+QVariant Config::get(const QString &key, const QVariant &defValue) {
+    return m_pSettings->value(key, defValue);
 }
 };

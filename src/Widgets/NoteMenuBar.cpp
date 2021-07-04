@@ -3,12 +3,15 @@
 #include "MainWindow.h"
 
 #include <MyNote.h>
+#include <Config/Config.h>
+#include <Config/AppState.h>
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
 
 #include <QAction>
 #include <QMenu>
 #include <QFileDialog>
+#include <QSignalMapper>
 #include <QDebug>
 
 namespace MyNote {
@@ -22,7 +25,8 @@ NoteMenuBar *NoteMenuBar::getInstance() {
 }
 
 NoteMenuBar::NoteMenuBar(QWidget *parent)
-    : QMenuBar(parent) {
+    : QMenuBar(parent)
+    , m_pSignalMapper(nullptr) {
     initUi();
 }
 
@@ -47,6 +51,10 @@ void NoteMenuBar::initUi() {
    QMenu *menuFile = addMenu("File");
    QAction *actionOpenDir = menuFile->addAction("Open");
    QAction *actionSaveFile = menuFile->addAction("Save");
+   menuFile->addSeparator();
+   QMenu *subMenuRecentlyFile = menuFile->addMenu("Recently");
+   initRecentlyFileList(subMenuRecentlyFile);
+   menuFile->addSeparator();
    QAction *actionExit = menuFile->addAction("Exit");
 
    connect(actionOpenDir, &QAction::triggered, openDir);
@@ -54,6 +62,24 @@ void NoteMenuBar::initUi() {
    connect(actionExit, &QAction::triggered, ExitApp);
 
    QMenu *menuAbout = addMenu("about");
+}
+
+void NoteMenuBar::initRecentlyFileList(QMenu *menuRecentlyFile) {
+    Q_ASSERT(menuRecentlyFile);
+
+    auto onOpenRecentlyFile = [=](const QAction *action) {
+        QString path = action->text();
+        NotebookManager::getInstance()->resetNote(path);
+    };
+
+    QStringList fileList = AppState::getInstance()->getRecentlyDirList();
+
+    for (auto file : fileList) {
+        QAction *action = menuRecentlyFile->addAction(file);
+    }
+
+    connect(menuRecentlyFile, &QMenu::triggered, onOpenRecentlyFile);
+
 }
 
 NoteMenuBar::~NoteMenuBar() {

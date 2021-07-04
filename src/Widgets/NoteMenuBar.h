@@ -3,6 +3,8 @@
 
 #include <QMenuBar>
 
+class QSignalMapper;
+
 namespace MyNote {
 
 class NoteMenuBar : public QMenuBar {
@@ -12,10 +14,14 @@ public:
     ~NoteMenuBar();
 
     void initUi();
+    void initRecentlyFileList(QMenu *menuFile);
 
 private:
-    NoteMenuBar(QWidget *parent);
+    NoteMenuBar(QWidget *parent = nullptr);
+
+private:
     static NoteMenuBar *m_pInstance;
+    QSignalMapper *m_pSignalMapper;
 };
 
 }
