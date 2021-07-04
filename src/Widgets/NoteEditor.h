@@ -1,17 +1,17 @@
 #ifndef NOTEEDITOR_H
 #define NOTEEDITOR_H
 
-#include <QWidget>
+#include <QPlainTextEdit>
 
-class QTextEdit;
 class QTreeWidgetItem;
 class QVBoxLayout;
 
 namespace MyNote {
 
 class Buffer;
+class LineNumberArea;
 
-class NoteEditor : public QWidget {
+class NoteEditor : public QPlainTextEdit {
     Q_OBJECT
 public:
     static NoteEditor *getInstance();
@@ -25,13 +25,45 @@ public:
 
     void onCurBufferChanged(Buffer* buffer);
 
+    //行号
+    void lineNumberAreaPaintEvent(QPaintEvent *event);
+    int lineNumberAreaWidth();
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
+private slots:
+    void updateLineNumberAreaWidth(int newBlockCount);
+    void highlightCurrentLine();
+    void updateLineNumberArea(const QRect &, int);
+
 private:
     NoteEditor(QWidget *parent);
 
 private:
-    QTextEdit *m_pTextEdit;
-    QVBoxLayout *m_pMainLayout;
+    LineNumberArea *m_pLineNumberArea;
+
     static NoteEditor *m_pInstance;
+};
+
+class LineNumberArea : public QWidget
+{
+public:
+    LineNumberArea(NoteEditor *editor) : QWidget(editor) {
+        m_pNoTeEditor = editor;
+    }
+
+    QSize sizeHint() const override {
+        return QSize(m_pNoTeEditor->lineNumberAreaWidth(), 0);
+    }
+
+protected:
+    void paintEvent(QPaintEvent *event) override {
+        m_pNoTeEditor->lineNumberAreaPaintEvent(event);
+    }
+
+private:
+    NoteEditor *m_pNoTeEditor;
 };
 
 }

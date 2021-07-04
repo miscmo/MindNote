@@ -80,6 +80,9 @@ void MainWindow::initDock() {
     addDockWidget(Qt::LeftDockWidgetArea, m_pFileDock);
 
     tabifyDockWidget(m_pNotebookDock, m_pFileDock);
+
+    //开始时显示notebook tab页
+    m_pNotebookDock->raise();
 }
 
 void MainWindow::loadStateAndGeometry() {
