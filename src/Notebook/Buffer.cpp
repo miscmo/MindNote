@@ -1,5 +1,7 @@
 #include "Buffer.h"
 
+#include <Utils/Utils.h>
+
 #include <QDebug>
 
 namespace MyNote {
@@ -7,35 +9,66 @@ namespace MyNote {
 #define MD_FILE "defnote.md"
 
 Buffer::Buffer(const QString &path) {
-    m_pDir = new QDir(path);
-    m_pFile = new QFile(path + "/" + MD_FILE);
-    if (!m_pFile->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)) {
-        return ;
-    }
+    Q_ASSERT(!path.isEmpty());
+
+    m_sPath = path;
 }
 
 Buffer::~Buffer() {
     qDebug() << "~Buffer" << endl;
-    m_pFile->close();
-    m_pFile = nullptr;
 }
 
 QByteArray Buffer::read() {
-    if (m_dContent.isEmpty() && m_pFile) {
-        m_dContent = m_pFile->readAll();
+    if (!m_dContent.isEmpty()) {
+        return m_dContent;
     }
+
+    QFile *file = openMD();
+    if (nullptr == file) {
+        return QByteArray("");
+    }
+
+    QTextStream in(file);
+    in.setCodec("UTF-8");
+
+    m_dContent = QByteArray().append(in.readAll());
+
+    file->close();
 
     return m_dContent;
 }
 
-QString Buffer::getName() {
-    return m_pDir->dirName();
-}
-
 void Buffer::write(const QByteArray &ctx) {
+    QFile *file = openMD();
+    if (nullptr == file) {
+        qDebug() << "write failed, notebook " << m_sPath << "cannot open." << endl;
+        return ;
+    }
+
+    QTextStream out(file);
+    out.setCodec("UTF-8");
+
+    out << ctx;
     m_dContent = ctx;
 
-    m_pFile->write(m_dContent);
+    file->close();
+
+    return ;
 }
+
+QString Buffer::getName() {
+    return m_sPath;
+}
+
+QFile *Buffer::openMD() {
+    QFile *file = new QFile(m_sPath + "/" + MD_FILE);
+    if (!file || !file->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)) {
+        SAFE_DELETE(file);
+        return nullptr;
+    }
+
+    return file;
+}
+
 
 }

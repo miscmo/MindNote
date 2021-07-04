@@ -15,10 +15,10 @@ public:
     void write(const QByteArray &ctx);
 
     QString getName();
+    QFile *openMD();
 
 private:
-    QFile *m_pFile;
-    QDir *m_pDir;
+    QString m_sPath;
     QByteArray m_dContent;
 };
 
