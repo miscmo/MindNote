@@ -11,7 +11,6 @@
 #include <QAction>
 #include <QMenu>
 #include <QFileDialog>
-#include <QSignalMapper>
 #include <QDebug>
 
 namespace MyNote {
@@ -75,7 +74,7 @@ void NoteMenuBar::initRecentlyFileList(QMenu *menuRecentlyFile) {
     QStringList fileList = AppState::getInstance()->getRecentlyDirList();
 
     for (auto file : fileList) {
-        QAction *action = menuRecentlyFile->addAction(file);
+        menuRecentlyFile->addAction(file);
     }
 
     connect(menuRecentlyFile, &QMenu::triggered, onOpenRecentlyFile);
