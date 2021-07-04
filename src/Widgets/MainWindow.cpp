@@ -19,8 +19,6 @@
 #include <QFileDialog>
 #include <QDebug>
 
-#define WIN_GEOMETRY_KEY "window_geometry"
-#define WIN_STATE_KEY "window_state"
 #define TEST_NOTE_PATH "D:\\Temp"
 
 namespace MyNote {
@@ -85,10 +83,10 @@ void MainWindow::initDock() {
 }
 
 void MainWindow::loadStateAndGeometry() {
-    Config *config = Config::Instance();
+    Config *config = Config::getInstance();
 
-    auto winGeometry  = config->get(WIN_GEOMETRY_KEY).toByteArray();
-    auto winState = config->get(WIN_STATE_KEY).toByteArray();
+    auto winGeometry  = config->get(CONF_WIN_GEOMETRY_KEY).toByteArray();
+    auto winState = config->get(CONF_WIN_STATE_KEY).toByteArray();
 
     if (!winGeometry.isEmpty())
         restoreGeometry(winGeometry);
@@ -98,10 +96,10 @@ void MainWindow::loadStateAndGeometry() {
 }
 
 void MainWindow::saveStateAndGeometry() {
-    Config *config = Config::Instance();
+    Config *config = Config::getInstance();
 
-    config->set(WIN_GEOMETRY_KEY, saveGeometry());
-    config->set(WIN_STATE_KEY, saveState());
+    config->set(CONF_WIN_GEOMETRY_KEY, saveGeometry());
+    config->set(CONF_WIN_STATE_KEY, saveState());
 }
 
 MainWindow::~MainWindow() {

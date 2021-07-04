@@ -2,6 +2,7 @@
 
 #include "Notebook.h"
 #include <Utils/Utils.h>
+#include <Config/AppState.h>
 
 #include <QDebug>
 
@@ -22,6 +23,8 @@ void NotebookManager::resetNote(const QString &path) {
         return ;
 
     m_pNotebook->resetDir(path);
+
+    AppState::getInstance()->addRecentlyDir(path);
 
     emit signalNotebookChanged(*m_pNotebook);
 }

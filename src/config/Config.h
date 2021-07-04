@@ -2,8 +2,13 @@
 #define CONFIGMGR_H
 
 #include <QObject>
+#include <QVariant>
 
 #define CONF_FILE_NAME "gnote.ini"
+
+#define CONF_WIN_STATE_KEY "window_state"
+#define CONF_WIN_GEOMETRY_KEY "window_geometry"
+#define CONF_RECENTLY_FILE_KEY "Recently_File"
 
 class QSettings;
 
@@ -14,13 +19,13 @@ namespace MyNote {
     public:
         ~Config();
 
-        static Config *Instance() {
+        static Config *getInstance() {
             static Config config;
             return &config;
         }
 
         void set(const QString &key, const QVariant &value);
-        QVariant get(const QString &key);
+        QVariant get(const QString &key, const QVariant &defVal = QVariant());
 
     private:
         Config();
