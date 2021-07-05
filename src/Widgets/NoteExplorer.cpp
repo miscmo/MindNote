@@ -7,6 +7,8 @@
 #include <Notebook/Notebook.h>
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
+#include <Widgets/NoteExplorerPopMenu.h>
+#include <Widgets/NoteExplorerItem.h>
 
 #include <QDebug>
 
@@ -23,7 +25,7 @@ NoteExplorer *NoteExplorer::getInstance() {
 
 NoteExplorer::NoteExplorer(QWidget *p_parent)
     : QTreeWidget(p_parent) {
-    setHeaderLabel("notebook");
+    setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 
     initUi();
 
@@ -36,7 +38,7 @@ void NoteExplorer::resetNote(const Notebook &note) {
     QSharedPointer<Node> rootNode = note.getRootNode();
 
     for (auto node : rootNode->getChilds()) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(this);
+        NoteExplorerItem *item = new NoteExplorerItem(this);
         item->setText(0, node->getName());
         if (!node->getChilds().isEmpty()) {
             loadNode(item, node);
@@ -44,7 +46,7 @@ void NoteExplorer::resetNote(const Notebook &note) {
         items.append(item);
     }
 
-    insertTopLevelItems(0,items);
+    insertTopLevelItems(0, items);
 }
 
 NoteExplorer::~NoteExplorer() {
@@ -52,12 +54,70 @@ NoteExplorer::~NoteExplorer() {
 }
 
 void NoteExplorer::initUi() {
+    setHeaderHidden(true);
 }
 
 void NoteExplorer::setupSignal() {
     connect(this, &QTreeWidget::itemClicked, this, &NoteExplorer::onItemClicked);
     connect(NotebookManager::getInstance(), &NotebookManager::signalNotebookChanged,
             this, &NoteExplorer::resetNote);
+    connect(this, &QTreeWidget::customContextMenuRequested, this, &NoteExplorer::onPopMenuRequest);
+}
+
+void NoteExplorer::onAddSub() {
+    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    if (!curItem)
+        return ;
+
+    QString itemName = curItem->text(0);
+
+    NoteExplorerItem *newItem = new NoteExplorerItem(curItem);
+    newItem->setText(0, "new");
+
+}
+
+void NoteExplorer::onAddPre() {
+    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    if (!curItem)
+        return ;
+
+    QString itemName = curItem->text(0);
+
+    NoteExplorerItem *newItem = new NoteExplorerItem(curItem->parent());
+    newItem->setText(0, "new");
+
+    insertTopLevelItem(indexOfTopLevelItem(curItem), newItem);
+}
+
+void NoteExplorer::onAddPost() {
+    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    if (!curItem)
+        return ;
+
+    QString itemName = curItem->text(0);
+
+    NoteExplorerItem *newItem = new NoteExplorerItem(curItem->parent());
+    newItem->setText(0, "new");
+
+    insertTopLevelItem(indexOfTopLevelItem(curItem)+1, newItem);
+}
+
+void NoteExplorer::onDelete() {
+    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    if (!curItem)
+        return ;
+
+    QString itemName = curItem->text(0);
+
+    int index = indexOfTopLevelItem(curItem);
+    if (-1 == index) {
+        NoteExplorerItem *parentItem = dynamic_cast<NoteExplorerItem *>(curItem->parent());
+        int childIdx = parentItem->indexOfChild(curItem);
+        parentItem->takeChild(childIdx);
+        return ;
+    }
+
+    takeTopLevelItem(index);
 }
 
 void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {
@@ -67,14 +127,23 @@ void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {
     manager->setCurrentBuffer(itemText);
 }
 
-void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, QSharedPointer<Node> node) {
+void NoteExplorer::onPopMenuRequest(const QPoint &point) {
+    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    if (!curItem)
+        return ;
+
+    NoteExplorerPopMenu popMenu(this);
+    popMenu.exec(QCursor::pos());
+}
+
+void NoteExplorer::loadNode(NoteExplorerItem *parent_item, QSharedPointer<Node> node) {
     auto subNodeList = node->getChilds();
 
     if (subNodeList.isEmpty())
         return ;
 
     for (auto subNode : subNodeList) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(parent_item);
+        NoteExplorerItem *item = new NoteExplorerItem(parent_item);
         item->setText(0, subNode->getName());
         loadNode(item, subNode);
     }
