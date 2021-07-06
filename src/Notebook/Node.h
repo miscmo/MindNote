@@ -11,13 +11,16 @@ class Node {
 public:
     Node(const QString &dir);
     ~Node();
-    void addChild(QSharedPointer<Node> node);
-    QVector<QSharedPointer<Node>> getChilds() { return m_pChilds; }
+
+    bool init();
+
+    void addChild(Node *node);
+    QVector<Node *> getChilds() { return m_vChilds; }
     QString getName() { return m_sNodeDir; }
 
 private:
     QString m_sNodeDir;
-    QVector<QSharedPointer<Node>> m_pChilds;
+    QVector<Node *> m_vChilds;
 };
 
 }

@@ -7,6 +7,7 @@
 #include <Notebook/Notebook.h>
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
+#include <Notebook/Node.h>
 #include <Widgets/NoteExplorerPopMenu.h>
 #include <Widgets/NoteExplorerItem.h>
 
@@ -32,10 +33,20 @@ NoteExplorer::NoteExplorer(QWidget *p_parent)
     setupSignal();
 }
 
-void NoteExplorer::resetNote(const Notebook &note) {
+void NoteExplorer::clearAllNote() {
+    clear();
+}
+
+void NoteExplorer::resetNote() {
     QList<QTreeWidgetItem *> items;
 
-    QSharedPointer<Node> rootNode = note.getRootNode();
+    Notebook *note = NotebookManager::getInstance()->getCurNotebook();
+
+    Q_ASSERT(note != nullptr);
+
+    clearAllNote();
+
+    Node *rootNode = note->getRootNode();
 
     for (auto node : rootNode->getChilds()) {
         NoteExplorerItem *item = new NoteExplorerItem(this);
@@ -136,7 +147,7 @@ void NoteExplorer::onPopMenuRequest(const QPoint &point) {
     popMenu.exec(QCursor::pos());
 }
 
-void NoteExplorer::loadNode(NoteExplorerItem *parent_item, QSharedPointer<Node> node) {
+void NoteExplorer::loadNode(NoteExplorerItem *parent_item, Node *node) {
     auto subNodeList = node->getChilds();
 
     if (subNodeList.isEmpty())

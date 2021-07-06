@@ -1,31 +1,28 @@
 #ifndef NOTEBOOK_H
 #define NOTEBOOK_H
 
-#include "Node.h"
-
 #include <QVector>
-#include <QSharedPointer>
 
 namespace MyNote {
 
-class Notebook {
+class Node;
 
+class Notebook {
 public:
-    Notebook();
+    Notebook(const QString &path = QString());
     ~Notebook();
 
-    QSharedPointer<Node> getRootNode() const {return m_pRoot;}
+    void initNote();
 
-    void resetDir(const QString &path);
+    Node *getRootNode() const {return m_pRoot;}
 
     QString getPath() const {return m_sPath;}
 
 private:
-    void initNote();
-    void loadNode(QSharedPointer<Node> node, const QString &path);
+    void loadNode(Node *node, const QString &path);
 
 private:
-    QSharedPointer<Node> m_pRoot;
+    Node *m_pRoot;
     QString m_sPath;
 };
 

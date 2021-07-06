@@ -18,20 +18,25 @@ public:
     static NoteExplorer *getInstance();
     ~NoteExplorer();
 
-    void resetNote(const Notebook &note);
+    void resetNote();
 
-    void loadNode(NoteExplorerItem *parent_item, QSharedPointer<Node> node);
 
-    void initUi();
-    void setupSignal();
+    void onItemClicked(QTreeWidgetItem *p_item, int column);
+    void onPopMenuRequest(const QPoint& point);
 
+public slots:
     void onAddSub();
     void onAddPre();
     void onAddPost();
     void onDelete();
 
-    void onItemClicked(QTreeWidgetItem *p_item, int column);
-    void onPopMenuRequest(const QPoint& point);
+private:
+    void initUi();
+    void setupSignal();
+
+    void clearAllNote();
+    void loadNode(NoteExplorerItem *parent_item, Node *node);
+
 
 private:
     NoteExplorer(QWidget *p_parent);

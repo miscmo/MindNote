@@ -36,7 +36,7 @@ void NoteMenuBar::initUi() {
                     "",
                     QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
 
-        NotebookManager::getInstance()->resetNote(dir);
+        NotebookManager::getInstance()->setCurNotebook(dir);
     };
 
     auto saveNote = [=]() {
@@ -68,7 +68,7 @@ void NoteMenuBar::initRecentlyFileList(QMenu *menuRecentlyFile) {
 
     auto onOpenRecentlyFile = [=](const QAction *action) {
         QString path = action->text();
-        NotebookManager::getInstance()->resetNote(path);
+        NotebookManager::getInstance()->setCurNotebook(path);
     };
 
     QStringList fileList = AppState::getInstance()->getRecentlyDirList();

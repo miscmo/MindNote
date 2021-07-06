@@ -2,10 +2,13 @@
 #define NOTEBOOKMANAGER_H
 
 #include <QObject>
+#include <QHash>
 
 namespace MyNote {
 
 class Notebook;
+
+using NOTEBOOK_HASH_TYPE = QHash<QString, Notebook *>;
 
 class NotebookManager : public QObject {
     Q_OBJECT
@@ -13,18 +16,22 @@ public:
     static NotebookManager *getInstance();
     ~NotebookManager();
 
-    void resetNote(const QString &path);
-
-signals:
-    void signalNotebookChanged(const Notebook &note);
-
+    Notebook *getCurNotebook() { return m_pCurNotebook; }
+    void setCurNotebook(const QString &path);
 
 private:
-//public:
+    Notebook *getNotebook(const QString &path);
+
+signals:
+    void signalNotebookChanged();
+
+private:
     NotebookManager();
 
 private:
-    Notebook *m_pNotebook;
+    NOTEBOOK_HASH_TYPE m_hNotebookHash;
+    Notebook *m_pCurNotebook;
+    QString m_sCurNotebook;
 };
 
 }
