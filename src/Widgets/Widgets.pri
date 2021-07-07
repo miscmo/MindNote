@@ -1,4 +1,7 @@
 SOURCES += \
+    $$PWD/Dialogs/Dialog.cpp \
+    $$PWD/Dialogs/NewNodeDialog.cpp \
+    $$PWD/Dialogs/ScrollDialog.cpp \
     $$PWD/FileExplorer.cpp \
     $$PWD/MainWindow.cpp \
     $$PWD/NoteEditor.cpp \
@@ -10,6 +13,9 @@ SOURCES += \
     $$PWD/ViewWindow.cpp \
 
 HEADERS += \
+    $$PWD/Dialogs/Dialog.h \
+    $$PWD/Dialogs/NewNodeDialog.h \
+    $$PWD/Dialogs/ScrollDialog.h \
     $$PWD/FileExplorer.h \
     $$PWD/MainWindow.h \
     $$PWD/NoteEditor.h \

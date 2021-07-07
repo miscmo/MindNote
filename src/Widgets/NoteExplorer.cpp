@@ -10,6 +10,7 @@
 #include <Notebook/Node.h>
 #include <Widgets/NoteExplorerPopMenu.h>
 #include <Widgets/NoteExplorerItem.h>
+#include <Widgets/Dialogs/NewNodeDialog.h>
 
 #include <QDebug>
 
@@ -50,6 +51,7 @@ void NoteExplorer::resetNote() {
 
     for (auto node : rootNode->getChilds()) {
         NoteExplorerItem *item = new NoteExplorerItem(this);
+        item->setNode(node);
         item->setText(0, node->getName());
         if (!node->getChilds().isEmpty()) {
             loadNode(item, node);
@@ -73,6 +75,7 @@ void NoteExplorer::setupSignal() {
     connect(NotebookManager::getInstance(), &NotebookManager::signalNotebookChanged,
             this, &NoteExplorer::resetNote);
     connect(this, &QTreeWidget::customContextMenuRequested, this, &NoteExplorer::onPopMenuRequest);
+    connect(this, &NoteExplorer::itemChanged, NotebookManager::getInstance(), &NotebookManager::onItemChanged);
 }
 
 void NoteExplorer::onAddSub() {
@@ -82,9 +85,14 @@ void NoteExplorer::onAddSub() {
 
     QString itemName = curItem->text(0);
 
-    NoteExplorerItem *newItem = new NoteExplorerItem(curItem);
-    newItem->setText(0, "new");
+    NewNoteDialog dig(this);
+    dig.exec();
 
+//    NoteExplorerItem *newItem = new NoteExplorerItem(curItem);
+    //newItem->setText(0, "");
+
+    //setCurrentItem(newItem);
+    //editItem(currentItem());
 }
 
 void NoteExplorer::onAddPre() {
@@ -155,6 +163,7 @@ void NoteExplorer::loadNode(NoteExplorerItem *parent_item, Node *node) {
 
     for (auto subNode : subNodeList) {
         NoteExplorerItem *item = new NoteExplorerItem(parent_item);
+        item->setNode(subNode);
         item->setText(0, subNode->getName());
         loadNode(item, subNode);
     }

@@ -17,8 +17,8 @@ include($$PWD/Widgets/Widgets.pri)
 include($$PWD/Notebook/Notebook.pri)
 
 SOURCES += \
-    MyNote.cpp \
-    main.cpp
+    Main.cpp \
+    MyNote.cpp
 
 HEADERS += \
     MyNote.h
