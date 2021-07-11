@@ -7,8 +7,9 @@
 
 using namespace MyNote;
 
-Node::Node(const QString &dir)
-    : m_sNodeDir(dir) {
+Node::Node(const QString &dir, Node *parentNode)
+    : m_sNodeDir(dir)
+    , m_pParentNode(parentNode) {
 }
 
 Node::~Node() {
@@ -33,13 +34,37 @@ void Node::addChild(Node *node, int index) {
 }
 
 Node *Node::addChildByName(const QString &name, int index) {
-    Node *node = new Node(m_sNodeDir + '/' + name);
+    Node *node = new Node(m_sNodeDir + '/' + name, node);
     if (node && node->init()) {
         addChild(node, index);
         return node;
     }
 
     return nullptr;
+}
+
+bool Node::deleteDir() {
+    for (auto childs : m_vChilds) {
+        childs->deleteDir();
+    }
+
+    m_vChilds.erase(m_vChilds.begin(), m_vChilds.end());
+
+    QDir dir(m_sNodeDir);
+    return dir.removeRecursively();
+}
+
+bool Node::deleteChild(Node *node) {
+    int index = m_vChilds.indexOf(node);
+    if (-1 == index) {
+        return false;
+    }
+
+    node->deleteDir();
+
+    m_vChilds.removeAt(index);
+
+    return true;
 }
 
 bool Node::hasChildName(const QString &name) {

@@ -9,8 +9,9 @@
 #include <Notebook/BufferManager.h>
 #include <Notebook/Node.h>
 #include <Widgets/NoteExplorerPopMenu.h>
-#include <Widgets/NoteExplorerItem.h>
+#include <Widgets/WidgetFactory.h>
 #include <Widgets/Dialogs/NewNodeDialog.h>
+#include <Widgets/Dialogs/NodeDeleteConfirmDialog.h>
 
 #include <QDebug>
 
@@ -50,13 +51,12 @@ void NoteExplorer::resetNote() {
     clearAllNote();
 
     Node *rootNode = note->getRootNode();
-    NoteExplorerItem *rootItem = new NoteExplorerItem(this);
+    QTreeWidgetItem *rootItem = WidgetFactory::createNoteExplorerItem(this);
     rootItem->setData(0, Qt::UserRole, QVariant().fromValue(rootNode));
     rootItem->setText(0, rootNode->getName());
 
     for (auto node : rootNode->getChilds()) {
-        NoteExplorerItem *item = new NoteExplorerItem(rootItem);
-        item->setNode(node);
+        QTreeWidgetItem *item = WidgetFactory::createNoteExplorerItem(rootItem);
         item->setData(0, Qt::UserRole, QVariant().fromValue(node));
         item->setText(0, node->getName());
         if (!node->getChilds().isEmpty()) {
@@ -87,7 +87,7 @@ void NoteExplorer::setupSignal() {
 }
 
 void NoteExplorer::onAddSub() {
-    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    QTreeWidgetItem* curItem = currentItem();
     if (!curItem)
         return ;
 
@@ -95,7 +95,7 @@ void NoteExplorer::onAddSub() {
 
     NewNoteDialog dig(curNode, -1, this);
     if (dig.exec() == QDialog::Accepted) {
-        NoteExplorerItem *newItem = new NoteExplorerItem(curItem);
+        QTreeWidgetItem *newItem = WidgetFactory::createNoteExplorerItem(curItem);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
 
@@ -106,7 +106,7 @@ void NoteExplorer::onAddSub() {
 }
 
 void NoteExplorer::onAddPre() {
-    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    QTreeWidgetItem* curItem = currentItem();
     if (!curItem)
         return ;
 
@@ -115,7 +115,7 @@ void NoteExplorer::onAddPre() {
 
     NewNoteDialog dig(parentNode, preIndex, this);
     if (dig.exec() == QDialog::Accepted) {
-        NoteExplorerItem *newItem = new NoteExplorerItem();
+        QTreeWidgetItem *newItem = WidgetFactory::createNoteExplorerItem((QTreeWidget *)nullptr);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
 
@@ -128,7 +128,7 @@ void NoteExplorer::onAddPre() {
 }
 
 void NoteExplorer::onAddPost() {
-    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    QTreeWidgetItem* curItem = currentItem();
     if (!curItem)
         return ;
 
@@ -137,7 +137,7 @@ void NoteExplorer::onAddPost() {
 
     NewNoteDialog dig(parentNode, postIndex, this);
     if (dig.exec() == QDialog::Accepted) {
-        NoteExplorerItem *newItem = new NoteExplorerItem();
+        QTreeWidgetItem *newItem = WidgetFactory::createNoteExplorerItem((QTreeWidget *)nullptr);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
 
@@ -150,21 +150,20 @@ void NoteExplorer::onAddPost() {
 }
 
 void NoteExplorer::onDelete() {
-    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    QTreeWidgetItem* curItem = currentItem();
     if (!curItem)
         return ;
 
-    QString itemName = curItem->text(0);
+    Node *curNode = curItem->data(0, Qt::UserRole).value<Node *>();
 
-    int index = indexOfTopLevelItem(curItem);
-    if (-1 == index) {
-        NoteExplorerItem *parentItem = dynamic_cast<NoteExplorerItem *>(curItem->parent());
-        int childIdx = parentItem->indexOfChild(curItem);
-        parentItem->takeChild(childIdx);
-        return ;
+    NodeDeleteConfirmDialog dig(curNode, this);
+    if (dig.exec() == QDialog::Accepted) {
+        QTreeWidgetItem *parentItem = curItem->parent();
+
+        int childIndex = parentItem->indexOfChild(curItem);
+
+        parentItem->takeChild(childIndex);
     }
-
-    takeTopLevelItem(index);
 }
 
 void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {
@@ -174,7 +173,7 @@ void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {
 }
 
 void NoteExplorer::onPopMenuRequest(const QPoint &point) {
-    NoteExplorerItem* curItem = dynamic_cast<NoteExplorerItem *>(currentItem());
+    QTreeWidgetItem* curItem = currentItem();
     if (!curItem)
         return ;
 
@@ -182,17 +181,17 @@ void NoteExplorer::onPopMenuRequest(const QPoint &point) {
     popMenu.exec(QCursor::pos());
 }
 
-void NoteExplorer::loadNode(NoteExplorerItem *parent_item, Node *node) {
+void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, Node *node) {
     auto subNodeList = node->getChilds();
 
     if (subNodeList.isEmpty())
         return ;
 
     for (auto subNode : subNodeList) {
-        NoteExplorerItem *item = new NoteExplorerItem(parent_item);
-        item->setNode(subNode);
+        QTreeWidgetItem *item = WidgetFactory::createNoteExplorerItem(parent_item);
         item->setData(0, Qt::UserRole, QVariant().fromValue(subNode));
         item->setText(0, subNode->getName());
+
         loadNode(item, subNode);
     }
 }
