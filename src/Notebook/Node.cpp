@@ -34,7 +34,7 @@ void Node::addChild(Node *node, int index) {
 }
 
 Node *Node::addChildByName(const QString &name, int index) {
-    Node *node = new Node(m_sNodeDir + '/' + name, node);
+    Node *node = new Node(m_sNodeDir + '/' + name, this);
     if (node && node->init()) {
         addChild(node, index);
         return node;
