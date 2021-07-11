@@ -17,6 +17,7 @@ public:
     void initMenuImport();
     void initMenuTools();
     void initMenuView();
+    void initMenuSetting();
     void initMenuAbout();
     void initRecentlyFileList(QMenu *menuFile);
 

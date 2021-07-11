@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="cs_CN">
 <context>
     <name>MyNote::NewNoteDialog</name>
     <message>
@@ -68,78 +68,98 @@
 <context>
     <name>MyNote::NoteMenuBar</name>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="46"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="50"/>
         <source>Notebook</source>
         <translation type="unfinished">笔记本</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="47"/>
-        <location filename="Widgets/NoteMenuBar.cpp" line="66"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="51"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="70"/>
         <source>Open Notebook</source>
         <translation type="unfinished">打开笔记本</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="48"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="52"/>
         <source>Save</source>
         <translation type="unfinished">保存</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="52"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="56"/>
         <source>Recently Access</source>
         <translation type="unfinished">打开最近访问</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="57"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="61"/>
         <source>Exit</source>
         <translation type="unfinished">退出</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="99"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="103"/>
         <source>Edit</source>
         <translation type="unfinished">编辑</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="100"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="104"/>
         <source>Rename</source>
         <translation type="unfinished">重命名</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="104"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="108"/>
         <source>Import</source>
         <translation type="unfinished">导入</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="105"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="109"/>
         <source>From dir</source>
         <translation type="unfinished">从文件夹导入</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="109"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="113"/>
         <source>View</source>
         <translation type="unfinished">查看</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="110"/>
         <source>Options</source>
-        <translation type="unfinished">选项</translation>
+        <translation type="obsolete">选项</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="114"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="118"/>
         <source>Tools</source>
         <translation type="unfinished">工具</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="115"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="114"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="121"/>
         <source>More</source>
         <translation type="unfinished">更多</translation>
     </message>
     <message>
         <location filename="Widgets/NoteMenuBar.cpp" line="119"/>
+        <source>Notebook Frame Exchange</source>
+        <translation type="unfinished">笔记结构转换</translation>
+    </message>
+    <message>
+        <location filename="Widgets/NoteMenuBar.cpp" line="128"/>
+        <source>Choose Font</source>
+        <translation type="unfinished">选择编辑器字体</translation>
+    </message>
+    <message>
+        <location filename="Widgets/NoteMenuBar.cpp" line="133"/>
+        <source>Setting</source>
+        <translation type="unfinished">设置</translation>
+    </message>
+    <message>
+        <location filename="Widgets/NoteMenuBar.cpp" line="135"/>
+        <source>Font</source>
+        <translation type="unfinished">字体</translation>
+    </message>
+    <message>
+        <location filename="Widgets/NoteMenuBar.cpp" line="141"/>
         <source>About</source>
         <translation type="unfinished">关于</translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="120"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="143"/>
         <source>Help</source>
         <translation type="unfinished">帮助</translation>
     </message>

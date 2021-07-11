@@ -22,6 +22,9 @@ public:
     void setupSignal();
     void setupUi();
 
+    void setCurFont(const QFont &font);
+    const QFont &getCurFont();
+
     QString getText();
 
     void onCurBufferChanged(Buffer* buffer);

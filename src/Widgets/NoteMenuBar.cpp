@@ -7,11 +7,13 @@
 #include <Config/AppState.h>
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
+#include <Widgets/NoteEditor.h>
 
 #include <QAction>
 #include <QMenu>
 #include <QFileDialog>
 #include <QDebug>
+#include <QFontDialog>
 
 using namespace MyNote;
 
@@ -38,6 +40,8 @@ void NoteMenuBar::initUi() {
     initMenuTools();
 
     initMenuView();
+
+    initMenuSetting();
 
     initMenuAbout();
 }
@@ -107,17 +111,36 @@ void NoteMenuBar::initMenuImport() {
 
 void NoteMenuBar::initMenuView() {
     QMenu *menuImport = addMenu(tr("View"));
-    QAction *actionFromDir = menuImport->addAction(tr("Options"));
+    QAction *actionMore = menuImport->addAction(tr("More"));
 }
 
 void NoteMenuBar::initMenuTools() {
     QMenu *menuImport = addMenu(tr("Tools"));
-    QAction *actionFromDir = menuImport->addAction(tr("More"));
+    QAction *actionNoteFrameExchange = menuImport->addAction(tr("Notebook Frame Exchange"));
+    addSeparator();
+    QAction *actionMore = menuImport->addAction(tr("More"));
+}
+
+void NoteMenuBar::initMenuSetting() {
+    auto fontSelecter = [=]() {
+        bool ok;
+        QFont curFont = NoteEditor::getInstance()->getCurFont();
+        QFont font = QFontDialog::getFont(&ok, curFont, this, tr("Choose Font"));
+        if (ok) {
+            NoteEditor::getInstance()->setCurFont(font);
+        }
+    };
+    QMenu *menuSetting = addMenu(tr("Setting"));
+
+    QAction *actionFont = menuSetting->addAction(tr("Font"));
+
+    connect(actionFont, &QAction::triggered, fontSelecter);
 }
 
 void NoteMenuBar::initMenuAbout() {
     QMenu *menuAbout = addMenu(tr("About"));
-    QAction *actionOpenDir = menuAbout->addAction(tr("Help"));
+
+    QAction *actionHelp = menuAbout->addAction(tr("Help"));
 }
 
 NoteMenuBar::~NoteMenuBar() {

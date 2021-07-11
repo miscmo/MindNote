@@ -9,6 +9,7 @@
 #define CONF_WIN_STATE_KEY "window_state"
 #define CONF_WIN_GEOMETRY_KEY "window_geometry"
 #define CONF_RECENTLY_FILE_KEY "Recently_File"
+#define CONF_FONT_KEY "editor_font"
 
 class QSettings;
 

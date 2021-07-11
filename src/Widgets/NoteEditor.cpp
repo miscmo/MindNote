@@ -9,6 +9,7 @@
 #include <Notebook/NotebookManager.h>
 #include <Notebook/Notebook.h>
 #include <Notebook/Node.h>
+#include <Config/Config.h>
 
 #include <QWidget>
 #include <QTextEdit>
@@ -33,6 +34,7 @@ NoteEditor *NoteEditor::getInstance() {
 
 NoteEditor::~NoteEditor() {
     qDebug() << "~NodeEditor" << endl;
+    Config::getInstance()->set(CONF_FONT_KEY, QVariant(getCurFont().toString()));
 }
 
 NoteEditor::NoteEditor(QWidget *parent)
@@ -47,13 +49,28 @@ QString NoteEditor::getText() {
 }
 
 void NoteEditor::initUi() {
-    //setFontFamily("Consolas");
+    QFont defFont("Courier New", 12);
+    QString fontString = Config::getInstance()->get(CONF_FONT_KEY, QVariant(defFont.toString())).toString();
+    QFont initFont;
+    bool init = initFont.fromString(fontString);
+    if (init) {
+        setCurFont(initFont);
+    } else {
+        setCurFont(defFont);
+    }
 
     m_pLineNumberArea = new LineNumberArea(this);
 
-
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+}
+
+void NoteEditor::setCurFont(const QFont &font) {
+    setFont(font);
+}
+
+const QFont &NoteEditor::getCurFont() {
+    return font();
 }
 
 int NoteEditor::lineNumberAreaWidth() {
@@ -112,7 +129,7 @@ void NoteEditor::highlightCurrentLine()
     if (!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
 
-        QColor lineColor = QColor(Qt::yellow).lighter(160);
+        QColor lineColor = QColor(Qt::gray).lighter(140);
 
         selection.format.setBackground(lineColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
