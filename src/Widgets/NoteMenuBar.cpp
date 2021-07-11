@@ -54,7 +54,7 @@ void NoteMenuBar::initMenuNotebook() {
 
     menuFile->addSeparator();
 
-    QAction *actionExit = menuFile->addAction("Exit");
+    QAction *actionExit = menuFile->addAction(tr("Exit"));
 
     connect(actionOpenDir, &QAction::triggered, this, &NoteMenuBar::openNotebook);
     connect(actionSaveFile, &QAction::triggered, this, &NoteMenuBar::saveNote);
