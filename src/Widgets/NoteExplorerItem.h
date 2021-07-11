@@ -12,7 +12,7 @@ class Node;
 
 class NoteExplorerItem : public QTreeWidgetItem {
 public:
-    NoteExplorerItem(QTreeWidget *parent = nullptr);
+    NoteExplorerItem(QTreeWidget *parent);
     NoteExplorerItem(QTreeWidgetItem *parent = nullptr);
     ~NoteExplorerItem();
 

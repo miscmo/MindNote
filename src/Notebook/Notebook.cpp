@@ -8,7 +8,7 @@
 #include <QDebug>
 #include <QDir>
 
-namespace MyNote {
+using namespace MyNote;
 
 Notebook::Notebook(const QString &path)
     : m_pRoot(nullptr)
@@ -43,4 +43,16 @@ void Notebook::loadNode(Node *node, const QString &path) {
     }
 }
 
+bool Notebook::setCurrentNode(Node *node) {
+    if (m_pCurrentNode == node)
+        return false;
+
+    m_pCurrentNode = node;
+    return true;
+}
+
+QString Notebook::getName() {
+    QDir dir(m_sPath);
+
+    return dir.dirName();
 }

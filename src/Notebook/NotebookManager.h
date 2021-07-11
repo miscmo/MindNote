@@ -9,6 +9,7 @@
 namespace MyNote {
 
 class Notebook;
+class Node;
 
 using NOTEBOOK_HASH_TYPE = QHash<QString, Notebook *>;
 
@@ -18,8 +19,13 @@ public:
     static NotebookManager *getInstance();
     ~NotebookManager();
 
+    void initSignal();
+
     Notebook *getCurNotebook() { return m_pCurNotebook; }
     void setCurNotebook(const QString &path);
+
+    void setCurrentNode(Node *node);
+    void saveCurrentNode();
 
 public slots:
     void onItemChanged(QTreeWidgetItem *item, int column) {
@@ -30,6 +36,7 @@ private:
     Notebook *getNotebook(const QString &path);
 
 signals:
+    void signalCurrentNodeChanged(Node *node);
     void signalNotebookChanged();
 
 private:

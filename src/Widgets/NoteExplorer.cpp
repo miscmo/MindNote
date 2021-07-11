@@ -14,14 +14,16 @@
 
 #include <QDebug>
 
-namespace MyNote {
+using namespace MyNote;
+
+Q_DECLARE_METATYPE(Node *);
 
 NoteExplorer* NoteExplorer::m_pInstance = nullptr;
 NoteExplorer *NoteExplorer::getInstance() {
     if (m_pInstance == nullptr) {
         m_pInstance = new NoteExplorer(MyNote::getInstance()->getMainWindow());
-
     }
+
     return m_pInstance;
 }
 
@@ -48,10 +50,14 @@ void NoteExplorer::resetNote() {
     clearAllNote();
 
     Node *rootNode = note->getRootNode();
+    NoteExplorerItem *rootItem = new NoteExplorerItem(this);
+    rootItem->setData(0, Qt::UserRole, QVariant().fromValue(rootNode));
+    rootItem->setText(0, rootNode->getName());
 
     for (auto node : rootNode->getChilds()) {
-        NoteExplorerItem *item = new NoteExplorerItem(this);
+        NoteExplorerItem *item = new NoteExplorerItem(rootItem);
         item->setNode(node);
+        item->setData(0, Qt::UserRole, QVariant().fromValue(node));
         item->setText(0, node->getName());
         if (!node->getChilds().isEmpty()) {
             loadNode(item, node);
@@ -59,7 +65,8 @@ void NoteExplorer::resetNote() {
         items.append(item);
     }
 
-    insertTopLevelItems(0, items);
+    rootItem->setExpanded(true);
+    setRootIsDecorated(false);
 }
 
 NoteExplorer::~NoteExplorer() {
@@ -67,6 +74,7 @@ NoteExplorer::~NoteExplorer() {
 }
 
 void NoteExplorer::initUi() {
+    setColumnCount(1);
     setHeaderHidden(true);
 }
 
@@ -83,16 +91,18 @@ void NoteExplorer::onAddSub() {
     if (!curItem)
         return ;
 
-    QString itemName = curItem->text(0);
+    Node *curNode = curItem->data(0, Qt::UserRole).value<Node *>();
 
-    NewNoteDialog dig(this);
-    dig.exec();
+    NewNoteDialog dig(curNode, -1, this);
+    if (dig.exec() == QDialog::Accepted) {
+        NoteExplorerItem *newItem = new NoteExplorerItem(curItem);
+        newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
+        newItem->setText(0, dig.getNewNode()->getName());
 
-//    NoteExplorerItem *newItem = new NoteExplorerItem(curItem);
-    //newItem->setText(0, "");
+        setCurrentItem(newItem);
 
-    //setCurrentItem(newItem);
-    //editItem(currentItem());
+        emit itemClicked(newItem, 0);
+    }
 }
 
 void NoteExplorer::onAddPre() {
@@ -100,12 +110,21 @@ void NoteExplorer::onAddPre() {
     if (!curItem)
         return ;
 
-    QString itemName = curItem->text(0);
+    int preIndex = curItem->parent()->indexOfChild(curItem);
+    Node *parentNode = curItem->parent()->data(0, Qt::UserRole).value<Node *>();
 
-    NoteExplorerItem *newItem = new NoteExplorerItem(curItem->parent());
-    newItem->setText(0, "new");
+    NewNoteDialog dig(parentNode, preIndex, this);
+    if (dig.exec() == QDialog::Accepted) {
+        NoteExplorerItem *newItem = new NoteExplorerItem();
+        newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
+        newItem->setText(0, dig.getNewNode()->getName());
 
-    insertTopLevelItem(indexOfTopLevelItem(curItem), newItem);
+        curItem->parent()->insertChild(preIndex, newItem);
+
+        setCurrentItem(newItem);
+
+        emit itemClicked(newItem, 0);
+    }
 }
 
 void NoteExplorer::onAddPost() {
@@ -113,12 +132,21 @@ void NoteExplorer::onAddPost() {
     if (!curItem)
         return ;
 
-    QString itemName = curItem->text(0);
+    int postIndex = curItem->parent()->indexOfChild(curItem) + 1;
+    Node *parentNode = curItem->parent()->data(0, Qt::UserRole).value<Node *>();
 
-    NoteExplorerItem *newItem = new NoteExplorerItem(curItem->parent());
-    newItem->setText(0, "new");
+    NewNoteDialog dig(parentNode, postIndex, this);
+    if (dig.exec() == QDialog::Accepted) {
+        NoteExplorerItem *newItem = new NoteExplorerItem();
+        newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
+        newItem->setText(0, dig.getNewNode()->getName());
 
-    insertTopLevelItem(indexOfTopLevelItem(curItem)+1, newItem);
+        curItem->parent()->insertChild(postIndex, newItem);
+
+        setCurrentItem(newItem);
+
+        emit itemClicked(newItem, 0);
+    }
 }
 
 void NoteExplorer::onDelete() {
@@ -140,10 +168,9 @@ void NoteExplorer::onDelete() {
 }
 
 void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {
-    QString itemText = p_item->text(0);
+    Node *itemNode = p_item->data(0, Qt::UserRole).value<Node *>();
 
-    BufferManager *manager = BufferManager::getInstance();
-    manager->setCurrentBuffer(itemText);
+    NotebookManager::getInstance()->setCurrentNode(itemNode);
 }
 
 void NoteExplorer::onPopMenuRequest(const QPoint &point) {
@@ -164,9 +191,8 @@ void NoteExplorer::loadNode(NoteExplorerItem *parent_item, Node *node) {
     for (auto subNode : subNodeList) {
         NoteExplorerItem *item = new NoteExplorerItem(parent_item);
         item->setNode(subNode);
+        item->setData(0, Qt::UserRole, QVariant().fromValue(subNode));
         item->setText(0, subNode->getName());
         loadNode(item, subNode);
     }
-}
-
 }

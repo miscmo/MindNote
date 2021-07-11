@@ -2,12 +2,14 @@
 #define NOTEBOOK_H
 
 #include <QVector>
+#include <QObject>
 
 namespace MyNote {
 
 class Node;
 
-class Notebook {
+class Notebook : public QObject {
+    Q_OBJECT
 public:
     Notebook(const QString &path = QString());
     ~Notebook();
@@ -15,14 +17,18 @@ public:
     void initNote();
 
     Node *getRootNode() const {return m_pRoot;}
+    bool setCurrentNode(Node *node);
+    Node *getCurrentNode() { return m_pCurrentNode; }
 
     QString getPath() const {return m_sPath;}
+    QString getName();
 
 private:
     void loadNode(Node *node, const QString &path);
 
 private:
     Node *m_pRoot;
+    Node *m_pCurrentNode;
     QString m_sPath;
 };
 

@@ -24,6 +24,9 @@ public:
     void onItemClicked(QTreeWidgetItem *p_item, int column);
     void onPopMenuRequest(const QPoint& point);
 
+signals:
+    void signalCurrentNodeChanged(Node *node);
+
 public slots:
     void onAddSub();
     void onAddPre();

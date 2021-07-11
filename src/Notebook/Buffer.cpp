@@ -62,12 +62,12 @@ QString Buffer::getName() {
 
 QFile *Buffer::openMD() {
     QFile *file = new QFile(m_sPath + "/" + MD_FILE);
-    if (!file || !file->open(QIODevice::ReadWrite | QIODevice::ExistingOnly)) {
-        SAFE_DELETE(file);
-        return nullptr;
+    if (file && file->open(QIODevice::ReadWrite)) {
+        return file;
     }
 
-    return file;
+    SAFE_DELETE(file);
+    return nullptr;
 }
 
 

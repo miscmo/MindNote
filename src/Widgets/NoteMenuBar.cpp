@@ -40,7 +40,7 @@ void NoteMenuBar::initUi() {
     };
 
     auto saveNote = [=]() {
-        BufferManager::getInstance()->saveBuffer();
+        NotebookManager::getInstance()->saveCurrentNode();
     };
 
     auto ExitApp = []() {

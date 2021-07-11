@@ -1,6 +1,7 @@
 SOURCES += \
     $$PWD/Dialogs/Dialog.cpp \
     $$PWD/Dialogs/NewNodeDialog.cpp \
+    $$PWD/Dialogs/NodeInfoWidget.cpp \
     $$PWD/Dialogs/ScrollDialog.cpp \
     $$PWD/FileExplorer.cpp \
     $$PWD/MainWindow.cpp \
@@ -11,10 +12,12 @@ SOURCES += \
     $$PWD/NoteMenuBar.cpp \
     $$PWD/ViewArea.cpp \
     $$PWD/ViewWindow.cpp \
+    $$PWD/WidgetFactory.cpp
 
 HEADERS += \
     $$PWD/Dialogs/Dialog.h \
     $$PWD/Dialogs/NewNodeDialog.h \
+    $$PWD/Dialogs/NodeInfoWidget.h \
     $$PWD/Dialogs/ScrollDialog.h \
     $$PWD/FileExplorer.h \
     $$PWD/MainWindow.h \
@@ -25,3 +28,4 @@ HEADERS += \
     $$PWD/NoteMenuBar.h \
     $$PWD/ViewArea.h \
     $$PWD/ViewWindow.h \
+    $$PWD/WidgetFactory.h

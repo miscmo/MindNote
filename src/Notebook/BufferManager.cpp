@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QByteArray>
 
-namespace MyNote {
+using namespace MyNote;
 
 BufferManager* BufferManager::getInstance() {
     static BufferManager bufferManager;
@@ -18,8 +18,7 @@ BufferManager* BufferManager::getInstance() {
 
 BufferManager::BufferManager()
     : QObject()
-    , m_pBufferHash(nullptr)
-    , m_pCurrentBuffer(nullptr) {
+    , m_pBufferHash(nullptr) {
     m_pBufferHash = new QHash<QString, Buffer *>();
 }
 
@@ -34,25 +33,7 @@ Buffer *BufferManager::getBuffer(const QString &path) {
     return it.value();
 }
 
-void BufferManager::saveBuffer() {
-    NoteEditor *editor = NoteEditor::getInstance();
-
-    QString text = editor->getText();
-
-    m_pCurrentBuffer->write(QByteArray().append(text));
-}
-
-void BufferManager::setCurrentBuffer(const QString &path) {
-    m_pCurrentBuffer = getBuffer(path);
-
-    emit currentBufferChanged(m_pCurrentBuffer);
-}
-
-
 BufferManager::~BufferManager() {
     qDebug() << "~BufferManager()" << endl;
     SAFE_DELETE(m_pBufferHash);
-    m_pCurrentBuffer = nullptr;
-}
-
 }

@@ -10,6 +10,7 @@ namespace MyNote {
 
 class Buffer;
 class LineNumberArea;
+class Node;
 
 class NoteEditor : public QPlainTextEdit {
     Q_OBJECT
@@ -36,6 +37,8 @@ private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect &, int);
+
+    void onCurrentNodeChanged(Node *node);
 
 private:
     NoteEditor(QWidget *parent);
