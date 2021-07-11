@@ -13,7 +13,7 @@
 #include <QFileDialog>
 #include <QDebug>
 
-namespace MyNote {
+using namespace MyNote;
 
 NoteMenuBar *NoteMenuBar::m_pInstance = nullptr;
 
@@ -24,43 +24,58 @@ NoteMenuBar *NoteMenuBar::getInstance() {
 }
 
 NoteMenuBar::NoteMenuBar(QWidget *parent)
-    : QMenuBar(parent)
-    , m_pSignalMapper(nullptr) {
+    : QMenuBar(parent) {
     initUi();
 }
 
 void NoteMenuBar::initUi() {
-    auto openDir = [=]() {
-        QString dir = QFileDialog::getExistingDirectory(
-                    this, tr("Open Directory"),
-                    "",
-                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
+    initMenuNotebook();
 
-        NotebookManager::getInstance()->setCurNotebook(dir);
-    };
+    initMenuEdit();
 
-    auto saveNote = [=]() {
-        NotebookManager::getInstance()->saveCurrentNode();
-    };
+    initMenuImport();
 
-    auto ExitApp = []() {
-        MyNote::getInstance()->getMainWindow()->close();
-    };
+    initMenuTools();
 
-   QMenu *menuFile = addMenu("File");
-   QAction *actionOpenDir = menuFile->addAction("Open");
-   QAction *actionSaveFile = menuFile->addAction("Save");
-   menuFile->addSeparator();
-   QMenu *subMenuRecentlyFile = menuFile->addMenu("Recently");
-   initRecentlyFileList(subMenuRecentlyFile);
-   menuFile->addSeparator();
-   QAction *actionExit = menuFile->addAction("Exit");
+    initMenuView();
 
-   connect(actionOpenDir, &QAction::triggered, openDir);
-   connect(actionSaveFile, &QAction::triggered, saveNote);
-   connect(actionExit, &QAction::triggered, ExitApp);
+    initMenuAbout();
+}
 
-   QMenu *menuAbout = addMenu("about");
+void NoteMenuBar::initMenuNotebook() {
+    QMenu *menuFile = addMenu(tr("Notebook"));
+    QAction *actionOpenDir = menuFile->addAction(tr("Open Notebook"));
+    QAction *actionSaveFile = menuFile->addAction(tr("Save"));
+
+    menuFile->addSeparator();
+
+    QMenu *subMenuRecentlyFile = menuFile->addMenu(tr("Recently Access"));
+    initRecentlyFileList(subMenuRecentlyFile);
+
+    menuFile->addSeparator();
+
+    QAction *actionExit = menuFile->addAction("Exit");
+
+    connect(actionOpenDir, &QAction::triggered, this, &NoteMenuBar::openNotebook);
+    connect(actionSaveFile, &QAction::triggered, this, &NoteMenuBar::saveNote);
+    connect(actionExit, &QAction::triggered, this, &NoteMenuBar::exitApp);
+}
+
+void NoteMenuBar::openNotebook() {
+    QString dir = QFileDialog::getExistingDirectory(
+                this, tr("Open Notebook"),
+                "",
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
+
+    NotebookManager::getInstance()->setCurNotebook(dir);
+}
+
+void NoteMenuBar::saveNote() {
+    NotebookManager::getInstance()->saveCurrentNode();
+}
+
+void NoteMenuBar::exitApp() {
+    MyNote::getInstance()->getMainWindow()->close();
 }
 
 void NoteMenuBar::initRecentlyFileList(QMenu *menuRecentlyFile) {
@@ -78,10 +93,32 @@ void NoteMenuBar::initRecentlyFileList(QMenu *menuRecentlyFile) {
     }
 
     connect(menuRecentlyFile, &QMenu::triggered, onOpenRecentlyFile);
+}
 
+void NoteMenuBar::initMenuEdit() {
+    QMenu *menuEdit = addMenu(tr("Edit"));
+    QAction *actionRename = menuEdit->addAction(tr("Rename"));
+}
+
+void NoteMenuBar::initMenuImport() {
+    QMenu *menuImport = addMenu(tr("Import"));
+    QAction *actionFromDir = menuImport->addAction(tr("From dir"));
+}
+
+void NoteMenuBar::initMenuView() {
+    QMenu *menuImport = addMenu(tr("View"));
+    QAction *actionFromDir = menuImport->addAction(tr("Options"));
+}
+
+void NoteMenuBar::initMenuTools() {
+    QMenu *menuImport = addMenu(tr("Tools"));
+    QAction *actionFromDir = menuImport->addAction(tr("More"));
+}
+
+void NoteMenuBar::initMenuAbout() {
+    QMenu *menuAbout = addMenu(tr("About"));
+    QAction *actionOpenDir = menuAbout->addAction(tr("Help"));
 }
 
 NoteMenuBar::~NoteMenuBar() {
-}
-
 }

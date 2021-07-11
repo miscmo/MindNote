@@ -3,8 +3,6 @@
 
 #include <QMenuBar>
 
-class QSignalMapper;
-
 namespace MyNote {
 
 class NoteMenuBar : public QMenuBar {
@@ -14,14 +12,24 @@ public:
     ~NoteMenuBar();
 
     void initUi();
+    void initMenuNotebook();
+    void initMenuEdit();
+    void initMenuImport();
+    void initMenuTools();
+    void initMenuView();
+    void initMenuAbout();
     void initRecentlyFileList(QMenu *menuFile);
+
+private slots:
+    void openNotebook();
+    void saveNote();
+    void exitApp();
 
 private:
     NoteMenuBar(QWidget *parent = nullptr);
 
 private:
     static NoteMenuBar *m_pInstance;
-    QSignalMapper *m_pSignalMapper;
 };
 
 }
