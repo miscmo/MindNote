@@ -24,6 +24,8 @@ public:
     Notebook *getCurNotebook() { return m_pCurNotebook; }
     void setCurNotebook(const QString &path);
 
+    bool deleteNode(Node *node);
+
     void setCurrentNode(Node *node);
     void saveCurrentNode();
 

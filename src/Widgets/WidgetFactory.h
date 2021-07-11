@@ -3,6 +3,8 @@
 
 class QFormLayout;
 class QWidget;
+class QTreeWidgetItem;
+class QTreeWidget;
 
 namespace MyNote {
 
@@ -11,6 +13,10 @@ public:
     WidgetFactory() = delete;
 
     static QFormLayout *createFormLayout(QWidget *parent = nullptr);
+
+    static QTreeWidgetItem *createNoteExplorerItem(QTreeWidget *parent);
+
+    static QTreeWidgetItem *createNoteExplorerItem(QTreeWidgetItem *parent);
 };
 
 }

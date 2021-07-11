@@ -20,6 +20,8 @@ public:
     bool setCurrentNode(Node *node);
     Node *getCurrentNode() { return m_pCurrentNode; }
 
+    bool deleteNode(Node *node);
+
     QString getPath() const {return m_sPath;}
     QString getName();
 

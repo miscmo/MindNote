@@ -1,7 +1,5 @@
 #include "NewNodeDialog.h"
 
-#include "NodeInfoWidget.h"
-
 #include <Notebook/NotebookManager.h>
 #include <Notebook/Notebook.h>
 #include <Notebook/Node.h>

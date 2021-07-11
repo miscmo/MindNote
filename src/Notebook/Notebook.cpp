@@ -1,7 +1,7 @@
 #include "Notebook.h"
 
 #include <Utils/Utils.h>
-#include <Notebook/NodeFactory.h>
+#include <Notebook/NotebookFactory.h>
 #include <Notebook/Node.h>
 
 
@@ -24,7 +24,7 @@ void Notebook::initNote() {
     QDir dir(m_sPath);
     Q_ASSERT(dir.exists());
 
-    m_pRoot = NodeFactory::createNode(m_sPath);
+    m_pRoot = NotebookFactory::createNode(m_sPath, nullptr);
 
     loadNode(m_pRoot, m_sPath);
 }
@@ -37,7 +37,7 @@ void Notebook::loadNode(Node *node, const QString &path) {
 
     for (auto dir : dirlist) {
         QString fullpath = path + '/' + dir;
-        Node *newNode = NodeFactory::createNode(fullpath);
+        Node *newNode = NotebookFactory::createNode(fullpath, node);
         loadNode(newNode, fullpath);
         node->addChild(newNode);
     }
@@ -49,6 +49,14 @@ bool Notebook::setCurrentNode(Node *node) {
 
     m_pCurrentNode = node;
     return true;
+}
+
+bool Notebook::deleteNode(Node *node) {
+    Node *parentNode = node->getParentNode();
+
+    Q_ASSERT(nullptr != parentNode);
+
+    return parentNode->deleteChild(node);
 }
 
 QString Notebook::getName() {

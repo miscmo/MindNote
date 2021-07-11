@@ -72,6 +72,10 @@ void NotebookManager::saveCurrentNode() {
     node->write(QByteArray().append(NoteEditor::getInstance()->getText()));
 }
 
+bool NotebookManager::deleteNode(Node *node) {
+    return getCurNotebook()->deleteNode(node);
+}
+
 NotebookManager::~NotebookManager() {
     qDebug() << "~NotebookManager" << endl;
 }

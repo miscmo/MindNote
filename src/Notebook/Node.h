@@ -12,13 +12,17 @@ class Buffer;
 
 class Node {
 public:
-    Node(const QString &dir);
+    Node(const QString &dir, Node *parentNode);
     ~Node();
 
     bool init();
 
     void addChild(Node *node, int index = -1);
     Node *addChildByName(const QString &name, int index);
+
+    bool deleteDir();
+    bool deleteChild(Node *node);
+
     QVector<Node *> getChilds() { return m_vChilds; }
     QString getName();
     QString getPath() { return m_sNodeDir; }
@@ -30,9 +34,12 @@ public:
 
     Buffer *getBuffer();
 
+    Node *getParentNode() { return m_pParentNode; }
+
 private:
     QString m_sNodeDir;
     QVector<Node *> m_vChilds;
+    Node *m_pParentNode;
 };
 
 }

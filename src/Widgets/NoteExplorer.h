@@ -10,7 +10,6 @@ namespace MyNote {
 class Notebook;
 class Node;
 class NoteEditor;
-class NoteExplorerItem;
 
 class NoteExplorer : public QTreeWidget {
     Q_OBJECT
@@ -38,7 +37,7 @@ private:
     void setupSignal();
 
     void clearAllNote();
-    void loadNode(NoteExplorerItem *parent_item, Node *node);
+    void loadNode(QTreeWidgetItem *parent_item, Node *node);
 
 
 private:
