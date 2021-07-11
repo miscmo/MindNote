@@ -1,0 +1,94 @@
+name: macos
+
+on:
+  # push:
+    # branches: [ master ]
+  # pull_request:
+    # branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+env:
+    MYNOTE_VER: 3.2.0
+
+jobs:
+  build-linux:
+    name: Build On MacOS
+    runs-on: macos-latest
+    timeout-minutes: 120
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Install Dependencies
+        run: |
+          brew install tree
+
+      - name: Install macdeployqtfix
+        run: |
+          git clone https://github.com/tamlok/macdeployqtfix.git macdeployqtfix --depth=1
+        working-directory: ${{runner.workspace}}
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.12.10
+          target: desktop
+          modules: qtwebchannel qtwebengine qtsvg qtlocation qttools qttranslations
+
+      - name: Create Build Dir
+        run: mkdir build
+        working-directory: ${{runner.workspace}}
+
+      - name: Configure Project
+        run: |
+          qmake -v
+          qmake CONFIG+=release ${GITHUB_WORKSPACE}/MyNote.pro
+        working-directory: ${{runner.workspace}}/build
+
+      - name: Build Project
+        run: make -j4
+        working-directory: ${{runner.workspace}}/build
+
+      - name: Cleanup rpath
+        run: |
+          app_target=./src/MyNote.app/Contents/MacOS/MyNote
+          install_name_tool -delete_rpath ${PWD}/src/../libs/vtextedit/src/editor ${app_target}
+          install_name_tool -delete_rpath ${PWD}/src/../libs/vtextedit/src/libs/syntax-highlighting ${app_target}
+        working-directory: ${{runner.workspace}}/build
+
+      - name: Mac Deploy
+        run: |
+          pushd src
+          macdeployqt MyNote.app
+          python ${{runner.workspace}}/macdeployqtfix/macdeployqtfix.py MyNote.app/Contents/MacOS/MyNote $Qt5_Dir
+          # Fix Helpers/QtWebEngineProcess.app
+          pushd MyNote.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers
+          macdeployqt QtWebEngineProcess.app
+          python ${{runner.workspace}}/macdeployqtfix/macdeployqtfix.py QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess $Qt5_Dir
+          popd
+          popd
+          tree ./
+        working-directory: ${{runner.workspace}}/build
+
+      - name: Package Project
+        run: |
+          mkdir -p distrib/MyNote
+          pushd distrib/MyNote
+          mv ../../src/MyNote.app ./
+          ln -s /Applications ./Applications
+          popd
+          sleep 1m
+          hdiutil create -srcfolder ./distrib/MyNote -format UDBZ MyNote-mac-x64_v${{env.MYNOTE_VER}}.dmg
+          cp MyNote-mac-x64_v${{env.MYNOTE_VER}}.dmg MyNote-mac-x64.dmg
+        working-directory: ${{runner.workspace}}/build
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: MyNote-mac-x64_v${{env.MYNOTE_VER}}
+          path: ${{runner.workspace}}/build/MyNote-mac-x64_v${{env.MYNOTE_VER}}.dmg

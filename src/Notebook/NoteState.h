@@ -1,7 +1,7 @@
 #ifndef NOTESTATE_H
 #define NOTESTATE_H
 
-#include <Qstring>
+#include <QString>
 
 namespace MyNote {
 

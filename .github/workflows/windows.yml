@@ -1,0 +1,84 @@
+name: windows
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+env:
+    MYNOTE_VER: 0.1
+
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: windows-latest
+    timeout-minutes: 120
+
+    strategy:
+      matrix:
+        config:
+          - {
+            name: "Build On Win64",
+            arch: win64_msvc2017_64,
+            platform: x64
+          }
+          - {
+            name: "Build On Win32",
+            arch: win32_msvc2017,
+            platform: x86
+          }
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.12.10
+          target: desktop
+          arch: ${{matrix.config.arch}}
+          modules: qtwebchannel qtwebengine qtsvg qtlocation qttools qttranslations
+          tools: tools_openssl_${{matrix.config.platform}},1.1.1-4,qt.tools.openssl.win_${{matrix.config.platform}}
+
+      - name: Create Build Dir
+        shell: bash
+        run: mkdir build
+        working-directory: ${{runner.workspace}}
+
+      - name: Configure and Build Project
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" ${{matrix.config.platform}}
+          qmake -r -spec win32-msvc CONFIG-=debug CONFIG+=release %GITHUB_WORKSPACE%\MyNote.pro
+          nmake
+        working-directory: ${{runner.workspace}}/build
+
+      - name: Package Project
+        shell: cmd
+        run: |
+          mkdir "%DISTRIB_PATH%"
+          call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" ${{matrix.config.platform}}
+          windeployqt.exe --dir "%DISTRIB_PATH%" .\src\release\MyNote.exe
+          copy .\src\release\MyNote.exe "%DISTRIB_PATH%\MyNote.exe"
+          copy "%GITHUB_WORKSPACE%\README.md" "%DISTRIB_PATH%\README.md"
+          copy "%GITHUB_WORKSPACE%\COPYING.LESSER" "%DISTRIB_PATH%\COPYING.LESSER"
+          echo %GITHUB_SHA% > "%DISTRIB_PATH%\commit"
+          7z a MyNote-win-${{matrix.config.platform}}.zip "%DISTRIB_PATH%"
+        working-directory: ${{runner.workspace}}/build
+        env:
+          DISTRIB_PATH: ${{runner.workspace}}/build/distrib/MyNote
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: MyNote-win-${{matrix.config.platform}}_v${{env.MYNOTE_VER}}
+          path: ${{env.DISTRIB_PATH}}
+        env:
+          DISTRIB_PATH: ${{runner.workspace}}/build/distrib/MyNote
