@@ -10,6 +10,7 @@ namespace MyNote {
 class Notebook;
 class Node;
 class NoteEditor;
+class NoteExplorerItem;
 
 class NoteExplorer : public QTreeWidget {
     Q_OBJECT
@@ -17,14 +18,28 @@ public:
     static NoteExplorer *getInstance();
     ~NoteExplorer();
 
-    void resetNote(const Notebook &note);
+    void resetNote();
 
-    void loadNode(QTreeWidgetItem *parent_item, QSharedPointer<Node> node);
 
+    void onItemClicked(QTreeWidgetItem *p_item, int column);
+    void onPopMenuRequest(const QPoint& point);
+
+signals:
+    void signalCurrentNodeChanged(Node *node);
+
+public slots:
+    void onAddSub();
+    void onAddPre();
+    void onAddPost();
+    void onDelete();
+
+private:
     void initUi();
     void setupSignal();
 
-    void onItemClicked(QTreeWidgetItem *p_item, int column);
+    void clearAllNote();
+    void loadNode(NoteExplorerItem *parent_item, Node *node);
+
 
 private:
     NoteExplorer(QWidget *p_parent);

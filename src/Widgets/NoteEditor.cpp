@@ -6,6 +6,9 @@
 #include <Utils/Utils.h>
 #include <Notebook/BufferManager.h>
 #include <Notebook/Buffer.h>
+#include <Notebook/NotebookManager.h>
+#include <Notebook/Notebook.h>
+#include <Notebook/Node.h>
 
 #include <QWidget>
 #include <QTextEdit>
@@ -16,7 +19,7 @@
 
 #include <QDebug>
 
-namespace MyNote {
+using namespace MyNote;
 
 NoteEditor *NoteEditor::m_pInstance = nullptr;
 
@@ -155,22 +158,19 @@ void NoteEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 }
 
-
-
 void NoteEditor::setupUi() {
 }
 
 void NoteEditor::setupSignal() {
-    connect(BufferManager::getInstance(), &BufferManager::currentBufferChanged,
-            this, &NoteEditor::onCurBufferChanged);
+    connect(NotebookManager::getInstance(), &NotebookManager::signalCurrentNodeChanged,
+            this, &NoteEditor::onCurrentNodeChanged);
+
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 }
 
-void NoteEditor::onCurBufferChanged(Buffer *buffer) {
-    //setText(buffer->read());
-    setPlainText(buffer->read());
-}
 
+void NoteEditor::onCurrentNodeChanged(Node *node) {
+    setPlainText(node->read());
 }

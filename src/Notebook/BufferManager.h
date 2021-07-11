@@ -18,19 +18,12 @@ public:
     ~BufferManager();
 
     Buffer *getBuffer(const QString &path);
-    void saveBuffer();
-
-    void setCurrentBuffer(const QString &path);
-
-signals:
-    void currentBufferChanged(Buffer *buffer);
 
 private:
     BufferManager();
 
 private:
     BUFFER_HASH_TYPE *m_pBufferHash;
-    Buffer *m_pCurrentBuffer;
 };
 
 }
