@@ -24,12 +24,6 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Init Submodules
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-
       - name: Install Dependencies
         run: |
           brew install tree
@@ -98,18 +92,3 @@ jobs:
         with:
           name: MyNote-mac-x64_v${{env.MYNOTE_VER}}
           path: ${{runner.workspace}}/build/MyNote-mac-x64_v${{env.MYNOTE_VER}}.dmg
-
-      - name: Update Tag
-        if: github.ref == 'refs/heads/master'
-        run: |
-          git tag --force continuous-build ${GITHUB_SHA}
-          git push --force --tags
-
-      - name: Update Continuous Build Release
-        if: github.ref == 'refs/heads/master'
-        uses: johnwbyrd/update-release@v1.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          files: ${{runner.workspace}}/build/MyNote-mac-x64.dmg
-          release: Continuous Build
-          tag: continuous-build

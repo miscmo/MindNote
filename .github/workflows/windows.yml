@@ -38,13 +38,6 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Init Submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
@@ -58,12 +51,6 @@ jobs:
         shell: bash
         run: mkdir build
         working-directory: ${{runner.workspace}}
-
-      - name: Clone OpenSSL
-        shell: bash
-        run: |
-          git clone https://github.com/tamlok/openssl-utils.git openssl-utils.git --depth=1
-        working-directory: ${{runner.workspace}}/build
 
       - name: Configure and Build Project
         shell: cmd
@@ -80,15 +67,9 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" ${{matrix.config.platform}}
           windeployqt.exe --dir "%DISTRIB_PATH%" .\src\release\MyNote.exe
           copy .\src\release\MyNote.exe "%DISTRIB_PATH%\MyNote.exe"
-          rem set qt_dir=%Qt5_Dir:/=\%
-          rem for %%I in ("%qt_dir%\..\..") do set "qt_topdir=%%~fI"
-          rem set openssl_dir=%qt_topdir%\Tools\OpenSSL\Win_${{matrix.config.platform}}\bin
-          set openssl_dir=openssl-utils.git\1.1.1g\Win_${{matrix.config.platform}}
-          copy %openssl_dir%\lib*.dll "%DISTRIB_PATH%\"
           copy "%GITHUB_WORKSPACE%\README.md" "%DISTRIB_PATH%\README.md"
           copy "%GITHUB_WORKSPACE%\COPYING.LESSER" "%DISTRIB_PATH%\COPYING.LESSER"
           echo %GITHUB_SHA% > "%DISTRIB_PATH%\commit"
-          del /F /Q "%DISTRIB_PATH%\translations\qt_*.qm"
           7z a MyNote-win-${{matrix.config.platform}}.zip "%DISTRIB_PATH%"
         working-directory: ${{runner.workspace}}/build
         env:
@@ -101,19 +82,3 @@ jobs:
           path: ${{env.DISTRIB_PATH}}
         env:
           DISTRIB_PATH: ${{runner.workspace}}/build/distrib/MyNote
-
-      - name: Update Tag
-        if: github.ref == 'refs/heads/master'
-        shell: bash
-        run: |
-          git tag --force continuous-build ${GITHUB_SHA}
-          git push --force --tags
-
-      - name: Update Continuous Build Release
-        if: github.ref == 'refs/heads/master'
-        uses: johnwbyrd/update-release@v1.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          files: ${{runner.workspace}}/build/MyNote-win-${{matrix.config.platform}}.zip
-          release: Continuous Build
-          tag: continuous-build
