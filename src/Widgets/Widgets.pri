@@ -9,6 +9,9 @@ SOURCES += \
     $$PWD/NoteExplorer.cpp \
     $$PWD/NoteExplorerPopMenu.cpp \
     $$PWD/NoteMenuBar.cpp \
+    $$PWD/NoteStatusBar.cpp \
+    $$PWD/NoteToolBar.cpp \
+    $$PWD/Settings/NoteFontSetting.cpp \
     $$PWD/ViewArea.cpp \
     $$PWD/ViewWindow.cpp \
     $$PWD/WidgetFactory.cpp
@@ -24,6 +27,9 @@ HEADERS += \
     $$PWD/NoteExplorer.h \
     $$PWD/NoteExplorerPopMenu.h \
     $$PWD/NoteMenuBar.h \
+    $$PWD/NoteStatusBar.h \
+    $$PWD/NoteToolBar.h \
+    $$PWD/Settings/NoteFontSetting.h \
     $$PWD/ViewArea.h \
     $$PWD/ViewWindow.h \
     $$PWD/WidgetFactory.h

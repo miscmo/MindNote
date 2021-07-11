@@ -22,9 +22,11 @@ public:
     void init();
 
     void initUi();
+    void initToolBar();
     void initMenuBar();
     void initCentralWindow();
     void initDock();
+    void initStatusBar();
 
     void saveStateAndGeometry();
     void loadStateAndGeometry();

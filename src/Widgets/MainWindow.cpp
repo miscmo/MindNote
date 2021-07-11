@@ -11,6 +11,8 @@
 #include <Notebook/Notebook.h>
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
+#include <Widgets/NoteToolBar.h>
+#include <Widgets/NoteStatusBar.h>
 
 #include <QRect>
 #include <QVariant>
@@ -34,18 +36,33 @@ void MainWindow::init() {
 }
 
 void MainWindow::initUi() {
-    //菜单栏
+    initToolBar();
+
     initMenuBar();
 
     initCentralWindow();
 
     initDock();
+
+    initStatusBar();
+}
+
+void MainWindow::initToolBar() {
+    QToolBar *mainToolBar = NoteToolBar::getInstance();
+
+    addToolBar(Qt::TopToolBarArea, mainToolBar);
 }
 
 void MainWindow::initMenuBar() {
     QMenuBar * mainMenuBar = NoteMenuBar::getInstance();
 
     setMenuBar(mainMenuBar);
+}
+
+void MainWindow::initStatusBar() {
+    QStatusBar *mainStatusBar = NoteStatusBar::getInstance();
+
+    setStatusBar(mainStatusBar);
 }
 
 void MainWindow::initCentralWindow() {
