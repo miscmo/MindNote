@@ -37,12 +37,14 @@ void NoteToolBar::initUi() {
 
 void NoteToolBar::initNotebookManage() {
     QAction *actionNewNotebook = new QAction("newNotebook", this);
+    actionNewNotebook->setToolTip(tr("create new notebook"));
 
     addAction(actionNewNotebook);
 }
 
 void NoteToolBar::initNoteEdit() {
     QAction *actionSave = new QAction("Save", this);
+    actionSave->setToolTip(tr("save note"));
 
     addAction(actionSave);
 }

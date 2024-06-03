@@ -12,7 +12,11 @@ int main(int argc, char *argv[])
 
     QTranslator translator;
 
-    translator.load(":/cn.qm");
+    if (translator.load(":/cn.qm")) {
+        qDebug() << "translator load succ\n";
+    } else {
+        qWarning() << "translator load failed\n";
+    }
     a.installTranslator(&translator);
 
     MainWindow mainWindow;
