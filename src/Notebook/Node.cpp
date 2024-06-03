@@ -13,7 +13,7 @@ Node::Node(const QString &dir, Node *parentNode)
 }
 
 Node::~Node() {
-    qDebug() << "~Node" << endl;
+    qDebug() << "~Node" << Qt::endl;
 }
 
 bool Node::init() {

@@ -69,7 +69,7 @@ void NotebookManager::saveCurrentNode() {
     if (!node)
         return ;
 
-    node->write(QByteArray().append(NoteEditor::getInstance()->getText()));
+    node->write(QByteArray().append(NoteEditor::getInstance()->getText().toUtf8()));
 }
 
 bool NotebookManager::deleteNode(Node *node) {
@@ -77,7 +77,7 @@ bool NotebookManager::deleteNode(Node *node) {
 }
 
 NotebookManager::~NotebookManager() {
-    qDebug() << "~NotebookManager" << endl;
+    qDebug() << "~NotebookManager" << Qt::endl;
 }
 
 }

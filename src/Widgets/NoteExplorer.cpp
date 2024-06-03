@@ -70,7 +70,7 @@ void NoteExplorer::resetNote() {
 }
 
 NoteExplorer::~NoteExplorer() {
-    qDebug() << "~NoteExplorer" << endl;
+    qDebug() << "~NoteExplorer" << Qt::endl;
 }
 
 void NoteExplorer::initUi() {

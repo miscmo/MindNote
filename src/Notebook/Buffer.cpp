@@ -15,7 +15,7 @@ Buffer::Buffer(const QString &path) {
 }
 
 Buffer::~Buffer() {
-    qDebug() << "~Buffer" << endl;
+    qDebug() << "~Buffer" << Qt::endl;
 }
 
 QByteArray Buffer::read() {
@@ -29,9 +29,10 @@ QByteArray Buffer::read() {
     }
 
     QTextStream in(file);
-    in.setCodec("UTF-8");
+    in.setEncoding(QStringConverter::Utf8);
 
-    m_dContent = QByteArray().append(in.readAll());
+    // 避免直接readAll，文件太大时会出问题
+    m_dContent = QByteArray().append(in.readAll().toUtf8());
 
     file->close();
 
@@ -41,12 +42,12 @@ QByteArray Buffer::read() {
 void Buffer::write(const QByteArray &ctx) {
     QFile *file = openMD();
     if (nullptr == file) {
-        qDebug() << "write failed, notebook " << m_sPath << "cannot open." << endl;
+        qDebug() << "write failed, notebook " << m_sPath << "cannot open." << Qt::endl;
         return ;
     }
 
     QTextStream out(file);
-    out.setCodec("UTF-8");
+    out.setEncoding(QStringConverter::Utf8);
 
     out << ctx;
     m_dContent = ctx;

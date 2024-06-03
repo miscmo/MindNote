@@ -37,7 +37,7 @@ void ViewArea::initUi() {
 }
 
 ViewArea::~ViewArea() {
-    qDebug() << "~ViewArea" << endl;
+    qDebug() << "~ViewArea" << Qt::endl;
     SAFE_DELETE(m_pMainLayout);
 }
 

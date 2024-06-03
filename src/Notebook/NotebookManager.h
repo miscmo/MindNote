@@ -31,7 +31,7 @@ public:
 
 public slots:
     void onItemChanged(QTreeWidgetItem *item, int column) {
-        qDebug() << "itemChanged" << endl;
+        qDebug() << "itemChanged" << Qt::endl;
     }
 
 private:

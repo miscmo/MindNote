@@ -24,7 +24,7 @@ FileExplorer::FileExplorer(QWidget *parent)
 }
 
 FileExplorer::~FileExplorer() {
-    qDebug() << "~FileExplorer" << endl;
+    qDebug() << "~FileExplorer" << Qt::endl;
 }
 
 }

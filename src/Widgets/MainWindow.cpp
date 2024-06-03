@@ -123,7 +123,7 @@ void MainWindow::saveStateAndGeometry() {
 }
 
 MainWindow::~MainWindow() {
-    qDebug() << "~MainWindow" << endl;
+    qDebug() << "~MainWindow" << Qt::endl;
 }
 
 void MainWindow::closeEvent(QCloseEvent *p_event) {

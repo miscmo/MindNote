@@ -58,7 +58,7 @@ void NewNoteDialog::setupCentralWidget() {
 }
 
 void NewNoteDialog::onNameEdited(const QString &name) {
-    qDebug() << name << endl;
+    qDebug() << name << Qt::endl;
     if (name.isEmpty() || m_pParentNode->hasChildName(name)) {
         setButtonEnabled(QDialogButtonBox::Ok, false);
         return ;

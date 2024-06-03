@@ -33,7 +33,7 @@ NoteEditor *NoteEditor::getInstance() {
 }
 
 NoteEditor::~NoteEditor() {
-    qDebug() << "~NodeEditor" << endl;
+    qDebug() << "~NodeEditor" << Qt::endl;
     Config::getInstance()->set(CONF_FONT_KEY, QVariant(getCurFont().toString()));
 }
 

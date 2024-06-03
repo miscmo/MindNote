@@ -16,7 +16,7 @@ Notebook::Notebook(const QString &path)
 }
 
 Notebook::~Notebook() {
-    qDebug() << "~Notebook" << endl;
+    qDebug() << "~Notebook" << Qt::endl;
     SAFE_DELETE(m_pRoot);
 }
 

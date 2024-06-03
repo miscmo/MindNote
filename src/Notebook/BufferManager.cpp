@@ -34,6 +34,6 @@ Buffer *BufferManager::getBuffer(const QString &path) {
 }
 
 BufferManager::~BufferManager() {
-    qDebug() << "~BufferManager()" << endl;
+    qDebug() << "~BufferManager()" << Qt::endl;
     SAFE_DELETE(m_pBufferHash);
 }
