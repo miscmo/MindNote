@@ -8,22 +8,30 @@ namespace MyNote {
 
 class Node;
 
-class Notebook : public QObject {
+class Note : public QObject {
     Q_OBJECT
 public:
-    Notebook(const QString &path = QString());
-    ~Notebook();
+    Note(const QString &path = QString());
+    ~Note();
 
-    void initNote();
+    void InitNote();
 
-    Node *getRootNode() const {return m_pRoot;}
-    bool setCurrentNode(Node *node);
-    Node *getCurrentNode() { return m_pCurrentNode; }
+    //笔记操作
 
-    bool deleteNode(Node *node);
+    // 保存笔记
+    int SaveNote();
 
-    QString getPath() const {return m_sPath;}
-    QString getName();
+    const QString& GetPath() const {return m_sPath;}
+    const QString GetName();
+
+    // 结点操作
+    Node *GetRootNode() const {return m_pRoot;}
+    bool SetCurrentNode(Node *node);
+    Node *GetCurrentNode() { return m_pCurrentNode; }
+
+    bool DeleteNode(Node *node);
+
+    void TextChanged();
 
 private:
     void loadNode(Node *node, const QString &path);

@@ -8,15 +8,16 @@ class QTreeWidget;
 
 namespace MyNote {
 
+class NodeItem;
 class WidgetFactory {
 public:
     WidgetFactory() = delete;
 
     static QFormLayout *createFormLayout(QWidget *parent = nullptr);
 
-    static QTreeWidgetItem *createNoteExplorerItem(QTreeWidget *parent);
+    static NodeItem *CreateNodeItem(QTreeWidget *parent);
 
-    static QTreeWidgetItem *createNoteExplorerItem(QTreeWidgetItem *parent);
+    static NodeItem *CreateNodeItem(QTreeWidgetItem *parent);
 };
 
 }

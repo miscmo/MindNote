@@ -27,7 +27,7 @@ namespace MyNote {
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
-    MyNote::getInstance()->setMainWindow(this);
+    MyNote::getInstance()->SetMainWindow(this);
     loadStateAndGeometry();
 }
 
@@ -36,7 +36,9 @@ void MainWindow::init() {
 }
 
 void MainWindow::initUi() {
-    initToolBar();
+
+    // 工具栏暂时不用，界面越简洁越好
+    //initToolBar();
 
     initMenuBar();
 
@@ -120,6 +122,8 @@ void MainWindow::saveStateAndGeometry() {
 
     config->set(CONF_WIN_GEOMETRY_KEY, saveGeometry());
     config->set(CONF_WIN_STATE_KEY, saveState());
+
+    NoteMgr::GetInstance()->SaveNote();
 }
 
 MainWindow::~MainWindow() {

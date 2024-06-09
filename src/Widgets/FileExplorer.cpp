@@ -13,7 +13,7 @@ FileExplorer *FileExplorer::m_pInstance = nullptr;
 
 FileExplorer *FileExplorer::getInstance() {
     if (m_pInstance == nullptr) {
-        m_pInstance = new FileExplorer(MyNote::getInstance()->getMainWindow());
+        m_pInstance = new FileExplorer(MyNote::getInstance()->GetMainWindow());
     }
     return m_pInstance;
 }

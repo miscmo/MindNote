@@ -20,8 +20,8 @@ public:
 
     ~MyNote();
 
-    MainWindow *getMainWindow() { return m_pMainWindow; }
-    void setMainWindow(MainWindow *mainWindow);
+    MainWindow *GetMainWindow() { return m_pMainWindow; }
+    void SetMainWindow(MainWindow *mainWindow);
 
 private:
     explicit MyNote(QObject *parent = nullptr);

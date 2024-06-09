@@ -38,7 +38,7 @@ void NewNoteDialog::setupCentralWidget() {
 
     m_pMainLayout = WidgetFactory::createFormLayout(m_pNodeInfoWidget);
 
-    QString notebookName = NotebookManager::getInstance()->getCurNotebook()->getName();
+    QString notebookName = NoteMgr::GetInstance()->GetCurNote()->GetName();
 
     m_pMainLayout->addRow(tr("Notebook:"),
                           new QLabel(notebookName, m_pNodeInfoWidget));

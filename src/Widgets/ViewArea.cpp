@@ -14,7 +14,7 @@ namespace MyNote {
 ViewArea *ViewArea::m_pInstance = nullptr;
 ViewArea *ViewArea::getInstance() {
     if (m_pInstance == nullptr) {
-        m_pInstance = new ViewArea(MyNote::getInstance()->getMainWindow());
+        m_pInstance = new ViewArea(MyNote::getInstance()->GetMainWindow());
 
     }
 

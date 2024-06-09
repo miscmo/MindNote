@@ -10,7 +10,8 @@ namespace MyNote {
 
 class Buffer;
 
-class Node {
+class Node : public QObject {
+    Q_OBJECT
 public:
     Node(const QString &dir, Node *parentNode);
     ~Node();
@@ -36,10 +37,23 @@ public:
 
     Node *getParentNode() { return m_pParentNode; }
 
+    // 只保存当前结点内容
+    int Save();
+    // 保存当前结点和所有子结点
+    int SaveAll();
+
+    bool NeedSave();
+
+    void TextChanged();
+
+signals:
+    void SignalModStatusChanged(Node *node);
+
 private:
     QString m_sNodeDir;
     QVector<Node *> m_vChilds;
     Node *m_pParentNode;
+    bool m_bIsMod;
 };
 
 }

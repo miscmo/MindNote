@@ -11,7 +11,7 @@ NoteStatusBar *NoteStatusBar::m_pInstance = nullptr;
 
 NoteStatusBar *NoteStatusBar::getInstance() {
     if (!m_pInstance) {
-        m_pInstance = new NoteStatusBar(MyNote::getInstance()->getMainWindow());
+        m_pInstance = new NoteStatusBar(MyNote::getInstance()->GetMainWindow());
     }
 
     return m_pInstance;

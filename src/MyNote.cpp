@@ -16,7 +16,7 @@ MyNote::~MyNote() {
     m_pMainWindow = nullptr;
 }
 
-void MyNote::setMainWindow(MainWindow *mainWindow) {
+void MyNote::SetMainWindow(MainWindow *mainWindow) {
     if (!m_pMainWindow)	{
         m_pMainWindow = mainWindow;
     }

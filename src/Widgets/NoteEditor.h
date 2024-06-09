@@ -43,6 +43,10 @@ private slots:
 
     void onCurrentNodeChanged(Node *node);
 
+    void onTextChanged();
+
+    void onTextModify(bool isMod);
+
 private:
     NoteEditor(QWidget *parent);
 

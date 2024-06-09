@@ -1,5 +1,7 @@
 #include "WidgetFactory.h"
 
+#include "NodeItem.h"
+
 #include <QFormLayout>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -12,8 +14,8 @@ QFormLayout *WidgetFactory::createFormLayout(QWidget *parent) {
     return layout;
 }
 
-QTreeWidgetItem *WidgetFactory::createNoteExplorerItem(QTreeWidget *parent) {
-    QTreeWidgetItem *item = new QTreeWidgetItem(parent);
+NodeItem *WidgetFactory::CreateNodeItem(QTreeWidget *parent) {
+    NodeItem *item = new NodeItem(parent);
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled;
     flags = flags | Qt::ItemIsSelectable;
@@ -23,8 +25,8 @@ QTreeWidgetItem *WidgetFactory::createNoteExplorerItem(QTreeWidget *parent) {
     return item;
 }
 
-QTreeWidgetItem *WidgetFactory::createNoteExplorerItem(QTreeWidgetItem *parent) {
-    QTreeWidgetItem *item = new QTreeWidgetItem(parent);
+NodeItem *WidgetFactory::CreateNodeItem(QTreeWidgetItem *parent) {
+    NodeItem *item = new NodeItem(parent);
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled;
     flags = flags | Qt::ItemIsSelectable;

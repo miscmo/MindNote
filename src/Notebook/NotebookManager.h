@@ -8,46 +8,49 @@
 
 namespace MyNote {
 
-class Notebook;
+class Note;
 class Node;
 
-using NOTEBOOK_HASH_TYPE = QHash<QString, Notebook *>;
+using NOTEBOOK_HASH_TYPE = QHash<QString, Note *>;
 
-class NotebookManager : public QObject {
+class NoteMgr : public QObject {
     Q_OBJECT
 public:
-    static NotebookManager *getInstance();
-    ~NotebookManager();
+    static NoteMgr *GetInstance();
+    ~NoteMgr();
 
-    void initSignal();
+    void InitSignal();
 
-    Notebook *getCurNotebook() { return m_pCurNotebook; }
-    void setCurNotebook(const QString &path);
+    Note *GetCurNote() { return m_pCurNote; }
+    void SetCurNote(const QString &path);
 
-    bool deleteNode(Node *node);
+    bool DeleteNode(Node *node);
 
-    void setCurrentNode(Node *node);
-    void saveCurrentNode();
+    void SetCurNode(Node *node);
+    void SaveCurNode();
+
+    int SaveNote();
+
+    void TextChanged();
 
 public slots:
-    void onItemChanged(QTreeWidgetItem *item, int column) {
+    void OnItemChanged(QTreeWidgetItem *item, int column) {
         qDebug() << "itemChanged" << Qt::endl;
     }
 
 private:
-    Notebook *getNotebook(const QString &path);
+    Note *getNote(const QString &path);
 
 signals:
-    void signalCurrentNodeChanged(Node *node);
-    void signalNotebookChanged();
+    void signalCurNodeChanged(Node *node);
+    void signalNoteChanged();
 
 private:
-    NotebookManager();
+    NoteMgr();
 
 private:
-    NOTEBOOK_HASH_TYPE m_hNotebookHash;
-    Notebook *m_pCurNotebook;
-    QString m_sCurNotebook;
+    NOTEBOOK_HASH_TYPE m_hNoteList;
+    Note *m_pCurNote;
 };
 
 }

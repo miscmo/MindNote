@@ -35,7 +35,7 @@ bool NodeDeleteConfirmDialog::confirmDeleteNode() {
     if (!m_pNode)
         return true;
 
-    return NotebookManager::getInstance()->deleteNode(m_pNode);
+    return NoteMgr::GetInstance()->DeleteNode(m_pNode);
 }
 
 

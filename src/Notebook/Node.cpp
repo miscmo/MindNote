@@ -4,12 +4,14 @@
 #include <QDir>
 #include <Notebook/Buffer.h>
 #include <Notebook/BufferManager.h>
+#include <Widgets/NoteEditor.h>
 
 using namespace MyNote;
 
 Node::Node(const QString &dir, Node *parentNode)
     : m_sNodeDir(dir)
-    , m_pParentNode(parentNode) {
+    , m_pParentNode(parentNode)
+    , m_bIsMod(0){
 }
 
 Node::~Node() {
@@ -92,4 +94,43 @@ QByteArray Node::read() {
 
 void Node::write(const QByteArray &ctx) {
     getBuffer()->write(ctx);
+}
+
+
+int Node::Save() {
+    // 这里不应该依赖NoteEditor
+    // 暂时先这样写
+    if (NeedSave()) {
+        write(QByteArray().append(NoteEditor::getInstance()->getText().toUtf8()));
+        qDebug() << "save succ, node: " << this->getPath() << "\n";
+        m_bIsMod = false;
+        emit SignalModStatusChanged(this);
+    }
+}
+
+int Node::SaveAll() {
+    int ret = 0;
+    for (auto child : m_vChilds) {
+        if (child->NeedSave()) {
+            if (child->Save() != 1) {
+                // 有node保存失败
+                ret = -1;
+            }
+        }
+    }
+
+    return ret;
+}
+
+
+bool Node::NeedSave() {
+    return m_bIsMod;
+}
+
+
+void Node::TextChanged() {
+    if (m_bIsMod == false) {
+        m_bIsMod = true;
+        emit SignalModStatusChanged(this);
+    }
 }

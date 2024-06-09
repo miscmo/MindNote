@@ -21,7 +21,7 @@ NoteMenuBar *NoteMenuBar::m_pInstance = nullptr;
 
 NoteMenuBar *NoteMenuBar::getInstance() {
     if (!m_pInstance)
-        m_pInstance = new NoteMenuBar(MyNote::getInstance()->getMainWindow());
+        m_pInstance = new NoteMenuBar(MyNote::getInstance()->GetMainWindow());
     return m_pInstance;
 }
 
@@ -71,15 +71,17 @@ void NoteMenuBar::openNotebook() {
                 "",
                 QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
 
-    NotebookManager::getInstance()->setCurNotebook(dir);
+    qDebug() << "open note path: " << dir << "\n";
+
+    NoteMgr::GetInstance()->SetCurNote(dir);
 }
 
 void NoteMenuBar::saveNote() {
-    NotebookManager::getInstance()->saveCurrentNode();
+    NoteMgr::GetInstance()->SaveCurNode();
 }
 
 void NoteMenuBar::exitApp() {
-    MyNote::getInstance()->getMainWindow()->close();
+    MyNote::getInstance()->GetMainWindow()->close();
 }
 
 void NoteMenuBar::initRecentlyFileList(QMenu *menuRecentlyFile) {
@@ -87,7 +89,10 @@ void NoteMenuBar::initRecentlyFileList(QMenu *menuRecentlyFile) {
 
     auto onOpenRecentlyFile = [=](const QAction *action) {
         QString path = action->text();
-        NotebookManager::getInstance()->setCurNotebook(path);
+
+        qDebug() << "open recently note, path: " << path << "\n";
+
+        NoteMgr::GetInstance()->SetCurNote(path);
     };
 
     QStringList fileList = AppState::getInstance()->getRecentlyDirList();

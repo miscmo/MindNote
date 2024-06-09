@@ -12,72 +12,102 @@
 
 namespace MyNote {
 
-NotebookManager *NotebookManager::getInstance() {
-    static NotebookManager manager;
-    return &manager;
+ NoteMgr* NoteMgr::GetInstance() {
+    static NoteMgr mgr;
+    return &mgr;
 }
 
-NotebookManager::NotebookManager()
+NoteMgr::NoteMgr()
     : QObject()
-    , m_pCurNotebook(nullptr) {
-    initSignal();
+    , m_pCurNote(nullptr) {
+    InitSignal();
 }
 
-void NotebookManager::initSignal() {
+void NoteMgr::InitSignal() {
 }
 
-void NotebookManager::setCurNotebook(const QString &path) {
-    if (path.isEmpty() || path == m_sCurNotebook)
+void NoteMgr::SetCurNote(const QString &path) {
+    if (path.isEmpty()) {
+        qWarning() << "open note path is emtpy\n";
         return ;
+    }
 
     QDir dir(path);
     Q_ASSERT(dir.exists());
 
-    m_pCurNotebook = getNotebook(path);
+    if (m_pCurNote != nullptr && m_pCurNote->GetPath() == path) {
+        qDebug() << "open note same with cur note\n";
+        return ;
+    }
 
-    Q_ASSERT(m_pCurNotebook != nullptr);
+    m_pCurNote = getNote(path);
 
-    m_sCurNotebook = path;
+    Q_ASSERT(m_pCurNote != nullptr);
 
     AppState::getInstance()->addRecentlyDir(path);
 
-    emit signalNotebookChanged();
+    // 截至目前，底层数据已经构建好了，要基于这些数据构建用户界面
+
+    qDebug() << "cur note is: " << m_pCurNote->GetPath() << "\n";
+    qDebug() << "cur node is: " << m_pCurNote->GetCurrentNode()->getPath() << "\n";
+
+    emit signalNoteChanged();
+    emit signalCurNodeChanged(m_pCurNote->GetCurrentNode());
 }
 
-Notebook *NotebookManager::getNotebook(const QString &path) {
-    NOTEBOOK_HASH_TYPE::const_iterator it = m_hNotebookHash.find(path);
-    if (m_hNotebookHash.end() == it) {
-        Notebook *newNotebook = new Notebook(path);
-        newNotebook->initNote();
-        m_hNotebookHash.insert(path, newNotebook);
-        return newNotebook;
+Note *NoteMgr::getNote(const QString &path) {
+    NOTEBOOK_HASH_TYPE::const_iterator it = m_hNoteList.find(path);
+    if (m_hNoteList.end() == it) {
+        qDebug() << "create new note\n";
+        Note *newNote = new Note(path);
+        newNote->InitNote();
+        m_hNoteList.insert(path, newNote);
+        return newNote;
     }
+
+    qDebug() << "open already created note\n";
 
     return it.value();
 }
 
-void NotebookManager::setCurrentNode(Node *node) {
-    bool ret = m_pCurNotebook->setCurrentNode(node);
+void NoteMgr::SetCurNode(Node *node) {
+    bool ret = m_pCurNote->SetCurrentNode(node);
     if (!ret)
         return ;
 
-    emit signalCurrentNodeChanged(node);
+    emit signalCurNodeChanged(node);
 }
 
-void NotebookManager::saveCurrentNode() {
-    Node *node = m_pCurNotebook->getCurrentNode();
+void NoteMgr::SaveCurNode() {
+    Node *node = m_pCurNote->GetCurrentNode();
     if (!node)
         return ;
 
-    node->write(QByteArray().append(NoteEditor::getInstance()->getText().toUtf8()));
+    if (node->NeedSave()) {
+        //node->write(QByteArray().append(NoteEditor::getInstance()->getText().toUtf8()));
+        node->Save();
+    }
 }
 
-bool NotebookManager::deleteNode(Node *node) {
-    return getCurNotebook()->deleteNode(node);
+int NoteMgr::SaveNote() {
+    if (m_pCurNote == nullptr) {
+        return 0;
+    }
+
+    return m_pCurNote->SaveNote();
 }
 
-NotebookManager::~NotebookManager() {
+bool NoteMgr::DeleteNode(Node *node) {
+    return GetCurNote()->DeleteNode(node);
+}
+
+void NoteMgr::TextChanged() {
+    GetCurNote()->TextChanged();
+}
+
+NoteMgr::~NoteMgr() {
     qDebug() << "~NotebookManager" << Qt::endl;
 }
+
 
 }

@@ -25,6 +25,7 @@ void Utils::File::write(QString filename, QByteArray ctx) {
     file.close();
 }
 
+// 返回文件夹下所有的文件和目录名列表
 QStringList Utils::listNode(const QString &path) {
     QDir dir(path);
     QStringList nameFilter = { ".", "..", NODE_IMG_DIR };

@@ -10,32 +10,33 @@
 
 using namespace MyNote;
 
-Notebook::Notebook(const QString &path)
+Note::Note(const QString &path)
     : m_pRoot(nullptr)
     , m_sPath(path) {
 }
 
-Notebook::~Notebook() {
+Note::~Note() {
     qDebug() << "~Notebook" << Qt::endl;
     SAFE_DELETE(m_pRoot);
 }
 
-void Notebook::initNote() {
+void Note::InitNote() {
     QDir dir(m_sPath);
     Q_ASSERT(dir.exists());
 
     m_pRoot = NotebookFactory::createNode(m_sPath, nullptr);
 
     loadNode(m_pRoot, m_sPath);
+    SetCurrentNode(m_pRoot);
 }
 
-void Notebook::loadNode(Node *node, const QString &path) {
+void Note::loadNode(Node *node, const QString &path) {
     QStringList dirlist = Utils::listNode(path);
 
     if (dirlist.empty())
         return ;
 
-    for (auto dir : dirlist) {
+    for (auto &dir : dirlist) {
         QString fullpath = path + '/' + dir;
         Node *newNode = NotebookFactory::createNode(fullpath, node);
         loadNode(newNode, fullpath);
@@ -43,7 +44,7 @@ void Notebook::loadNode(Node *node, const QString &path) {
     }
 }
 
-bool Notebook::setCurrentNode(Node *node) {
+bool Note::SetCurrentNode(Node *node) {
     if (m_pCurrentNode == node)
         return false;
 
@@ -51,7 +52,7 @@ bool Notebook::setCurrentNode(Node *node) {
     return true;
 }
 
-bool Notebook::deleteNode(Node *node) {
+bool Note::DeleteNode(Node *node) {
     Node *parentNode = node->getParentNode();
 
     Q_ASSERT(nullptr != parentNode);
@@ -59,8 +60,24 @@ bool Notebook::deleteNode(Node *node) {
     return parentNode->deleteChild(node);
 }
 
-QString Notebook::getName() {
+const QString Note::GetName() {
     QDir dir(m_sPath);
 
     return dir.dirName();
+}
+
+int Note::SaveNote() {
+    if (m_pRoot == nullptr)	{
+        return 0;
+    }
+
+    return m_pRoot->SaveAll();
+}
+
+void Note::TextChanged() {
+    if (m_pCurrentNode == nullptr)  {
+        return;
+    }
+
+    m_pCurrentNode->TextChanged();
 }

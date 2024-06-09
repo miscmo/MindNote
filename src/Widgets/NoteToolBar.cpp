@@ -9,7 +9,7 @@ NoteToolBar *NoteToolBar::m_pInstance = nullptr;
 
 NoteToolBar *NoteToolBar::getInstance() {
     if (!m_pInstance) {
-        m_pInstance = new NoteToolBar(MyNote::getInstance()->getMainWindow());
+        m_pInstance = new NoteToolBar(MyNote::getInstance()->GetMainWindow());
     }
 
     return m_pInstance;

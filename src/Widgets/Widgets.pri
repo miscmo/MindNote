@@ -5,6 +5,7 @@ SOURCES += \
     $$PWD/Dialogs/ScrollDialog.cpp \
     $$PWD/FileExplorer.cpp \
     $$PWD/MainWindow.cpp \
+    $$PWD/NodeItem.cpp \
     $$PWD/NoteEditor.cpp \
     $$PWD/NoteExplorer.cpp \
     $$PWD/NoteExplorerPopMenu.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     $$PWD/Dialogs/ScrollDialog.h \
     $$PWD/FileExplorer.h \
     $$PWD/MainWindow.h \
+    $$PWD/NodeItem.h \
     $$PWD/NoteEditor.h \
     $$PWD/NoteExplorer.h \
     $$PWD/NoteExplorerPopMenu.h \

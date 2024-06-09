@@ -26,7 +26,7 @@ NoteEditor *NoteEditor::m_pInstance = nullptr;
 
 NoteEditor *NoteEditor::getInstance() {
     if (m_pInstance == nullptr) {
-        m_pInstance = new NoteEditor(MyNote::getInstance()->getMainWindow());
+        m_pInstance = new NoteEditor(MyNote::getInstance()->GetMainWindow());
     }
 
     return m_pInstance;
@@ -179,15 +179,27 @@ void NoteEditor::setupUi() {
 }
 
 void NoteEditor::setupSignal() {
-    connect(NotebookManager::getInstance(), &NotebookManager::signalCurrentNodeChanged,
+    connect(NoteMgr::GetInstance(), &NoteMgr::signalCurNodeChanged,
             this, &NoteEditor::onCurrentNodeChanged);
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
+    connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
+    connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(onTextChanged(bool)));
 }
 
 
 void NoteEditor::onCurrentNodeChanged(Node *node) {
     setPlainText(node->read());
+}
+
+void NoteEditor::onTextChanged() {
+    qDebug() << "text changed\n";
+    NoteMgr::GetInstance()->TextChanged();
+}
+
+void NoteEditor::onTextModify(bool isMod) {
+    qDebug() << "text modify: " << isMod << Qt::endl;
+   // NoteMgr::GetInstance()->TextChanged();
 }

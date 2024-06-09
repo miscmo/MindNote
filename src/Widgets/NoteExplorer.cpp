@@ -2,6 +2,7 @@
 
 #include "NoteEditor.h"
 #include "MainWindow.h"
+#include "NodeItem.h"
 
 #include <MyNote.h>
 #include <Notebook/Notebook.h>
@@ -22,7 +23,7 @@ Q_DECLARE_METATYPE(Node *);
 NoteExplorer* NoteExplorer::m_pInstance = nullptr;
 NoteExplorer *NoteExplorer::getInstance() {
     if (m_pInstance == nullptr) {
-        m_pInstance = new NoteExplorer(MyNote::getInstance()->getMainWindow());
+        m_pInstance = new NoteExplorer(MyNote::getInstance()->GetMainWindow());
     }
 
     return m_pInstance;
@@ -42,23 +43,25 @@ void NoteExplorer::clearAllNote() {
 }
 
 void NoteExplorer::resetNote() {
-    QList<QTreeWidgetItem *> items;
+    QList<NodeItem *> items;
 
-    Notebook *note = NotebookManager::getInstance()->getCurNotebook();
+    Note *note = NoteMgr::GetInstance()->GetCurNote();
 
     Q_ASSERT(note != nullptr);
 
     clearAllNote();
 
-    Node *rootNode = note->getRootNode();
-    QTreeWidgetItem *rootItem = WidgetFactory::createNoteExplorerItem(this);
+    Node *rootNode = note->GetRootNode();
+    NodeItem *rootItem = WidgetFactory::CreateNodeItem(this);
     rootItem->setData(0, Qt::UserRole, QVariant().fromValue(rootNode));
     rootItem->setText(0, rootNode->getName());
+    rootItem->ConnNodeIsMod(rootNode);
 
     for (auto node : rootNode->getChilds()) {
-        QTreeWidgetItem *item = WidgetFactory::createNoteExplorerItem(rootItem);
+        NodeItem *item = WidgetFactory::CreateNodeItem(rootItem);
         item->setData(0, Qt::UserRole, QVariant().fromValue(node));
         item->setText(0, node->getName());
+        item->ConnNodeIsMod(node);
         if (!node->getChilds().isEmpty()) {
             loadNode(item, node);
         }
@@ -80,10 +83,10 @@ void NoteExplorer::initUi() {
 
 void NoteExplorer::setupSignal() {
     connect(this, &QTreeWidget::itemClicked, this, &NoteExplorer::onItemClicked);
-    connect(NotebookManager::getInstance(), &NotebookManager::signalNotebookChanged,
+    connect(NoteMgr::GetInstance(), &NoteMgr::signalNoteChanged,
             this, &NoteExplorer::resetNote);
     connect(this, &QTreeWidget::customContextMenuRequested, this, &NoteExplorer::onPopMenuRequest);
-    connect(this, &NoteExplorer::itemChanged, NotebookManager::getInstance(), &NotebookManager::onItemChanged);
+    connect(this, &NoteExplorer::itemChanged, NoteMgr::GetInstance(), &NoteMgr::OnItemChanged);
 }
 
 void NoteExplorer::onAddSub() {
@@ -95,9 +98,10 @@ void NoteExplorer::onAddSub() {
 
     NewNoteDialog dig(curNode, -1, this);
     if (dig.exec() == QDialog::Accepted) {
-        QTreeWidgetItem *newItem = WidgetFactory::createNoteExplorerItem(curItem);
+        NodeItem *newItem = WidgetFactory::CreateNodeItem(curItem);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
+        newItem->ConnNodeIsMod(dig.getNewNode());
 
         setCurrentItem(newItem);
 
@@ -115,9 +119,10 @@ void NoteExplorer::onAddPre() {
 
     NewNoteDialog dig(parentNode, preIndex, this);
     if (dig.exec() == QDialog::Accepted) {
-        QTreeWidgetItem *newItem = WidgetFactory::createNoteExplorerItem((QTreeWidget *)nullptr);
+        NodeItem *newItem = WidgetFactory::CreateNodeItem((QTreeWidget *)nullptr);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
+        newItem->ConnNodeIsMod(dig.getNewNode());
 
         curItem->parent()->insertChild(preIndex, newItem);
 
@@ -137,9 +142,10 @@ void NoteExplorer::onAddPost() {
 
     NewNoteDialog dig(parentNode, postIndex, this);
     if (dig.exec() == QDialog::Accepted) {
-        QTreeWidgetItem *newItem = WidgetFactory::createNoteExplorerItem((QTreeWidget *)nullptr);
+        NodeItem *newItem = WidgetFactory::CreateNodeItem((QTreeWidget *)nullptr);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
+        newItem->ConnNodeIsMod(dig.getNewNode());
 
         curItem->parent()->insertChild(postIndex, newItem);
 
@@ -167,9 +173,13 @@ void NoteExplorer::onDelete() {
 }
 
 void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {
+    // 先保存原来的
+    NoteMgr::GetInstance()->SaveCurNode();
+
+    // 再切换到新的结点
     Node *itemNode = p_item->data(0, Qt::UserRole).value<Node *>();
 
-    NotebookManager::getInstance()->setCurrentNode(itemNode);
+    NoteMgr::GetInstance()->SetCurNode(itemNode);
 }
 
 void NoteExplorer::onPopMenuRequest(const QPoint &point) {
@@ -188,7 +198,7 @@ void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, Node *node) {
         return ;
 
     for (auto subNode : subNodeList) {
-        QTreeWidgetItem *item = WidgetFactory::createNoteExplorerItem(parent_item);
+        NodeItem *item = WidgetFactory::CreateNodeItem(parent_item);
         item->setData(0, Qt::UserRole, QVariant().fromValue(subNode));
         item->setText(0, subNode->getName());
 
