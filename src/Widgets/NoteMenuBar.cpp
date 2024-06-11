@@ -8,6 +8,7 @@
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
 #include <Widgets/NoteEditor.h>
+#include <Model/DBMgr.h>
 
 #include <QAction>
 #include <QMenu>
@@ -135,11 +136,20 @@ void NoteMenuBar::initMenuSetting() {
             NoteEditor::getInstance()->setCurFont(font);
         }
     };
+
+    auto SettingMore = [=]() {
+        Setting curSet = DBMgr::GetInstance()->GetCurSetting();
+        qDebug() << curSet.Name << Qt::endl;
+    };
+
     QMenu *menuSetting = addMenu(tr("Setting"));
 
     QAction *actionFont = menuSetting->addAction(tr("Font"));
 
+    QAction *actionMore = menuSetting->addAction(tr("More"));
+
     connect(actionFont, &QAction::triggered, fontSelecter);
+    connect(actionMore, &QAction::triggered, SettingMore);
 }
 
 void NoteMenuBar::initMenuAbout() {

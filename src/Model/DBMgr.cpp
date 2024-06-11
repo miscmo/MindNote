@@ -69,6 +69,16 @@ int DBMgr::UserAdd(User *user) {
     return 0;
 }
 
+Setting DBMgr::GetCurSetting() {
+    Setting curSet;
+    curSet.Id = 1;
+    curSet.IsAutoLogin = 1;
+    curSet.Name = "测试配置";
+    curSet.IsOpenLastNote = 1;
+
+    return curSet;
+}
+
 DBMgr::~DBMgr() {
     Close();
 }

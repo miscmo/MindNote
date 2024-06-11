@@ -11,6 +11,23 @@ struct User {
     QString Name;
     QString Avatar;
     QString Passwd;
+    int SettingId;
+};
+
+struct Note {
+    int Id;
+    QString Name;
+    int Type;	// 笔记类型：文件笔记
+    QString CreateTime;
+    QString UpdateTime;
+    QString Path;
+};
+
+struct Setting {
+    int Id;
+    QString Name;
+    int IsOpenLastNote;
+    int IsAutoLogin;
 };
 
 class DBMgr {
@@ -26,6 +43,11 @@ public:
     int UserUpdate();
     int UserDel();
     int UserQuery();
+
+
+    int NoteAdd();
+
+    Setting GetCurSetting();
 
 
 
