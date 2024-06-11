@@ -13,6 +13,7 @@
 #include <Notebook/BufferManager.h>
 #include <Widgets/NoteToolBar.h>
 #include <Widgets/NoteStatusBar.h>
+#include <Model/DBMgr.h>
 
 #include <QRect>
 #include <QVariant>
@@ -124,6 +125,7 @@ void MainWindow::saveStateAndGeometry() {
     config->set(CONF_WIN_STATE_KEY, saveState());
 
     NoteMgr::GetInstance()->SaveNote();
+    DBMgr::GetInstance()->Close();
 }
 
 MainWindow::~MainWindow() {

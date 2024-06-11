@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,6 +15,7 @@ include($$PWD/Utils/Utils.pri)
 include($$PWD/Config/Config.pri)
 include($$PWD/Widgets/Widgets.pri)
 include($$PWD/Notebook/Notebook.pri)
+include($$PWD/Model/Model.pri)
 
 SOURCES += \
     Main.cpp \
