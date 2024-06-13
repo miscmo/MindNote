@@ -13,7 +13,6 @@ public:
 
     void initUi();
     void initNotebookManage();
-    void initNoteEdit();
 
 private:
     NoteToolBar(QWidget *parent = nullptr);

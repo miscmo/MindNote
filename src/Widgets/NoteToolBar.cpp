@@ -2,6 +2,13 @@
 
 #include <MyNote.h>
 #include <Widgets/MainWindow.h>
+#include <Widgets/NoteEditor.h>
+#include <Notebook/NotebookManager.h>
+#include <Config/AppState.h>
+
+#include <QFontDialog>
+#include <QToolButton>
+#include <QMenu>
 
 using namespace MyNote;
 
@@ -29,22 +36,81 @@ void NoteToolBar::initUi() {
     setMovable(false);
 
     initNotebookManage();
-
-    addSeparator();
-
-    initNoteEdit();
 }
 
 void NoteToolBar::initNotebookManage() {
-    QAction *actionNewNotebook = new QAction("newNotebook", this);
-    actionNewNotebook->setToolTip(tr("create new notebook"));
+    const QString strFromDisk = "From Disk";
 
-    addAction(actionNewNotebook);
-}
+    QAction *actionNewNote = new QAction(tr("NewNote"), this);
+    actionNewNote->setToolTip(tr("create new notebook"));
 
-void NoteToolBar::initNoteEdit() {
-    QAction *actionSave = new QAction("Save", this);
+    addAction(actionNewNote);
+
+    addSeparator();
+
+    QToolButton *btnOpenNote = new QToolButton(this);
+    QMenu *menuOpenNote = new QMenu();
+
+    auto onOpenRecentlyFile = [=](const QAction *action) {
+        QString path = action->text();
+
+        if (path == strFromDisk) {
+            qDebug() << "todo: open from disk" << Qt::endl;
+            return ;
+        }
+
+        qDebug() << "open recently note, path: " << path << "\n";
+
+        // 错误处理，如果是一个错误的path，要弹窗告警出来
+        NoteMgr::GetInstance()->SetCurNote(path);
+    };
+
+    QStringList fileList = AppState::getInstance()->getRecentlyDirList();
+
+    for (auto file : fileList) {
+        menuOpenNote->addAction(file);
+    }
+
+    menuOpenNote->addSeparator();
+
+    menuOpenNote->addAction(tr("From Disk"));
+
+    connect(menuOpenNote, &QMenu::triggered, onOpenRecentlyFile);
+
+    btnOpenNote->setMenu(menuOpenNote);
+
+    btnOpenNote->setPopupMode(QToolButton::MenuButtonPopup);
+    btnOpenNote->setText(tr("Open Note"));
+
+    addWidget(btnOpenNote);
+
+    addSeparator();
+
+    auto onSave = [=]() {
+        NoteMgr::GetInstance()->SaveCurNode();
+    };
+
+    QAction *actionSave = new QAction(tr("Save"), this);
     actionSave->setToolTip(tr("save note"));
 
     addAction(actionSave);
+    connect(actionSave, &QAction::triggered, onSave);
+
+    addSeparator();
+
+    QAction *actionFont = new QAction(tr("Font"), this);
+    actionSave->setToolTip(tr("set font"));
+
+    addAction(actionFont);
+
+    auto fontSelecter = [=]() {
+        bool ok;
+        QFont curFont = NoteEditor::getInstance()->getCurFont();
+        QFont font = QFontDialog::getFont(&ok, curFont, this, tr("Choose Font"));
+        if (ok) {
+            NoteEditor::getInstance()->setCurFont(font);
+        }
+    };
+
+    connect(actionFont, &QAction::triggered, fontSelecter);
 }

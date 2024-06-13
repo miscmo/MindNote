@@ -14,7 +14,7 @@ struct User {
     int SettingId;
 };
 
-struct Note {
+struct NoteModel {
     int Id;
     QString Name;
     int Type;	// 笔记类型：文件笔记

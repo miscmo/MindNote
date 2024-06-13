@@ -38,8 +38,7 @@ void MainWindow::init() {
 
 void MainWindow::initUi() {
 
-    // 工具栏暂时不用，界面越简洁越好
-    //initToolBar();
+    initToolBar();
 
     initMenuBar();
 

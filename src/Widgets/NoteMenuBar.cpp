@@ -128,6 +128,7 @@ void NoteMenuBar::initMenuTools() {
 }
 
 void NoteMenuBar::initMenuSetting() {
+    // todo 这里做一个通用的字体管理控件，可以分别设置中文和英文字体
     auto fontSelecter = [=]() {
         bool ok;
         QFont curFont = NoteEditor::getInstance()->getCurFont();
