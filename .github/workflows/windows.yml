@@ -41,7 +41,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: 6.2.12
+          version: 6.2.4
           target: desktop
           arch: ${{matrix.config.arch}}
           modules: qtwebchannel qtwebengine qtsvg qtlocation qttools qttranslations
