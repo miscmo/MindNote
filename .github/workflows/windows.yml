@@ -26,11 +26,11 @@ jobs:
             arch: win64_msvc2017_64,
             platform: x64
           }
-          - {
-            name: "Build On Win32",
-            arch: win32_msvc2017,
-            platform: x86
-          }
+          #- {
+            #name: "Build On Win32",
+           # arch: win32_msvc2017,
+            #platform: x86
+          #}
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE.
@@ -41,7 +41,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: 6.2.*
+          version: 6.2.12
           target: desktop
           arch: ${{matrix.config.arch}}
           modules: qtwebchannel qtwebengine qtsvg qtlocation qttools qttranslations
