@@ -24,6 +24,7 @@ NoteExplorer* NoteExplorer::m_pInstance = nullptr;
 NoteExplorer *NoteExplorer::getInstance() {
     if (m_pInstance == nullptr) {
         m_pInstance = new NoteExplorer(MyNote::getInstance()->GetMainWindow());
+        m_pInstance->setRootIsDecorated(true);
     }
 
     return m_pInstance;
@@ -51,17 +52,22 @@ void NoteExplorer::resetNote() {
 
     clearAllNote();
 
+    QIcon itemIcon(":/Res/document.svg");
+
     Node *rootNode = note->GetRootNode();
     NodeItem *rootItem = WidgetFactory::CreateNodeItem(this);
     rootItem->setData(0, Qt::UserRole, QVariant().fromValue(rootNode));
     rootItem->setText(0, rootNode->getName());
+    rootItem->setText(1, rootNode->getName());
     rootItem->ConnNodeIsMod(rootNode);
+    rootItem->setIcon(0, itemIcon);
 
     for (auto node : rootNode->getChilds()) {
         NodeItem *item = WidgetFactory::CreateNodeItem(rootItem);
         item->setData(0, Qt::UserRole, QVariant().fromValue(node));
         item->setText(0, node->getName());
         item->ConnNodeIsMod(node);
+        item->setIcon(0, itemIcon);
         if (!node->getChilds().isEmpty()) {
             loadNode(item, node);
         }
@@ -70,6 +76,7 @@ void NoteExplorer::resetNote() {
 
     rootItem->setExpanded(true);
     setRootIsDecorated(false);
+    //setIndentation(20);   设置缩进距离
 }
 
 NoteExplorer::~NoteExplorer() {
@@ -197,10 +204,13 @@ void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, Node *node) {
     if (subNodeList.isEmpty())
         return ;
 
+    QIcon itemIcon(":/Res/document.svg");
+
     for (auto subNode : subNodeList) {
         NodeItem *item = WidgetFactory::CreateNodeItem(parent_item);
         item->setData(0, Qt::UserRole, QVariant().fromValue(subNode));
         item->setText(0, subNode->getName());
+        item->setIcon(0, itemIcon);
 
         loadNode(item, subNode);
     }
