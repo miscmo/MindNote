@@ -2,6 +2,7 @@ SOURCES += \
     $$PWD/Dialogs/Dialog.cpp \
     $$PWD/Dialogs/NewNodeDialog.cpp \
     $$PWD/Dialogs/NodeDeleteConfirmDialog.cpp \
+    $$PWD/Dialogs/NoteInfoDialog.cpp \
     $$PWD/Dialogs/ScrollDialog.cpp \
     $$PWD/FileExplorer.cpp \
     $$PWD/MainWindow.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     $$PWD/Dialogs/Dialog.h \
     $$PWD/Dialogs/NewNodeDialog.h \
     $$PWD/Dialogs/NodeDeleteConfirmDialog.h \
+    $$PWD/Dialogs/NoteInfoDialog.h \
     $$PWD/Dialogs/ScrollDialog.h \
     $$PWD/FileExplorer.h \
     $$PWD/MainWindow.h \

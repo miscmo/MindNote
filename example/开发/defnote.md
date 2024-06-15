@@ -98,6 +98,32 @@ todo：增加新建笔记本、侧边栏可以同时打开多个笔记本、修�
 
 1. 修复了切换笔记，导致了误触发文件修改标记，修复思路：切换笔记时，先disconnect掉textChanged信号，这样切换笔记就不会导致文本更改的信号的发出，node也就不会认为自己是已修改状态，然后切换完之后再恢复textChanged信号，这算是目前最好的方案
 
+为了下面编辑json方便点，我增加了自动缩进，目前的自动缩进策略很简单，就是跟上一行的缩进一样
+
+笔记文件的格式：
+
+{
+    "id": "",
+    "title": "测试笔记本",     // 笔记本名
+    "created_at": "",
+    "style": "",                // 样式
+    "path": "",                // 笔记文件路径
+    "subnotes": [
+        {
+            "id":"afeafeafew",    // 随机生成的base64字符串
+            "title": "第一条笔记",    // 笔记名
+            "path": "defnote.md",
+            "created_at": "",
+            "style": "",
+            "subnotes": []
+        },{
+        
+        }
+    ]
+}
+
+./afeafeafew/defnote.md
+
 
 
 

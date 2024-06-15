@@ -118,6 +118,38 @@ void NoteEditor::resizeEvent(QResizeEvent *e)
     m_pLineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
+void NoteEditor::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Tab) {
+        // 插入 4 个空格
+        // 设置tab键为4个空格的距离
+        insertPlainText("    ");
+        return;  // 防止进一步处理 Tab 键
+    } else if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+        // 处理回车键
+        QTextCursor cursor = textCursor();
+        cursor.insertBlock();
+
+        // 获取前一行的内容
+        cursor.movePosition(QTextCursor::PreviousBlock);
+        QString previousLineText = cursor.block().text();
+
+        // 找到前一行开头的空白字符
+        int leadingSpaces = 0;
+        while (leadingSpaces < previousLineText.length() && previousLineText[leadingSpaces].isSpace()) {
+            ++leadingSpaces;
+        }
+
+        // 插入相同数量的空白字符到新行
+        cursor.movePosition(QTextCursor::NextBlock);
+        cursor.insertText(previousLineText.left(leadingSpaces));
+        setTextCursor(cursor);
+
+        return;  // 防止进一步处理回车键
+    }
+
+    QPlainTextEdit::keyPressEvent(event);
+}
+
 //![resizeEvent]
 
 //![cursorPositionChanged]

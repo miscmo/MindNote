@@ -17,7 +17,7 @@ ScrollDialog::ScrollDialog(QWidget *p_parent, Qt::WindowFlags p_flags)
     : Dialog(p_parent, p_flags)
 {
     m_scrollArea = new QScrollArea(this);
-    m_scrollArea->setWidgetResizable(true);
+    m_scrollArea->setWidgetResizable(false);
     m_layout->addWidget(m_scrollArea);
 }
 

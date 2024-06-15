@@ -10,6 +10,7 @@
 #include <Widgets/NoteEditor.h>
 #include <Model/DBMgr.h>
 #include <Widgets/WidgetMgr.h>
+#include <Widgets/Dialogs/NoteInfoDialog.h>
 
 #include <QAction>
 #include <QMenu>
@@ -64,13 +65,21 @@ void NoteMenuBar::initMenuNotebook() {
 
     QAction *actionExit = menuFile->addAction(tr("Exit"));
 
-    connect(actionNewNotebook, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
+    connect(actionNewNotebook, &QAction::triggered, this, &NoteMenuBar::newNotebook);
     connect(actionOpenDir, &QAction::triggered, this, &NoteMenuBar::openNotebook);
     connect(actionSaveFile, &QAction::triggered, this, &NoteMenuBar::saveNote);
     connect(actionExit, &QAction::triggered, this, &NoteMenuBar::exitApp);
 }
 
 void NoteMenuBar::newNotebook() {
+
+    NoteInfoDialog dig(this);
+    if (dig.exec() == QDialog::Accepted) {
+        qDebug() << "create new note succ" << "\n";
+        return;
+    } else {
+        qDebug() << "create new note failed" << "\n";
+    }
 
 }
 
