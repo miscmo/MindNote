@@ -3,5 +3,12 @@
         <file>cn.qm</file>
         <file>en.qm</file>
         <file>Res/document.svg</file>
+        <file>Res/notebook_icon.svg</file>
+        <file>Res/addNewNotebook.svg</file>
+        <file>Res/font_bigger.svg</file>
+        <file>Res/font_set.svg</file>
+        <file>Res/font_small.svg</file>
+        <file>Res/save.svg</file>
+        <file>Res/hdd.svg</file>
     </qresource>
 </RCC>

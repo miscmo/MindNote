@@ -2,6 +2,7 @@
 
 #include <Widgets/NoteExplorer.h>
 #include <QMessageBox>
+#include <Widgets/WidgetMgr.h>
 
 namespace MyNote {
 
@@ -20,29 +21,23 @@ void NoteExplorerPopMenu::initUi() {
     QAction *addPre = addAction(tr("addPre"));
     QAction *addPost = addAction(tr("addPost"));
 
-    QAction *delItem = addAction(tr("delete"));
+    addSeparator();
 
     QAction *renameItem = addAction(tr("rename"));
 
     QAction *iconItem = addAction(tr("editIcon"));
 
-    auto todoMsgBox = [=](bool checked) {
-        // 创建消息框并设置标题和文本内容
-        QMessageBox messageBox;
-        messageBox.setWindowTitle("功能开发中");
-        messageBox.setText("该功能正在开发中，敬请期待！");
-        messageBox.setIcon(QMessageBox::Information);
+    addSeparator();
 
-        // 显示消息框
-        messageBox.exec();
-    };
+    QAction *delItem = addAction(tr("delete"));
+
 
     connect(addSub, &QAction::triggered, NoteExplorer::getInstance(), &NoteExplorer::onAddSub);
     connect(addPre, &QAction::triggered, NoteExplorer::getInstance(), &NoteExplorer::onAddPre);
     connect(addPost, &QAction::triggered, NoteExplorer::getInstance(), &NoteExplorer::onAddPost);
-    connect(delItem, &QAction::triggered, todoMsgBox);
-    connect(renameItem, &QAction::triggered, todoMsgBox);
-    connect(iconItem, &QAction::triggered, todoMsgBox);
+    connect(delItem, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
+    connect(renameItem, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
+    connect(iconItem, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
 }
 
 void NoteExplorerPopMenu::initSignal() {

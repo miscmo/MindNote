@@ -25,6 +25,7 @@ private slots:
     void openNotebook();
     void saveNote();
     void exitApp();
+    void newNotebook();
 
 private:
     NoteMenuBar(QWidget *parent = nullptr);

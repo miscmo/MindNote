@@ -5,6 +5,7 @@
 #include <Widgets/NoteEditor.h>
 #include <Notebook/NotebookManager.h>
 #include <Config/AppState.h>
+#include <Widgets/WidgetMgr.h>
 
 #include <QFontDialog>
 #include <QToolButton>
@@ -34,6 +35,9 @@ void NoteToolBar::initUi() {
     setAllowedAreas(Qt::TopToolBarArea);
     setFloatable(false);
     setMovable(false);
+    setIconSize(QSize(15, 15));
+    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    //setFixedHeight(20);
 
     initNotebookManage();
 }
@@ -41,12 +45,11 @@ void NoteToolBar::initUi() {
 void NoteToolBar::initNotebookManage() {
     const QString strFromDisk = "From Disk";
 
-    QAction *actionNewNote = new QAction(tr("NewNote"), this);
-    actionNewNote->setToolTip(tr("create new notebook"));
-
-    addAction(actionNewNote);
-
-    addSeparator();
+    QIcon openIcon(":/Res/addNewNotebook.svg");
+    QIcon saveIcon(":/Res/save.svg");
+    QIcon fontSetIcon(":/Res/font_set.svg");
+    QIcon noteIcon(":/Res/notebook_icon.svg");
+    QIcon hddIcon(":/Res/hdd.svg");
 
     QToolButton *btnOpenNote = new QToolButton(this);
     QMenu *menuOpenNote = new QMenu();
@@ -68,12 +71,13 @@ void NoteToolBar::initNotebookManage() {
     QStringList fileList = AppState::getInstance()->getRecentlyDirList();
 
     for (auto file : fileList) {
-        menuOpenNote->addAction(file);
+        menuOpenNote->addAction(noteIcon, file);
     }
 
     menuOpenNote->addSeparator();
 
-    menuOpenNote->addAction(tr("From Disk"));
+    menuOpenNote->addAction(hddIcon, tr("From Disk"));
+
 
     connect(menuOpenNote, &QMenu::triggered, onOpenRecentlyFile);
 
@@ -81,6 +85,8 @@ void NoteToolBar::initNotebookManage() {
 
     btnOpenNote->setPopupMode(QToolButton::MenuButtonPopup);
     btnOpenNote->setText(tr("Open Note"));
+    //btnOpenNote->setIcon(openIcon);
+    btnOpenNote->setLayoutDirection(Qt::LeftToRight);
 
     addWidget(btnOpenNote);
 
@@ -90,7 +96,7 @@ void NoteToolBar::initNotebookManage() {
         NoteMgr::GetInstance()->SaveCurNode();
     };
 
-    QAction *actionSave = new QAction(tr("Save"), this);
+    QAction *actionSave = new QAction(saveIcon, tr("Save"), this);
     actionSave->setToolTip(tr("save note"));
 
     addAction(actionSave);
@@ -98,8 +104,8 @@ void NoteToolBar::initNotebookManage() {
 
     addSeparator();
 
-    QAction *actionFont = new QAction(tr("Font"), this);
-    actionSave->setToolTip(tr("set font"));
+    QAction *actionFont = new QAction(fontSetIcon, tr("Font"), this);
+    actionFont->setToolTip(tr("set font"));
 
     addAction(actionFont);
 

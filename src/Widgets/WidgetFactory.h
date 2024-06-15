@@ -18,6 +18,8 @@ public:
     static NodeItem *CreateNodeItem(QTreeWidget *parent);
 
     static NodeItem *CreateNodeItem(QTreeWidgetItem *parent);
+
+    static auto TodoDialog();
 };
 
 }

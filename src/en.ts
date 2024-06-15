@@ -45,32 +45,32 @@
 <context>
     <name>MyNote::NoteExplorerPopMenu</name>
     <message>
-        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="19"/>
+        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="20"/>
         <source>addSub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="20"/>
+        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="21"/>
         <source>addPre</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="21"/>
+        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="22"/>
         <source>addPost</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="23"/>
+        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="24"/>
         <source>delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="25"/>
+        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="26"/>
         <source>rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="27"/>
+        <location filename="Widgets/NoteExplorerPopMenu.cpp" line="28"/>
         <source>editIcon</source>
         <translation type="unfinished"></translation>
     </message>
@@ -78,95 +78,100 @@
 <context>
     <name>MyNote::NoteMenuBar</name>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="51"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="52"/>
         <source>Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="52"/>
-        <location filename="Widgets/NoteMenuBar.cpp" line="71"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="54"/>
+        <source>New Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Widgets/NoteMenuBar.cpp" line="55"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="75"/>
         <source>Open Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="53"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="56"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="57"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="60"/>
         <source>Recently Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="62"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="65"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="109"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="113"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="110"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="114"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="114"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="118"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="115"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="119"/>
         <source>From dir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="119"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="123"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="124"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="128"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="120"/>
-        <location filename="Widgets/NoteMenuBar.cpp" line="127"/>
-        <location filename="Widgets/NoteMenuBar.cpp" line="150"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="124"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="131"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="154"/>
         <source>More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="125"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="129"/>
         <source>Notebook Frame Exchange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="135"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="139"/>
         <source>Choose Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="146"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="150"/>
         <source>Setting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="148"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="152"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="157"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="161"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteMenuBar.cpp" line="159"/>
+        <location filename="Widgets/NoteMenuBar.cpp" line="163"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -174,47 +179,47 @@
 <context>
     <name>MyNote::NoteToolBar</name>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="44"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="45"/>
         <source>NewNote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="45"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="46"/>
         <source>create new notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="76"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="79"/>
         <source>From Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="83"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="86"/>
         <source>Open Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="93"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="96"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="94"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="97"/>
         <source>save note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="101"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="104"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="102"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="105"/>
         <source>set font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Widgets/NoteToolBar.cpp" line="109"/>
+        <location filename="Widgets/NoteToolBar.cpp" line="112"/>
         <source>Choose Font</source>
         <translation type="unfinished"></translation>
     </message>

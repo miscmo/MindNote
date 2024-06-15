@@ -9,6 +9,7 @@
 #include <Notebook/BufferManager.h>
 #include <Widgets/NoteEditor.h>
 #include <Model/DBMgr.h>
+#include <Widgets/WidgetMgr.h>
 
 #include <QAction>
 #include <QMenu>
@@ -49,6 +50,8 @@ void NoteMenuBar::initUi() {
 
 void NoteMenuBar::initMenuNotebook() {
     QMenu *menuFile = addMenu(tr("Notebook"));
+
+    QAction *actionNewNotebook = menuFile->addAction(tr("New Notebook"));
     QAction *actionOpenDir = menuFile->addAction(tr("Open Notebook"));
     QAction *actionSaveFile = menuFile->addAction(tr("Save"));
 
@@ -61,9 +64,14 @@ void NoteMenuBar::initMenuNotebook() {
 
     QAction *actionExit = menuFile->addAction(tr("Exit"));
 
+    connect(actionNewNotebook, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
     connect(actionOpenDir, &QAction::triggered, this, &NoteMenuBar::openNotebook);
     connect(actionSaveFile, &QAction::triggered, this, &NoteMenuBar::saveNote);
     connect(actionExit, &QAction::triggered, this, &NoteMenuBar::exitApp);
+}
+
+void NoteMenuBar::newNotebook() {
+
 }
 
 void NoteMenuBar::openNotebook() {

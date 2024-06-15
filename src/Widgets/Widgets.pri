@@ -15,7 +15,8 @@ SOURCES += \
     $$PWD/Settings/NoteFontSetting.cpp \
     $$PWD/ViewArea.cpp \
     $$PWD/ViewWindow.cpp \
-    $$PWD/WidgetFactory.cpp
+    $$PWD/WidgetFactory.cpp \
+    $$PWD/WidgetMgr.cpp
 
 HEADERS += \
     $$PWD/Dialogs/Dialog.h \
@@ -34,4 +35,5 @@ HEADERS += \
     $$PWD/Settings/NoteFontSetting.h \
     $$PWD/ViewArea.h \
     $$PWD/ViewWindow.h \
-    $$PWD/WidgetFactory.h
+    $$PWD/WidgetFactory.h \
+    $$PWD/WidgetMgr.h

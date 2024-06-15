@@ -186,12 +186,15 @@ void NoteEditor::setupSignal() {
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
-    connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(onTextChanged(bool)));
+    //connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(onTextModify(bool)));
 }
 
 
 void NoteEditor::onCurrentNodeChanged(Node *node) {
+    // 切换笔记前先断联笔记修改检测，防止将笔记切换误认为是用户修改内容
+    disconnect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
     setPlainText(node->read());
+    connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 }
 
 void NoteEditor::onTextChanged() {

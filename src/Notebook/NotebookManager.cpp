@@ -12,7 +12,7 @@
 
 namespace MyNote {
 
- NoteMgr* NoteMgr::GetInstance() {
+NoteMgr* NoteMgr::GetInstance() {
     static NoteMgr mgr;
     return &mgr;
 }

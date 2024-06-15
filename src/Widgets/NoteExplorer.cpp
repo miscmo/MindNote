@@ -53,6 +53,7 @@ void NoteExplorer::resetNote() {
     clearAllNote();
 
     QIcon itemIcon(":/Res/document.svg");
+    QIcon rootIcon(":/Res/notebook_icon.svg");
 
     Node *rootNode = note->GetRootNode();
     NodeItem *rootItem = WidgetFactory::CreateNodeItem(this);
@@ -60,7 +61,7 @@ void NoteExplorer::resetNote() {
     rootItem->setText(0, rootNode->getName());
     rootItem->setText(1, rootNode->getName());
     rootItem->ConnNodeIsMod(rootNode);
-    rootItem->setIcon(0, itemIcon);
+    rootItem->setIcon(0, rootIcon);
 
     for (auto node : rootNode->getChilds()) {
         NodeItem *item = WidgetFactory::CreateNodeItem(rootItem);
@@ -96,10 +97,14 @@ void NoteExplorer::setupSignal() {
     connect(this, &NoteExplorer::itemChanged, NoteMgr::GetInstance(), &NoteMgr::OnItemChanged);
 }
 
+
+// todo:考虑整合onAddSub,onAddPre,onAddPost这三个函数，都是重复代码
 void NoteExplorer::onAddSub() {
     QTreeWidgetItem* curItem = currentItem();
     if (!curItem)
         return ;
+
+    QIcon itemIcon(":/Res/document.svg");
 
     Node *curNode = curItem->data(0, Qt::UserRole).value<Node *>();
 
@@ -109,6 +114,7 @@ void NoteExplorer::onAddSub() {
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
         newItem->ConnNodeIsMod(dig.getNewNode());
+        newItem->setIcon(0, itemIcon);
 
         setCurrentItem(newItem);
 
@@ -121,6 +127,8 @@ void NoteExplorer::onAddPre() {
     if (!curItem)
         return ;
 
+    QIcon itemIcon(":/Res/document.svg");
+
     int preIndex = curItem->parent()->indexOfChild(curItem);
     Node *parentNode = curItem->parent()->data(0, Qt::UserRole).value<Node *>();
 
@@ -130,6 +138,7 @@ void NoteExplorer::onAddPre() {
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
         newItem->ConnNodeIsMod(dig.getNewNode());
+        newItem->setIcon(0, itemIcon);
 
         curItem->parent()->insertChild(preIndex, newItem);
 
@@ -144,6 +153,8 @@ void NoteExplorer::onAddPost() {
     if (!curItem)
         return ;
 
+    QIcon itemIcon(":/Res/document.svg");
+
     int postIndex = curItem->parent()->indexOfChild(curItem) + 1;
     Node *parentNode = curItem->parent()->data(0, Qt::UserRole).value<Node *>();
 
@@ -153,6 +164,7 @@ void NoteExplorer::onAddPost() {
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
         newItem->setText(0, dig.getNewNode()->getName());
         newItem->ConnNodeIsMod(dig.getNewNode());
+        newItem->setIcon(0, itemIcon);
 
         curItem->parent()->insertChild(postIndex, newItem);
 
