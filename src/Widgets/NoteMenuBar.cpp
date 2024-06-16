@@ -17,6 +17,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QFontDialog>
+#include <QMessageBox>
 
 using namespace MyNote;
 
@@ -76,11 +77,12 @@ void NoteMenuBar::newNotebook() {
     NoteInfoDialog dig(this);
     if (dig.exec() == QDialog::Accepted) {
         qDebug() << "create new note succ" << "\n";
-        return;
     } else {
         qDebug() << "create new note failed" << "\n";
+        return;
     }
 
+    // todo 将新笔记添加到侧边栏
 }
 
 void NoteMenuBar::openNotebook() {
@@ -91,7 +93,13 @@ void NoteMenuBar::openNotebook() {
 
     qDebug() << "open note path: " << dir << "\n";
 
-    NoteMgr::GetInstance()->SetCurNote(dir);
+    Error err = NoteMgr::GetInstance()->openNote(dir);
+    if (!err.isSuccess()) {
+        // todo 不应该是这个this，应该是主窗口，暂时先写这个
+        //QMessageBox::warning(this, tr("open error"), err.message);
+        //qWarning() << "open note failed, errcode: " << int(err.code) << ", msg: " << err.message << Qt::endl;
+        qDebug() << "open note failed" << Qt::endl;
+    }
 }
 
 void NoteMenuBar::saveNote() {
@@ -110,7 +118,7 @@ void NoteMenuBar::initRecentlyFileList(QMenu *menuRecentlyFile) {
 
         qDebug() << "open recently note, path: " << path << "\n";
 
-        NoteMgr::GetInstance()->SetCurNote(path);
+        NoteMgr::GetInstance()->openNote(path);
     };
 
     QStringList fileList = AppState::getInstance()->getRecentlyDirList();

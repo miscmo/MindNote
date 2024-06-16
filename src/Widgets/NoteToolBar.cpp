@@ -65,7 +65,7 @@ void NoteToolBar::initNotebookManage() {
         qDebug() << "open recently note, path: " << path << "\n";
 
         // 错误处理，如果是一个错误的path，要弹窗告警出来
-        NoteMgr::GetInstance()->SetCurNote(path);
+        NoteMgr::GetInstance()->openNote(path);
     };
 
     QStringList fileList = AppState::getInstance()->getRecentlyDirList();

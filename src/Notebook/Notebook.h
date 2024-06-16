@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include <QObject>
+#include <Utils/Errors.h>
 
 namespace MyNote {
 
@@ -17,6 +18,8 @@ public:
     void InitNote();
 
     //笔记操作
+
+    Error open();
 
     // 保存笔记
     int SaveNote();

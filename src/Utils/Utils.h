@@ -8,10 +8,15 @@
 #define SAFE_DELETE(p) if (p) { delete p; p = nullptr; }
 #define SAFE_DELETE_ARR(p) if (p) { delete [] p; p = nullptr; }
 
+
 namespace MyNote {
 
 #define NODE_MD_NAME "README.md"
 #define NODE_IMG_DIR "gnote_img"
+
+#define NOTE_DEF_JSON "mindnote.json"
+
+#define DATETIME_FORMAT "yyyy-MM-dd hh:mm:ss"
 
 class Utils {
 public:
@@ -22,6 +27,7 @@ public:
     };
     static QStringList listNode(const QString &path);
 };
+
 
 }
 

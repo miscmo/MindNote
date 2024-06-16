@@ -19,8 +19,8 @@ public:
 protected:
     void acceptedButtonClicked() Q_DECL_OVERRIDE;
 
-private:
-    bool CreateNewNote();
+private slots:
+    void onNoteInfoEdited(const QString &path);
 
 private:
     QWidget *m_pNoteInfoWidget;

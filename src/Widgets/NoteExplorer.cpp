@@ -58,15 +58,15 @@ void NoteExplorer::resetNote() {
     Node *rootNode = note->GetRootNode();
     NodeItem *rootItem = WidgetFactory::CreateNodeItem(this);
     rootItem->setData(0, Qt::UserRole, QVariant().fromValue(rootNode));
-    rootItem->setText(0, rootNode->getName());
-    rootItem->setText(1, rootNode->getName());
+    rootItem->setText(0, rootNode->getTitle());
+    rootItem->setText(1, rootNode->getTitle());
     rootItem->ConnNodeIsMod(rootNode);
     rootItem->setIcon(0, rootIcon);
 
     for (auto node : rootNode->getChilds()) {
         NodeItem *item = WidgetFactory::CreateNodeItem(rootItem);
         item->setData(0, Qt::UserRole, QVariant().fromValue(node));
-        item->setText(0, node->getName());
+        item->setText(0, node->getTitle());
         item->ConnNodeIsMod(node);
         item->setIcon(0, itemIcon);
         if (!node->getChilds().isEmpty()) {
@@ -80,6 +80,40 @@ void NoteExplorer::resetNote() {
     //setIndentation(20);   设置缩进距离
 }
 
+void NoteExplorer::openNote(Note *note) {
+    //Note *note = NoteMgr::GetInstance()->GetCurNote();
+
+    Q_ASSERT(note != nullptr);
+
+    QIcon itemIcon(":/Res/document.svg");
+    QIcon rootIcon(":/Res/notebook_icon.svg");
+
+    Node *rootNode = note->GetRootNode();
+
+    NodeItem *rootItem = WidgetFactory::CreateNodeItem(this);
+    rootItem->setData(0, Qt::UserRole, QVariant().fromValue(rootNode));
+    rootItem->setText(0, rootNode->getTitle());
+    //rootItem->setText(1, rootNode->getName());
+    rootItem->ConnNodeIsMod(rootNode);
+    rootItem->setIcon(0, rootIcon);
+
+    loadNode(rootItem, rootNode);
+
+    rootItem->setExpanded(true);
+    setRootIsDecorated(false);
+    //setIndentation(20);   设置缩进距离
+
+}
+
+void NoteExplorer::closeNote(Note *note) {
+
+}
+
+void NoteExplorer::delNote(Note *note) {
+
+}
+
+
 NoteExplorer::~NoteExplorer() {
     qDebug() << "~NoteExplorer" << Qt::endl;
 }
@@ -90,11 +124,25 @@ void NoteExplorer::initUi() {
 }
 
 void NoteExplorer::setupSignal() {
-    connect(this, &QTreeWidget::itemClicked, this, &NoteExplorer::onItemClicked);
+    connect(this, &QTreeWidget::itemClicked,
+            this, &NoteExplorer::onItemClicked);
+    connect(this, &QTreeWidget::currentItemChanged,
+            this, &NoteExplorer::onCurrentItemChanged);
+    connect(this, &QTreeWidget::customContextMenuRequested,
+            this, &NoteExplorer::onPopMenuRequest);
+
+    // itemChanged 当树形控件中的某个项目的内容（如文本、复选框状态等）发生变化时触发。它通常在用户编辑项目内容后调用
+    connect(this, &NoteExplorer::itemChanged,
+            NoteMgr::GetInstance(), &NoteMgr::OnItemChanged);
+
     connect(NoteMgr::GetInstance(), &NoteMgr::signalNoteChanged,
             this, &NoteExplorer::resetNote);
-    connect(this, &QTreeWidget::customContextMenuRequested, this, &NoteExplorer::onPopMenuRequest);
-    connect(this, &NoteExplorer::itemChanged, NoteMgr::GetInstance(), &NoteMgr::OnItemChanged);
+    connect(NoteMgr::GetInstance(), &NoteMgr::signalOpenNote,
+            this, &NoteExplorer::openNote);
+    connect(NoteMgr::GetInstance(), &NoteMgr::signalCloseNote,
+            this, &NoteExplorer::closeNote);
+    connect(NoteMgr::GetInstance(), &NoteMgr::signalDelNote,
+            this, &NoteExplorer::delNote);
 }
 
 
@@ -112,7 +160,7 @@ void NoteExplorer::onAddSub() {
     if (dig.exec() == QDialog::Accepted) {
         NodeItem *newItem = WidgetFactory::CreateNodeItem(curItem);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
-        newItem->setText(0, dig.getNewNode()->getName());
+        newItem->setText(0, dig.getNewNode()->getTitle());
         newItem->ConnNodeIsMod(dig.getNewNode());
         newItem->setIcon(0, itemIcon);
 
@@ -136,7 +184,7 @@ void NoteExplorer::onAddPre() {
     if (dig.exec() == QDialog::Accepted) {
         NodeItem *newItem = WidgetFactory::CreateNodeItem((QTreeWidget *)nullptr);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
-        newItem->setText(0, dig.getNewNode()->getName());
+        newItem->setText(0, dig.getNewNode()->getTitle());
         newItem->ConnNodeIsMod(dig.getNewNode());
         newItem->setIcon(0, itemIcon);
 
@@ -162,7 +210,7 @@ void NoteExplorer::onAddPost() {
     if (dig.exec() == QDialog::Accepted) {
         NodeItem *newItem = WidgetFactory::CreateNodeItem((QTreeWidget *)nullptr);
         newItem->setData(0, Qt::UserRole, QVariant().fromValue(dig.getNewNode()));
-        newItem->setText(0, dig.getNewNode()->getName());
+        newItem->setText(0, dig.getNewNode()->getTitle());
         newItem->ConnNodeIsMod(dig.getNewNode());
         newItem->setIcon(0, itemIcon);
 
@@ -192,11 +240,19 @@ void NoteExplorer::onDelete() {
 }
 
 void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {
+}
+
+void NoteExplorer::onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous) {
     // 先保存原来的
-    NoteMgr::GetInstance()->SaveCurNode();
+    if (previous != nullptr) {
+        Node *preNode = previous->data(0, Qt::UserRole).value<Node *>();
+        if (preNode->NeedSave()) {
+            preNode->Save();
+        }
+    }
 
     // 再切换到新的结点
-    Node *itemNode = p_item->data(0, Qt::UserRole).value<Node *>();
+    Node *itemNode = current->data(0, Qt::UserRole).value<Node *>();
 
     NoteMgr::GetInstance()->SetCurNode(itemNode);
 }
@@ -221,8 +277,9 @@ void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, Node *node) {
     for (auto subNode : subNodeList) {
         NodeItem *item = WidgetFactory::CreateNodeItem(parent_item);
         item->setData(0, Qt::UserRole, QVariant().fromValue(subNode));
-        item->setText(0, subNode->getName());
+        item->setText(0, subNode->getTitle());
         item->setIcon(0, itemIcon);
+        item->ConnNodeIsMod(node);
 
         loadNode(item, subNode);
     }

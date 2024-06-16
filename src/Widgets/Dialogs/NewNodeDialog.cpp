@@ -43,7 +43,7 @@ void NewNoteDialog::setupCentralWidget() {
     m_pMainLayout->addRow(tr("Notebook:"),
                           new QLabel(notebookName, m_pNodeInfoWidget));
     m_pMainLayout->addRow(tr("ParentNode:"),
-                          new QLabel(m_pParentNode->getName(), m_pNodeInfoWidget));
+                          new QLabel(m_pParentNode->getTitle(), m_pNodeInfoWidget));
 
     m_pNodeType = new QComboBox(m_pNodeInfoWidget);
     m_pNodeType->addItem("Markdown");
@@ -59,7 +59,7 @@ void NewNoteDialog::setupCentralWidget() {
 
 void NewNoteDialog::onNameEdited(const QString &name) {
     qDebug() << name << Qt::endl;
-    if (name.isEmpty() || m_pParentNode->hasChildName(name)) {
+    if (name.isEmpty()) {
         setButtonEnabled(QDialogButtonBox::Ok, false);
         return ;
     }

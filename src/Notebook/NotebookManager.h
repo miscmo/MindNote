@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QTreeWidgetItem>
 #include <QDebug>
+#include <Utils/Errors.h>
 
 namespace MyNote {
 
@@ -33,6 +34,9 @@ public:
 
     void TextChanged();
 
+    Error createNewNote(QString path, QString name);
+    Error openNote(QString path);
+
 public slots:
     void OnItemChanged(QTreeWidgetItem *item, int column) {
         qDebug() << "itemChanged" << Qt::endl;
@@ -44,6 +48,9 @@ private:
 signals:
     void signalCurNodeChanged(Node *node);
     void signalNoteChanged();
+    void signalOpenNote(Note *note);
+    void signalCloseNote(Note *note);
+    void signalDelNote(Note *note);
 
 private:
     NoteMgr();

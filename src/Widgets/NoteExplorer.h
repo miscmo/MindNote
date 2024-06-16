@@ -9,6 +9,7 @@ namespace MyNote {
 
 class Notebook;
 class Node;
+class Note;
 class NoteEditor;
 
 class NoteExplorer : public QTreeWidget {
@@ -19,9 +20,13 @@ public:
 
     void resetNote();
 
+    void openNote(Note *note);
+    void closeNote(Note *note);
+    void delNote(Note *note);
 
     void onItemClicked(QTreeWidgetItem *p_item, int column);
     void onPopMenuRequest(const QPoint& point);
+    void onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
 signals:
     void signalCurrentNodeChanged(Node *node);
@@ -45,6 +50,7 @@ private:
 
 private:
     static NoteExplorer* m_pInstance;
+
 };
 
 }

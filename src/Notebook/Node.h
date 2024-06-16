@@ -5,16 +5,25 @@
 #include <QSharedPointer>
 #include <QString>
 #include <QByteArray>
+#include <QJsonObject>
+#include <Utils/Errors.h>
 
 namespace MyNote {
 
 class Buffer;
+class Note;
 
 class Node : public QObject {
     Q_OBJECT
 public:
-    Node(const QString &dir, Node *parentNode);
+    Node(Note *note, Node *parentNode = nullptr);
     ~Node();
+
+    // 以当前结点为模板，克隆一个新的结点并返回
+    Node *clone();
+
+    // 以传入的结点为模板，将传入结点内容赋值给当前结点
+    Error copy(Node *node);
 
     bool init();
 
@@ -25,13 +34,14 @@ public:
     bool deleteChild(Node *node);
 
     QVector<Node *> getChilds() { return m_vChilds; }
-    QString getName();
-    QString getPath() { return m_sNodeDir; }
+    QString getID();
+    QString getTitle();
 
     QByteArray read();
     void write(const QByteArray &ctx);
 
-    bool hasChildName(const QString &name);
+    //bool hasChildName(const QString &name);
+    bool hasChild(const QString &ID);
 
     Buffer *getBuffer();
 
@@ -46,14 +56,29 @@ public:
 
     void TextChanged();
 
+    QJsonObject toJson() const;
+    // 目前看可以写成static函数
+    Error fromJson(QJsonObject jsonObj);
+
 signals:
     void SignalModStatusChanged(Node *node);
 
 private:
-    QString m_sNodeDir;
+    QString m_sID;
+    QString m_sTitle;
+    Note *m_pNote;		// 所属的笔记本
+    QString m_sSytle;
+    // todo 改成NodeFile
+    QString m_sPath;
+    QString m_sCreateAt;
+    QString m_sUpdateAt;
+
     QVector<Node *> m_vChilds;
     Node *m_pParentNode;
+
     bool m_bIsMod;
+
+
 };
 
 }

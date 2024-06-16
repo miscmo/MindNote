@@ -6,11 +6,11 @@
 using namespace MyNote;
 
 Node *NotebookFactory::createNode(const QString &path, Node *parentNode) {
-    Node *node = new Node(path, parentNode);
-    if (!node->init()) {
-        SAFE_DELETE(node);
-        return nullptr;
-    }
+    // Node *node = new Node(path, parentNode);
+    // if (!node->init()) {
+    //     SAFE_DELETE(node);
+    //     return nullptr;
+    // }
 
-    return node;
+    // return node;
 }
