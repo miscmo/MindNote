@@ -2,6 +2,8 @@
 
 #include <QFile>
 #include <QDir>
+#include <QDebug>
+#include <QUuid>
 
 namespace MyNote {
 QByteArray Utils::File::read(QString filename) {
@@ -31,5 +33,18 @@ QStringList Utils::listNode(const QString &path) {
     QStringList nameFilter = { ".", "..", NODE_IMG_DIR };
     QDir::Filters filter = QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks;
     return dir.entryList(nameFilter, filter);
+}
+
+QString Utils::GetUUID() {
+    // 生成一个新的 UUID
+    QUuid uuid = QUuid::createUuid();
+
+    // 将 UUID 转换为不带大括号的字符串
+    QString uniqueStr = uuid.toString(QUuid::WithoutBraces);
+
+    // 去掉连字符
+    uniqueStr.remove('-');
+
+    return uniqueStr;
 }
 }

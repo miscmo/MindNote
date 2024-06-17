@@ -43,43 +43,6 @@ void NoteExplorer::clearAllNote() {
     clear();
 }
 
-void NoteExplorer::resetNote() {
-    QList<NodeItem *> items;
-
-    Note *note = NoteMgr::GetInstance()->GetCurNote();
-
-    Q_ASSERT(note != nullptr);
-
-    clearAllNote();
-
-    QIcon itemIcon(":/Res/document.svg");
-    QIcon rootIcon(":/Res/notebook_icon.svg");
-
-    Node *rootNode = note->GetRootNode();
-    NodeItem *rootItem = WidgetFactory::CreateNodeItem(this);
-    rootItem->setData(0, Qt::UserRole, QVariant().fromValue(rootNode));
-    rootItem->setText(0, rootNode->getTitle());
-    rootItem->setText(1, rootNode->getTitle());
-    rootItem->ConnNodeIsMod(rootNode);
-    rootItem->setIcon(0, rootIcon);
-
-    for (auto node : rootNode->getChilds()) {
-        NodeItem *item = WidgetFactory::CreateNodeItem(rootItem);
-        item->setData(0, Qt::UserRole, QVariant().fromValue(node));
-        item->setText(0, node->getTitle());
-        item->ConnNodeIsMod(node);
-        item->setIcon(0, itemIcon);
-        if (!node->getChilds().isEmpty()) {
-            loadNode(item, node);
-        }
-        items.append(item);
-    }
-
-    rootItem->setExpanded(true);
-    setRootIsDecorated(false);
-    //setIndentation(20);   设置缩进距离
-}
-
 void NoteExplorer::openNote(Note *note) {
     //Note *note = NoteMgr::GetInstance()->GetCurNote();
 
@@ -135,8 +98,6 @@ void NoteExplorer::setupSignal() {
     connect(this, &NoteExplorer::itemChanged,
             NoteMgr::GetInstance(), &NoteMgr::OnItemChanged);
 
-    connect(NoteMgr::GetInstance(), &NoteMgr::signalNoteChanged,
-            this, &NoteExplorer::resetNote);
     connect(NoteMgr::GetInstance(), &NoteMgr::signalOpenNote,
             this, &NoteExplorer::openNote);
     connect(NoteMgr::GetInstance(), &NoteMgr::signalCloseNote,

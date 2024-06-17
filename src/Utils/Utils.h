@@ -14,6 +14,8 @@ namespace MyNote {
 #define NODE_MD_NAME "README.md"
 #define NODE_IMG_DIR "gnote_img"
 
+#define DEF_NODE_FILE "defnote.mind"
+
 #define NOTE_DEF_JSON "mindnote.json"
 
 #define DATETIME_FORMAT "yyyy-MM-dd hh:mm:ss"
@@ -26,6 +28,7 @@ public:
         static void write(QString filename, QByteArray ctx);
     };
     static QStringList listNode(const QString &path);
+    static QString GetUUID();
 };
 
 

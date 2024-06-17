@@ -25,7 +25,7 @@ public:
     // 以传入的结点为模板，将传入结点内容赋值给当前结点
     Error copy(Node *node);
 
-    bool init();
+    bool init(QString title);
 
     void addChild(Node *node, int index = -1);
     Node *addChildByName(const QString &name, int index);
@@ -36,6 +36,8 @@ public:
     QVector<Node *> getChilds() { return m_vChilds; }
     QString getID();
     QString getTitle();
+
+    Note *getNote();
 
     QByteArray read();
     void write(const QByteArray &ctx);
@@ -59,6 +61,8 @@ public:
     QJsonObject toJson() const;
     // 目前看可以写成static函数
     Error fromJson(QJsonObject jsonObj);
+
+    QString getNodeFullPath();
 
 signals:
     void SignalModStatusChanged(Node *node);

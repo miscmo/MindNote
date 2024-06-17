@@ -22,15 +22,14 @@ public:
 
     void InitSignal();
 
-    Note *GetCurNote() { return m_pCurNote; }
-    void SetCurNote(const QString &path);
+    Node *GetCurNode() {return m_pCurNode;}
+    void SetCurNode(Node *node);
 
     bool DeleteNode(Node *node);
 
-    void SetCurNode(Node *node);
     void SaveCurNode();
 
-    int SaveNote();
+    int SaveNote(Note *note);
 
     void TextChanged();
 
@@ -57,7 +56,8 @@ private:
 
 private:
     NOTEBOOK_HASH_TYPE m_hNoteList;
-    Note *m_pCurNote;
+    //Note *m_pCurNote;
+    Node *m_pCurNode;
 };
 
 }

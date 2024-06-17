@@ -15,6 +15,8 @@ enum class ErrorCode {
     OPEN_FILE_FAILED,
     READ_FILE_FAILED,
     UNKNOWN_ERROR,
+    POINT_IS_NULLPTR,
+    HANDLE_FILE_FAILED,
 };
 
 struct Error {

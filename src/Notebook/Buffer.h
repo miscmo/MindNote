@@ -15,7 +15,7 @@ public:
     void write(const QByteArray &ctx);
 
     QString getName();
-    QFile *openMD();
+    QFile *openFile();
 
 private:
     QString m_sPath;

@@ -22,7 +22,7 @@ public:
     Error open();
 
     // 保存笔记
-    int SaveNote();
+    Error saveNote();
 
     const QString& GetPath() const {return m_sPath;}
     const QString GetName();

@@ -23,41 +23,41 @@ NoteMgr* NoteMgr::GetInstance() {
 
 NoteMgr::NoteMgr()
     : QObject()
-    , m_pCurNote(nullptr) {
+    , m_pCurNode(nullptr) {
     InitSignal();
 }
 
 void NoteMgr::InitSignal() {
 }
 
-void NoteMgr::SetCurNote(const QString &path) {
-    if (path.isEmpty()) {
-        qWarning() << "open note path is emtpy\n";
-        return ;
-    }
+// void NoteMgr::SetCurNote(const QString &path) {
+//     if (path.isEmpty()) {
+//         qWarning() << "open note path is emtpy\n";
+//         return ;
+//     }
 
-    QDir dir(path);
-    Q_ASSERT(dir.exists());
+//     QDir dir(path);
+//     Q_ASSERT(dir.exists());
 
-    if (m_pCurNote != nullptr && m_pCurNote->GetPath() == path) {
-        qDebug() << "open note same with cur note\n";
-        return ;
-    }
+//     if (m_pCurNote != nullptr && m_pCurNote->GetPath() == path) {
+//         qDebug() << "open note same with cur note\n";
+//         return ;
+//     }
 
-    m_pCurNote = getNote(path);
+//     m_pCurNote = getNote(path);
 
-    Q_ASSERT(m_pCurNote != nullptr);
+//     Q_ASSERT(m_pCurNote != nullptr);
 
-    AppState::getInstance()->addRecentlyDir(path);
+//     AppState::getInstance()->addRecentlyDir(path);
 
-    // 截至目前，底层数据已经构建好了，要基于这些数据构建用户界面
+//     // 截至目前，底层数据已经构建好了，要基于这些数据构建用户界面
 
-    qDebug() << "cur note is: " << m_pCurNote->GetPath() << "\n";
-    //qDebug() << "cur node is: " << m_pCurNote->GetCurrentNode()->getPath() << "\n";
+//     qDebug() << "cur note is: " << m_pCurNote->GetPath() << "\n";
+//     //qDebug() << "cur node is: " << m_pCurNote->GetCurrentNode()->getPath() << "\n";
 
-    emit signalNoteChanged();
-    emit signalCurNodeChanged(m_pCurNote->GetCurrentNode());
-}
+//     emit signalNoteChanged();
+//     emit signalCurNodeChanged(m_pCurNote->GetCurrentNode());
+// }
 
 Note *NoteMgr::getNote(const QString &path) {
     NOTEBOOK_HASH_TYPE::const_iterator it = m_hNoteList.find(path);
@@ -75,34 +75,43 @@ Note *NoteMgr::getNote(const QString &path) {
 }
 
 void NoteMgr::SetCurNode(Node *node) {
+    m_pCurNode = node;
     emit signalCurNodeChanged(node);
 }
 
 void NoteMgr::SaveCurNode() {
-    Node *node = m_pCurNote->GetCurrentNode();
-    if (!node)
+    if (!m_pCurNode)
         return ;
 
-    if (node->NeedSave()) {
+    if (m_pCurNode->NeedSave()) {
         //node->write(QByteArray().append(NoteEditor::getInstance()->getText().toUtf8()));
-        node->Save();
+        m_pCurNode->Save();
     }
 }
 
-int NoteMgr::SaveNote() {
-    if (m_pCurNote == nullptr) {
-        return 0;
-    }
-
-    return m_pCurNote->SaveNote();
+int NoteMgr::SaveNote(Note *note) {
+    // 将Note的结构保存下来
+    note->saveNote();
 }
 
 bool NoteMgr::DeleteNode(Node *node) {
-    return GetCurNote()->DeleteNode(node);
+    if (!m_pCurNode) {
+        return false;
+    }
+    Note *curNote = m_pCurNode->getNote();
+    if (curNote == nullptr) {
+        return false;
+    }
+
+    return curNote->DeleteNode(node);
 }
 
 void NoteMgr::TextChanged() {
-    GetCurNote()->TextChanged();
+    if (m_pCurNode == nullptr) {
+        return ;
+    }
+
+    m_pCurNode->TextChanged();
 }
 
 Error NoteMgr::createNewNote(QString path, QString name) {
@@ -130,9 +139,9 @@ Error NoteMgr::createNewNote(QString path, QString name) {
 
     // 创建mindnote.json
     QJsonObject noteJson;
-    noteJson["id"] = "root";
+    noteJson["id"] = Utils::GetUUID();
     noteJson["title"] = name;
-    noteJson["path"] = fullPath;
+    noteJson["path"] = DEF_NODE_FILE;
     noteJson["create_at"] = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
     noteJson["update_at"] = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
     noteJson["style"] = "";

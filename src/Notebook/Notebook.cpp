@@ -118,12 +118,50 @@ const QString Note::GetName() {
     return dir.dirName();
 }
 
-int Note::SaveNote() {
+Error Note::saveNote() {
     if (m_pRoot == nullptr)	{
-        return 0;
+        return {ErrorCode::POINT_IS_NULLPTR, "note root node is null"};
     }
 
-    return m_pRoot->SaveAll();
+    QJsonObject noteJson = m_pRoot->toJson();
+
+    // 将 JSON 对象封装进 JSON 文档
+    QJsonDocument jsonDoc(noteJson);
+
+    QString jsonPath = QDir(m_sPath).filePath("mindnote.json");
+
+    // 将 JSON 文档写入文件
+    QFile file(jsonPath);
+
+    QString backupFilePath = jsonPath + ".bak";
+
+    // 删除备份文件
+    // 删除备份暂时放前面，因为每次保存后我想看下原来的内容，以后肯定是要放后面，当文件修改
+    // 完后删除备份文件
+    if (QFile::exists(backupFilePath)) {
+        QFile::remove(backupFilePath);
+    }
+
+    // 备份原文件
+    if (file.exists()) {
+        if (!QFile::rename(jsonPath, backupFilePath)) {
+            qWarning() << "Failed to backup original file:" << jsonPath;
+            return {ErrorCode::HANDLE_FILE_FAILED, "rename json to bak json failed"};
+        }
+    }
+
+    if (!file.open(QIODevice::WriteOnly|QIODevice::Truncate)) {
+        qWarning() << "Couldn't open file for writing:" << file.errorString();
+        if (QFile::exists(backupFilePath)) {
+            QFile::rename(backupFilePath, jsonPath);  // 恢复备份文件
+        }
+        return {ErrorCode::WRITE_FILE_FAILED, "write file failed, file: " + jsonPath};
+    }
+
+    file.write(jsonDoc.toJson());
+    file.close();
+
+    return Error::success();
 }
 
 void Note::TextChanged() {

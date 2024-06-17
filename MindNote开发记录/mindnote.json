@@ -1,0 +1,40 @@
+{
+    "create_at": "2024-06-17 22:43:24",
+    "id": "7a221d3a65ae40e29c86e57d2883fee3",
+    "path": "defnote.mind",
+    "style": "",
+    "subnodes": [
+        {
+            "create_at": "2024-06-17 22:43:52",
+            "id": "85f935ba2f1e4e5eb4edd4a08921bd97",
+            "path": "defnote.mind",
+            "style": "",
+            "subnodes": [
+            ],
+            "title": "BUG list",
+            "update_at": "2024-06-17 22:43:52"
+        },
+        {
+            "create_at": "2024-06-17 22:44:37",
+            "id": "2a976788f157401781914e3ed4ff50b1",
+            "path": "defnote.mind",
+            "style": "",
+            "subnodes": [
+            ],
+            "title": "TODO list",
+            "update_at": "2024-06-17 22:44:37"
+        },
+        {
+            "create_at": "2024-06-17 22:45:13",
+            "id": "42bfdd2473c54657a235de84ed96efe7",
+            "path": "defnote.mind",
+            "style": "",
+            "subnodes": [
+            ],
+            "title": "记录",
+            "update_at": "2024-06-17 22:45:13"
+        }
+    ],
+    "title": "MindNote开发记录",
+    "update_at": "2024-06-17 22:43:24"
+}

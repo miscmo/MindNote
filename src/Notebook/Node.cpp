@@ -7,6 +7,8 @@
 #include <Notebook/Buffer.h>
 #include <Notebook/BufferManager.h>
 #include <Widgets/NoteEditor.h>
+#include <Notebook/Notebook.h>
+#include <Utils/Utils.h>
 
 using namespace MyNote;
 
@@ -14,7 +16,6 @@ Node::Node(Note *note, Node *parent)
     : m_pNote(note)
     , m_pParentNode(parent)
     , m_bIsMod(false){
-
 }
 
 Node::~Node() {
@@ -33,13 +34,12 @@ Node::~Node() {
     m_vChilds.clear();
 }
 
-bool Node::init() {
-    // QDir dir(m_sNodeDir);
-    // if (!dir.exists() && !dir.mkpath(dir.path())) {
-    //     return false;
-    // }
-
-    // return true;
+bool Node::init(QString title) {
+    m_sID = Utils::GetUUID();
+    m_sTitle = title;
+    m_sPath = DEF_NODE_FILE;
+    m_sCreateAt = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
+    m_sUpdateAt = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
 }
 
 void Node::addChild(Node *node, int index) {
@@ -51,13 +51,13 @@ void Node::addChild(Node *node, int index) {
 }
 
 Node *Node::addChildByName(const QString &name, int index) {
-    // Node *node = new Node(m_sNodeDir + '/' + name, this);
-    // if (node && node->init()) {
-    //     addChild(node, index);
-    //     return node;
-    // }
+    Node *node = new Node(getNote(), this);
+    if (node && node->init(name)) {
+        addChild(node, index);
+        return node;
+    }
 
-    // return nullptr;
+    return nullptr;
 }
 
 bool Node::deleteDir() {
@@ -103,16 +103,21 @@ QString Node::getTitle() {
 }
 
 Buffer *Node::getBuffer() {
-    // return BufferManager::getInstance()->getBuffer(m_sNodeDir);
+    return BufferManager::getInstance()->getBuffer(getNodeFullPath());
 }
 
 QByteArray Node::read() {
-    //return getBuffer()->read();
-    return "test";
+    return getBuffer()->read();
 }
 
 void Node::write(const QByteArray &ctx) {
     getBuffer()->write(ctx);
+}
+
+QString Node::getNodeFullPath() {
+    QString nodePath = QDir(m_pNote->GetPath()).filePath(m_sID);
+    QString filePath = QDir(nodePath).filePath(DEF_NODE_FILE);
+    return filePath;
 }
 
 
@@ -152,6 +157,10 @@ void Node::TextChanged() {
         m_bIsMod = true;
         emit SignalModStatusChanged(this);
     }
+}
+
+Note *Node::getNote() {
+    return m_pNote;
 }
 
 QJsonObject Node::toJson() const {

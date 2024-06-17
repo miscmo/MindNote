@@ -18,8 +18,6 @@ public:
     static NoteExplorer *getInstance();
     ~NoteExplorer();
 
-    void resetNote();
-
     void openNote(Note *note);
     void closeNote(Note *note);
     void delNote(Note *note);

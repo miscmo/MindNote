@@ -123,7 +123,7 @@ void MainWindow::saveStateAndGeometry() {
     config->set(CONF_WIN_GEOMETRY_KEY, saveGeometry());
     config->set(CONF_WIN_STATE_KEY, saveState());
 
-    NoteMgr::GetInstance()->SaveNote();
+    NoteMgr::GetInstance()->SaveCurNode();
     DBMgr::GetInstance()->Close();
 }
 

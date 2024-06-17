@@ -38,7 +38,7 @@ void NewNoteDialog::setupCentralWidget() {
 
     m_pMainLayout = WidgetFactory::createFormLayout(m_pNodeInfoWidget);
 
-    QString notebookName = NoteMgr::GetInstance()->GetCurNote()->GetName();
+    QString notebookName = NoteMgr::GetInstance()->GetCurNode()->getNote()->GetName();
 
     m_pMainLayout->addRow(tr("Notebook:"),
                           new QLabel(notebookName, m_pNodeInfoWidget));
@@ -75,5 +75,6 @@ void NewNoteDialog::acceptedButtonClicked() {
 
 bool NewNoteDialog::CreateNewNode() {
     m_pNewNode = m_pParentNode->addChildByName(m_pNameLineEdit->text(), m_nIndex);
+    m_pNewNode->getNote()->saveNote();
     return m_pNewNode != nullptr;
 }
