@@ -37,9 +37,7 @@ public:
     Error openNote(QString path);
 
 public slots:
-    void OnItemChanged(QTreeWidgetItem *item, int column) {
-        qDebug() << "itemChanged" << Qt::endl;
-    }
+    void OnItemChanged(QTreeWidgetItem *item, int column);
 
 private:
     Note *getNote(const QString &path);

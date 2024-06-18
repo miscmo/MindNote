@@ -13,6 +13,7 @@
 #include <QDir>
 #include <QDateTime>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 namespace MyNote {
 
@@ -199,6 +200,31 @@ Error NoteMgr::openNote(QString path) {
     emit signalOpenNote(openNote);
 
     return Error::success();
+}
+
+void NoteMgr::OnItemChanged(QTreeWidgetItem *item, int column) {
+    qDebug() << "itemChanged" << Qt::endl;
+
+    // item初始化时也会触发这里信号，这里暂时用item是否被用户选中过滤一下
+    // 后面要考虑更好的实现方式
+    if (!item->isSelected()) {
+        return ;
+    }
+
+    Node *curNode = item->data(0, Qt::UserRole).value<Node *>();
+
+    if (item->text(0).isEmpty()) {
+        QMessageBox::warning(NoteExplorer::getInstance(), tr("Invalid Name"), tr("Name cannot be empty"));
+        item->setText(0, curNode->getTitle());
+        return;
+    }
+
+    if (item->text(0) == curNode->getTitle()) {
+        return;
+    }
+
+    curNode->setTitle(item->text(0));
+    curNode->getNote()->saveNote();
 }
 
 NoteMgr::~NoteMgr() {

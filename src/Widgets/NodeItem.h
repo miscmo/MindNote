@@ -15,6 +15,8 @@ public:
     NodeItem(QTreeWidgetItem *parent);
     NodeItem(QTreeWidget *parent);
 
+    void init();
+
     //NodeItem(const QTreeWidget &other);
 
     // 将QTreeWidgetItem赋值给NodeItem时，要调用拷贝构造函数

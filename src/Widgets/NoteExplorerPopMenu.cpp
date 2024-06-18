@@ -36,7 +36,7 @@ void NoteExplorerPopMenu::initUi() {
     connect(addPre, &QAction::triggered, NoteExplorer::getInstance(), &NoteExplorer::onAddPre);
     connect(addPost, &QAction::triggered, NoteExplorer::getInstance(), &NoteExplorer::onAddPost);
     connect(delItem, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
-    connect(renameItem, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
+    connect(renameItem, &QAction::triggered, NoteExplorer::getInstance(), &NoteExplorer::onRename);
     connect(iconItem, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
 }
 

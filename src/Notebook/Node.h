@@ -36,6 +36,7 @@ public:
     QVector<Node *> getChilds() { return m_vChilds; }
     QString getID();
     QString getTitle();
+    void setTitle(QString title) {m_sTitle = title;};
 
     Note *getNote();
 

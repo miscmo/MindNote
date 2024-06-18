@@ -84,6 +84,7 @@ NoteExplorer::~NoteExplorer() {
 void NoteExplorer::initUi() {
     setColumnCount(1);
     setHeaderHidden(true);
+    setEditTriggers(QAbstractItemView::SelectedClicked | QAbstractItemView::DoubleClicked);
 }
 
 void NoteExplorer::setupSignal() {
@@ -198,6 +199,15 @@ void NoteExplorer::onDelete() {
 
         parentItem->takeChild(childIndex);
     }
+}
+
+void NoteExplorer::onRename() {
+    QTreeWidgetItem* curItem = currentItem();
+    if (!curItem) {
+        return ;
+    }
+
+    editItem(curItem);
 }
 
 void NoteExplorer::onItemClicked(QTreeWidgetItem *p_item, int column) {

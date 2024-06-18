@@ -9,10 +9,16 @@ using namespace  MyNote;
 
 NodeItem::NodeItem(QTreeWidgetItem *parent)
     : QTreeWidgetItem(parent) {
+    init();
 }
 
 NodeItem::NodeItem(QTreeWidget *parent)
     : QTreeWidgetItem(parent) {
+    init();
+}
+
+void NodeItem::init() {
+    setFlags(flags() | Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 }
 
 NodeItem::~NodeItem() {

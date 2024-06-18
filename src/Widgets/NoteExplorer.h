@@ -34,6 +34,7 @@ public slots:
     void onAddPre();
     void onAddPost();
     void onDelete();
+    void onRename();
 
 private:
     void initUi();
