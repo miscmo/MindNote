@@ -15,6 +15,7 @@
 #include <Widgets/Dialogs/NodeDeleteConfirmDialog.h>
 
 #include <QDebug>
+#include <QScrollBar>
 
 using namespace MyNote;
 
@@ -227,6 +228,9 @@ void NoteExplorer::onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetIte
         if (preNode->NeedSave()) {
             preNode->Save();
         }
+        preNode->setLastEditPos(NoteEditor::getInstance()->textCursor().position());
+        preNode->setLastHScrollPos(NoteEditor::getInstance()->horizontalScrollBar()->value());
+        preNode->setLastVScrollPos(NoteEditor::getInstance()->verticalScrollBar()->value());
     }
 
     // 再切换到新的结点

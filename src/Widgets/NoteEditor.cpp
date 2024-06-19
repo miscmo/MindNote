@@ -17,6 +17,8 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QTextBlock>
+#include <QShortcut>
+#include <QScrollBar>
 
 #include <QDebug>
 
@@ -63,6 +65,12 @@ void NoteEditor::initUi() {
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+
+
+    // 初始化快捷键
+    // ctrl-s 保存
+    QShortcut *saveShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
+    connect(saveShortcut, &QShortcut::activated, NoteMgr::GetInstance(), &NoteMgr::SaveCurNode);
 }
 
 void NoteEditor::setCurFont(const QFont &font) {
@@ -226,6 +234,15 @@ void NoteEditor::onCurrentNodeChanged(Node *node) {
     // 切换笔记前先断联笔记修改检测，防止将笔记切换误认为是用户修改内容
     disconnect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
     setPlainText(node->read());
+
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(node->getLastEditPos());
+    setTextCursor(cursor);
+
+    verticalScrollBar()->setValue(node->getLastVScrollPos());
+    horizontalScrollBar()->setValue(node->getLastHScrollPos());
+    setFocus();
+
     connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 }
 

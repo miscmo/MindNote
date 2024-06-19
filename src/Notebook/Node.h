@@ -65,6 +65,15 @@ public:
 
     QString getNodeFullPath();
 
+    void setLastEditPos(int pos) {m_bLastEditPos = pos;}
+    int getLastEditPos() {return m_bLastEditPos;}
+
+    void setLastVScrollPos(int v){ m_bLastVScrollPos = v;}
+    int getLastVScrollPos() {return m_bLastVScrollPos;}
+
+    void setLastHScrollPos(int h) {m_bLastHScrollPos = h;}
+    int getLastHScrollPos() {return m_bLastHScrollPos;}
+
 signals:
     void SignalModStatusChanged(Node *node);
 
@@ -80,6 +89,9 @@ private:
 
     QVector<Node *> m_vChilds;
     Node *m_pParentNode;
+    int m_bLastEditPos;		// 编辑位置
+    int m_bLastVScrollPos;	// 编辑器竖直滚动条的位置
+    int m_bLastHScrollPos;	// 编辑器水平滚动条的位置
 
     bool m_bIsMod;
 
