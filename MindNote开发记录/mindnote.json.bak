@@ -23,6 +23,16 @@
             ],
             "title": "TODO list",
             "update_at": "2024-06-17 22:44:37"
+        },
+        {
+            "create_at": "2024-06-17 22:45:13",
+            "id": "42bfdd2473c54657a235de84ed96efe7",
+            "path": "defnote.mind",
+            "style": "",
+            "subnodes": [
+            ],
+            "title": "记录23",
+            "update_at": "2024-06-17 22:45:13"
         }
     ],
     "title": "MindNote开发记录",

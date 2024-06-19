@@ -203,13 +203,14 @@ Error NoteMgr::openNote(QString path) {
 }
 
 void NoteMgr::OnItemChanged(QTreeWidgetItem *item, int column) {
-    qDebug() << "itemChanged" << Qt::endl;
 
     // item初始化时也会触发这里信号，这里暂时用item是否被用户选中过滤一下
     // 后面要考虑更好的实现方式
     if (!item->isSelected()) {
         return ;
     }
+
+    qDebug() << "itemChanged" << Qt::endl;
 
     Node *curNode = item->data(0, Qt::UserRole).value<Node *>();
 

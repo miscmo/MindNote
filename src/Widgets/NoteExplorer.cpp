@@ -84,7 +84,7 @@ NoteExplorer::~NoteExplorer() {
 void NoteExplorer::initUi() {
     setColumnCount(1);
     setHeaderHidden(true);
-    setEditTriggers(QAbstractItemView::SelectedClicked | QAbstractItemView::DoubleClicked);
+    setEditTriggers(QAbstractItemView::SelectedClicked);
 }
 
 void NoteExplorer::setupSignal() {
@@ -206,6 +206,13 @@ void NoteExplorer::onRename() {
     if (!curItem) {
         return ;
     }
+
+    if (curItem->flags() & Qt::ItemIsEditable) {
+        qDebug() << "curItem: " << curItem->text(0) << ", isEditable is true " << Qt::endl;
+    } else {
+        qDebug() << "curItem: " << curItem->text(0) << ", isEditable is false " << Qt::endl;
+    }
+
 
     editItem(curItem);
 }

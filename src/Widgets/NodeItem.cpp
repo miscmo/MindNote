@@ -9,12 +9,12 @@ using namespace  MyNote;
 
 NodeItem::NodeItem(QTreeWidgetItem *parent)
     : QTreeWidgetItem(parent) {
-    //init();
+    init();
 }
 
 NodeItem::NodeItem(QTreeWidget *parent)
     : QTreeWidgetItem(parent) {
-    //init();
+    init();
 }
 
 void NodeItem::init() {
