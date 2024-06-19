@@ -9,16 +9,16 @@ using namespace  MyNote;
 
 NodeItem::NodeItem(QTreeWidgetItem *parent)
     : QTreeWidgetItem(parent) {
-    init();
+    //init();
 }
 
 NodeItem::NodeItem(QTreeWidget *parent)
     : QTreeWidgetItem(parent) {
-    init();
+    //init();
 }
 
 void NodeItem::init() {
-    setFlags(flags() | Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+    setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 }
 
 NodeItem::~NodeItem() {
@@ -34,7 +34,9 @@ void NodeItem::HandleNodeIsMod(Node *node) {
 
     if (node->NeedSave()) {
         setForeground(0, QBrush(QColor(255,0,0)));
+        qDebug() << "node red, name: " << node->getTitle() << Qt::endl;
     } else {
         setForeground(0, QBrush(QColor(0,0,0)));
+        qDebug() << "node white, name: " << node->getTitle() << Qt::endl;
     }
 }

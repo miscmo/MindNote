@@ -250,7 +250,7 @@ void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, Node *node) {
         item->setData(0, Qt::UserRole, QVariant().fromValue(subNode));
         item->setText(0, subNode->getTitle());
         item->setIcon(0, itemIcon);
-        item->ConnNodeIsMod(node);
+        item->ConnNodeIsMod(subNode);
 
         loadNode(item, subNode);
     }
