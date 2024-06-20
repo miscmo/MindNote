@@ -11,6 +11,7 @@ using namespace MyNote;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon(":/Res/mindnote_icon.png"));
 
     QStringList drivers = QSqlDatabase::drivers();
     foreach (QString d, drivers) {

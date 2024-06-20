@@ -29,7 +29,6 @@ namespace MyNote {
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
     MyNote::getInstance()->SetMainWindow(this);
-    loadStateAndGeometry();
 }
 
 void MainWindow::init() {
@@ -47,6 +46,8 @@ void MainWindow::initUi() {
     initDock();
 
     initStatusBar();
+
+    loadStateAndGeometry();
 }
 
 void MainWindow::initToolBar() {
@@ -84,7 +85,7 @@ void MainWindow::initDock() {
     setTabPosition(Qt::TopDockWidgetArea, QTabWidget::North);
     setTabPosition(Qt::BottomDockWidgetArea, QTabWidget::North);
 
-    setDockNestingEnabled(true);
+    setDockNestingEnabled(false);
 
     //设置笔记目录Dock
     m_pNotebookDock = new QDockWidget("Notebook", this);
@@ -94,11 +95,11 @@ void MainWindow::initDock() {
     addDockWidget(Qt::LeftDockWidgetArea, m_pNotebookDock);
 
     //设置文件系统Dock
-    m_pFileDock = new QDockWidget("File", this);
-    m_pFileDock->setWidget(m_pFileExplorer);
-    addDockWidget(Qt::LeftDockWidgetArea, m_pFileDock);
+    //m_pFileDock = new QDockWidget("File", this);
+    //m_pFileDock->setWidget(m_pFileExplorer);
+    //addDockWidget(Qt::LeftDockWidgetArea, m_pFileDock);
 
-    tabifyDockWidget(m_pNotebookDock, m_pFileDock);
+    //tabifyDockWidget(m_pNotebookDock, m_pFileDock);
 
     //开始时显示notebook tab页
     m_pNotebookDock->raise();
@@ -109,6 +110,9 @@ void MainWindow::loadStateAndGeometry() {
 
     auto winGeometry  = config->get(CONF_WIN_GEOMETRY_KEY).toByteArray();
     auto winState = config->get(CONF_WIN_STATE_KEY).toByteArray();
+    auto lastNotes = config->get(CONF_LAST_OPEN_NOTES).toStringList();
+
+    NoteMgr::GetInstance()->openNotes(lastNotes);
 
     if (!winGeometry.isEmpty())
         restoreGeometry(winGeometry);
@@ -122,6 +126,8 @@ void MainWindow::saveStateAndGeometry() {
 
     config->set(CONF_WIN_GEOMETRY_KEY, saveGeometry());
     config->set(CONF_WIN_STATE_KEY, saveState());
+
+    config->set(CONF_LAST_OPEN_NOTES, NoteMgr::GetInstance()->getOpenNotes());
 
     NoteMgr::GetInstance()->SaveCurNode();
     DBMgr::GetInstance()->Close();

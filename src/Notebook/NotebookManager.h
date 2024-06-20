@@ -12,8 +12,6 @@ namespace MyNote {
 class Note;
 class Node;
 
-using NOTEBOOK_HASH_TYPE = QHash<QString, Note *>;
-
 class NoteMgr : public QObject {
     Q_OBJECT
 public:
@@ -36,11 +34,11 @@ public:
     Error createNewNote(QString path, QString name);
     Error openNote(QString path);
 
+    QStringList getOpenNotes();
+    void openNotes(QStringList notes);
+
 public slots:
     void OnItemChanged(QTreeWidgetItem *item, int column);
-
-private:
-    Note *getNote(const QString &path);
 
 signals:
     void signalCurNodeChanged(Node *node);
@@ -53,7 +51,7 @@ private:
     NoteMgr();
 
 private:
-    NOTEBOOK_HASH_TYPE m_hNoteList;
+    QVector<Note *> m_vNoteList;
     //Note *m_pCurNote;
     Node *m_pCurNode;
 };

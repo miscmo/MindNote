@@ -10,5 +10,6 @@
         <file>Res/font_small.svg</file>
         <file>Res/save.svg</file>
         <file>Res/hdd.svg</file>
+        <file>Res/mindnote_icon.png</file>
     </qresource>
 </RCC>

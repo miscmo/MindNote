@@ -60,21 +60,6 @@ void NoteMgr::InitSignal() {
 //     emit signalCurNodeChanged(m_pCurNote->GetCurrentNode());
 // }
 
-Note *NoteMgr::getNote(const QString &path) {
-    NOTEBOOK_HASH_TYPE::const_iterator it = m_hNoteList.find(path);
-    if (m_hNoteList.end() == it) {
-        qDebug() << "create new note\n";
-        Note *newNote = new Note(path);
-        newNote->InitNote();
-        m_hNoteList.insert(path, newNote);
-        return newNote;
-    }
-
-    qDebug() << "open already created note\n";
-
-    return it.value();
-}
-
 void NoteMgr::SetCurNode(Node *node) {
     m_pCurNode = node;
     emit signalCurNodeChanged(node);
@@ -173,13 +158,12 @@ Error NoteMgr::openNote(QString path) {
 
     Error err;
 
-    NOTEBOOK_HASH_TYPE::const_iterator it = m_hNoteList.find(path);
-    if (m_hNoteList.end() != it) {
-        // 笔记已经打开了
-        //openNote = it.value();
-        //openNote->refresh();
-        //QMessageBox::Warning("");
-        return Error::success();
+    for (auto note : m_vNoteList) {
+        if (note->GetPath() == path) {
+            // 笔记已经打开了
+            qDebug() << "note has been opened, note: " << path << Qt::endl;
+            return Error::success();
+        }
     }
 
     qDebug() << "create new note\n";
@@ -190,7 +174,7 @@ Error NoteMgr::openNote(QString path) {
         return err;
     }
 
-    m_hNoteList.insert(path, openNote);
+    m_vNoteList.append(openNote);
 
     // 刷新explorer
     //addNoteToExplorer();
@@ -226,6 +210,25 @@ void NoteMgr::OnItemChanged(QTreeWidgetItem *item, int column) {
 
     curNode->setTitle(item->text(0));
     curNode->getNote()->saveNote();
+}
+
+QVector<QString> NoteMgr::getOpenNotes() {
+    QStringList noteList;
+
+    for (auto note : m_vNoteList) {
+        noteList.append(note->GetPath());
+    }
+
+    return noteList;
+}
+
+void NoteMgr::openNotes(QStringList notes) {
+    for (auto &path : notes) {
+        Error err = openNote(path);
+        if (!err.isSuccess()) {
+            qDebug() << "open note failed, note: " << path << Qt::endl;
+        }
+    }
 }
 
 NoteMgr::~NoteMgr() {
