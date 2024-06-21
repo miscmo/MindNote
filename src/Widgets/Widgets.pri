@@ -10,6 +10,7 @@ SOURCES += \
     $$PWD/NoteEditor.cpp \
     $$PWD/NoteExplorer.cpp \
     $$PWD/NoteExplorerPopMenu.cpp \
+    $$PWD/NoteHighlighter.cpp \
     $$PWD/NoteMenuBar.cpp \
     $$PWD/NoteStatusBar.cpp \
     $$PWD/NoteToolBar.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     $$PWD/NoteEditor.h \
     $$PWD/NoteExplorer.h \
     $$PWD/NoteExplorerPopMenu.h \
+    $$PWD/NoteHighlighter.h \
     $$PWD/NoteMenuBar.h \
     $$PWD/NoteStatusBar.h \
     $$PWD/NoteToolBar.h \

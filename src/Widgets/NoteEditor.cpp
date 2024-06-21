@@ -10,6 +10,7 @@
 #include <Notebook/Notebook.h>
 #include <Notebook/Node.h>
 #include <Config/Config.h>
+#include <Widgets/NoteHighlighter.h>
 
 #include <QWidget>
 #include <QTextEdit>
@@ -71,6 +72,11 @@ void NoteEditor::initUi() {
     // ctrl-s 保存
     QShortcut *saveShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
     connect(saveShortcut, &QShortcut::activated, NoteMgr::GetInstance(), &NoteMgr::SaveCurNode);
+
+
+    // 高亮
+    NoteHighlighter *highlighter = new NoteHighlighter(document());
+
 }
 
 void NoteEditor::setCurFont(const QFont &font) {
