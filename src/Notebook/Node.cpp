@@ -15,7 +15,8 @@ using namespace MyNote;
 Node::Node(Note *note, Node *parent)
     : m_pNote(note)
     , m_pParentNode(parent)
-    , m_bIsMod(false){
+    , m_bIsMod(false)
+    , m_bIsDel(false) {
 }
 
 Node::~Node() {

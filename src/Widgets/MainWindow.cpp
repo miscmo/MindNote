@@ -124,6 +124,11 @@ void MainWindow::initGlobalShortcut() {
         }
     };
 
+    auto onToggleExplorerVisiable = [=]() {
+        bool isVisible = m_pNotebookDock->isVisible();
+        m_pNotebookDock->setVisible(!isVisible);
+    };
+
     auto onToggleFullScreen = [=]() {
         if (isFullScreen()) {
             showNormal();
@@ -136,6 +141,10 @@ void MainWindow::initGlobalShortcut() {
     // 设置全局快捷键 F1 来隐藏/显示菜单栏和工具栏
     QShortcut *shortcutF1 = new QShortcut(QKeySequence("F1"), this);
     connect(shortcutF1, &QShortcut::activated, onToggleVisiable);
+
+    // 设置全局快捷键 F2 来隐藏/显示侧边栏
+    QShortcut *shortcutF2 = new QShortcut(QKeySequence("F2"), this);
+    connect(shortcutF2, &QShortcut::activated, onToggleExplorerVisiable);
 
     // 设置全局快捷键 F11 来进入/退出全屏模式
     QShortcut *shortcutF11 = new QShortcut(QKeySequence("F11"), this);
