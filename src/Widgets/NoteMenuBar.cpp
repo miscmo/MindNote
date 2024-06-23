@@ -11,6 +11,7 @@
 #include <Model/DBMgr.h>
 #include <Widgets/WidgetMgr.h>
 #include <Widgets/Dialogs/NoteInfoDialog.h>
+#include <Widgets/NoteToolBar.h>
 
 #include <QAction>
 #include <QMenu>
@@ -142,7 +143,12 @@ void NoteMenuBar::initMenuImport() {
 
 void NoteMenuBar::initMenuView() {
     QMenu *menuImport = addMenu(tr("View"));
-    QAction *actionMore = menuImport->addAction(tr("More"));
+
+    QAction *actionToolBar = menuImport->addAction(tr("ToolBar"));
+    actionToolBar->setCheckable(true);
+    actionToolBar->setChecked(NoteToolBar::getInstance()->isVisible());
+
+    connect(actionToolBar, &QAction::toggled, NoteToolBar::getInstance(), &QToolBar::setVisible);
 }
 
 void NoteMenuBar::initMenuTools() {
@@ -172,10 +178,15 @@ void NoteMenuBar::initMenuSetting() {
 
     QAction *actionFont = menuSetting->addAction(tr("Font"));
 
+    menuSetting->addSeparator();
+
+    QAction *actionShortcut = menuSetting->addAction(tr("Shortcut"));
+
     QAction *actionMore = menuSetting->addAction(tr("More"));
 
     connect(actionFont, &QAction::triggered, fontSelecter);
     connect(actionMore, &QAction::triggered, SettingMore);
+    connect(actionShortcut, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
 }
 
 void NoteMenuBar::initMenuAbout() {

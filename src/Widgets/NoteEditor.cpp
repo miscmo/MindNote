@@ -10,7 +10,8 @@
 #include <Notebook/Notebook.h>
 #include <Notebook/Node.h>
 #include <Config/Config.h>
-#include <Widgets/NoteHighlighter.h>
+#include <Widgets/Highlighter/NoteHighlighter.h>
+#include <Widgets/Highlighter/StyleParser.h>
 
 #include <QWidget>
 #include <QTextEdit>
@@ -35,16 +36,17 @@ NoteEditor *NoteEditor::getInstance() {
     return m_pInstance;
 }
 
-NoteEditor::~NoteEditor() {
-    qDebug() << "~NodeEditor" << Qt::endl;
-    Config::getInstance()->set(CONF_FONT_KEY, QVariant(getCurFont().toString()));
-}
-
 NoteEditor::NoteEditor(QWidget *parent)
     : QPlainTextEdit(parent) {
+
     initUi();
 
     setupSignal();
+}
+
+NoteEditor::~NoteEditor() {
+    qDebug() << "~NodeEditor" << Qt::endl;
+    Config::getInstance()->set(CONF_FONT_KEY, QVariant(getCurFont().toString()));
 }
 
 QString NoteEditor::getText() {
@@ -52,6 +54,11 @@ QString NoteEditor::getText() {
 }
 
 void NoteEditor::initUi() {
+    m_pHighlighter = new NoteHighlighter(this->document());
+
+    //loadStyleFromStylesheet(":/Res/markdown.css");
+    loadStyleFromStylesheet("D:\\Code\\cloose-CuteMarkEd\\cloose-CuteMarkEd-64915b4\\app\\scripts\\highlight.js\\highlight.pack.js");
+
     QFont defFont("Courier New", 12);
     QString fontString = Config::getInstance()->get(CONF_FONT_KEY, QVariant(defFont.toString())).toString();
     QFont initFont;
@@ -75,7 +82,7 @@ void NoteEditor::initUi() {
 
 
     // 高亮
-    NoteHighlighter *highlighter = new NoteHighlighter(document());
+    //NoteHighlighter *highlighter = new NoteHighlighter(document());
 
 }
 
@@ -239,7 +246,10 @@ void NoteEditor::setupSignal() {
 void NoteEditor::onCurrentNodeChanged(Node *node) {
     // 切换笔记前先断联笔记修改检测，防止将笔记切换误认为是用户修改内容
     disconnect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
-    setPlainText(node->read());
+
+    QString nodeContent = QString::fromUtf8(node->read());
+
+    setPlainText(nodeContent);
 
     QTextCursor cursor = textCursor();
     cursor.setPosition(node->getLastEditPos());
@@ -260,4 +270,31 @@ void NoteEditor::onTextChanged() {
 void NoteEditor::onTextModify(bool isMod) {
     qDebug() << "text modify: " << isMod << Qt::endl;
    // NoteMgr::GetInstance()->TextChanged();
+}
+
+void NoteEditor::resetHighlighting() {
+    m_pHighlighter->reset();
+}
+
+void NoteEditor::loadStyleFromStylesheet(const QString &fileName) {
+
+    QFile f(fileName);
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QTextStream ts(&f);
+    QString input = ts.readAll();
+
+    // parse the stylesheet
+    StyleParser parser(input);
+    QVector<HighlightingStyle> styles = parser.highlightingStyles(this->font());
+
+    // set new style & rehighlight markdown document
+    m_pHighlighter->setStyles(styles);
+    m_pHighlighter->rehighlight();
+
+    // update color palette
+    this->setPalette(parser.editorPalette());
+    this->viewport()->setPalette(this->palette());
 }

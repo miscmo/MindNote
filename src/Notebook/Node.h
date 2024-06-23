@@ -33,6 +33,9 @@ public:
     bool deleteDir();
     bool deleteChild(Node *node);
 
+    bool isDel() {return m_bIsDel;};
+    void setDel(bool isDel);
+
     QVector<Node *> getChilds() { return m_vChilds; }
     QString getID();
     QString getTitle();
@@ -86,6 +89,7 @@ private:
     QString m_sPath;
     QString m_sCreateAt;
     QString m_sUpdateAt;
+    QString m_sDeleteAt;
 
     QVector<Node *> m_vChilds;
     Node *m_pParentNode;
@@ -94,7 +98,7 @@ private:
     int m_bLastHScrollPos;	// 编辑器水平滚动条的位置
 
     bool m_bIsMod;
-
+    bool m_bIsDel;
 
 };
 

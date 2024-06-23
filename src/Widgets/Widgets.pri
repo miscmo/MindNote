@@ -5,12 +5,17 @@ SOURCES += \
     $$PWD/Dialogs/NoteInfoDialog.cpp \
     $$PWD/Dialogs/ScrollDialog.cpp \
     $$PWD/FileExplorer.cpp \
+    $$PWD/Highlighter/HighlighterThread.cpp \
+    $$PWD/Highlighter/MarkdownParser.cpp \
+    $$PWD/Highlighter/NoteHighlighter.cpp \
+    $$PWD/Highlighter/StyleParser.cpp \
+    $$PWD/Highlighter/peg-markdown-highlight/pmh_parser.cpp \
+    $$PWD/Highlighter/peg-markdown-highlight/pmh_styleparser.cpp \
     $$PWD/MainWindow.cpp \
     $$PWD/NodeItem.cpp \
     $$PWD/NoteEditor.cpp \
     $$PWD/NoteExplorer.cpp \
     $$PWD/NoteExplorerPopMenu.cpp \
-    $$PWD/NoteHighlighter.cpp \
     $$PWD/NoteMenuBar.cpp \
     $$PWD/NoteStatusBar.cpp \
     $$PWD/NoteToolBar.cpp \
@@ -27,12 +32,19 @@ HEADERS += \
     $$PWD/Dialogs/NoteInfoDialog.h \
     $$PWD/Dialogs/ScrollDialog.h \
     $$PWD/FileExplorer.h \
+    $$PWD/Highlighter/Definitions.h \
+    $$PWD/Highlighter/HighlighterThread.h \
+    $$PWD/Highlighter/MarkdownParser.h \
+    $$PWD/Highlighter/NoteHighlighter.h \
+    $$PWD/Highlighter/StyleParser.h \
+    $$PWD/Highlighter/peg-markdown-highlight/pmh_definitions.h \
+    $$PWD/Highlighter/peg-markdown-highlight/pmh_parser.h \
+    $$PWD/Highlighter/peg-markdown-highlight/pmh_styleparser.h \
     $$PWD/MainWindow.h \
     $$PWD/NodeItem.h \
     $$PWD/NoteEditor.h \
     $$PWD/NoteExplorer.h \
     $$PWD/NoteExplorerPopMenu.h \
-    $$PWD/NoteHighlighter.h \
     $$PWD/NoteMenuBar.h \
     $$PWD/NoteStatusBar.h \
     $$PWD/NoteToolBar.h \

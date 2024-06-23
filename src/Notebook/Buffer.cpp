@@ -45,10 +45,14 @@ void Buffer::write(const QByteArray &ctx) {
         return ;
     }
 
+    file->resize(0);
+
     QTextStream out(file);
     out.setEncoding(QStringConverter::Utf8);
+    QString outContent = QString::fromUtf8(ctx);
 
-    out << ctx;
+    out << QString::fromUtf8(ctx);
+
     m_dContent = ctx;
 
     file->close();
@@ -62,6 +66,7 @@ QString Buffer::getName() {
 
 QFile *Buffer::openFile() {
     QFile *file = new QFile(m_sPath);
+
     QDir dir;
 
     // 获取文件的目录路径
@@ -74,12 +79,13 @@ QFile *Buffer::openFile() {
             return nullptr;
         }
     }
-    if (file && file->open(QIODevice::ReadWrite)) {
-        return file;
+
+    if (!file->open(QIODevice::ReadWrite)) {
+        qCritical() << "file open failed, file: " << m_sPath << "error: " << file->errorString() << Qt::endl;
+        SAFE_DELETE(file);
     }
 
-    SAFE_DELETE(file);
-    return nullptr;
+    return file;
 }
 
 

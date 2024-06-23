@@ -53,6 +53,10 @@ void NoteExplorer::openNote(Note *note) {
     QIcon rootIcon(":/Res/notebook_icon.svg");
 
     Node *rootNode = note->GetRootNode();
+    if (rootNode->isDel()) {
+        qDebug() << QString("note has been delete, note: %1").arg(note->GetPath()) << Qt::endl;
+        return ;
+    }
 
     NodeItem *rootItem = WidgetFactory::CreateNodeItem(this);
     rootItem->setData(0, Qt::UserRole, QVariant().fromValue(rootNode));
@@ -199,6 +203,9 @@ void NoteExplorer::onDelete() {
         int childIndex = parentItem->indexOfChild(curItem);
 
         parentItem->takeChild(childIndex);
+
+        curNode->setDel(true);
+        NoteMgr::GetInstance()->SaveNote(curNode->getNote());
     }
 }
 
@@ -244,8 +251,15 @@ void NoteExplorer::onPopMenuRequest(const QPoint &point) {
     if (!curItem)
         return ;
 
-    NoteExplorerPopMenu popMenu(this);
-    popMenu.exec(QCursor::pos());
+    if (indexOfTopLevelItem(curItem) != -1) {
+        qDebug() << QString("is top level item: %1").arg(curItem->text(0)) << Qt::endl;
+        NoteExplorerTopLevelPopMenu popMenu(this);
+        popMenu.exec(QCursor::pos());
+    } else {
+        NoteExplorerPopMenu popMenu(this);
+        popMenu.exec(QCursor::pos());
+    }
+
 }
 
 void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, Node *node) {
@@ -257,6 +271,10 @@ void NoteExplorer::loadNode(QTreeWidgetItem *parent_item, Node *node) {
     QIcon itemIcon(":/Res/document.svg");
 
     for (auto subNode : subNodeList) {
+        if (subNode->isDel()) {
+            continue;
+        }
+
         NodeItem *item = WidgetFactory::CreateNodeItem(parent_item);
         item->setData(0, Qt::UserRole, QVariant().fromValue(subNode));
         item->setText(0, subNode->getTitle());

@@ -32,11 +32,11 @@ NoteToolBar::~NoteToolBar() {
 }
 
 void NoteToolBar::initUi() {
-    setAllowedAreas(Qt::TopToolBarArea);
     setFloatable(false);
     setMovable(false);
     setIconSize(QSize(15, 15));
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    setVisible(true);
     //setFixedHeight(20);
 
     initNotebookManage();

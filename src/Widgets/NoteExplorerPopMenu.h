@@ -13,8 +13,16 @@ public:
 
     void initUi();
     void initSignal();
+};
 
+class NoteExplorerTopLevelPopMenu : public QMenu {
+    Q_OBJECT
+public:
+    NoteExplorerTopLevelPopMenu(QWidget *parent = nullptr);
+    ~NoteExplorerTopLevelPopMenu();
 
+    void initUi();
+    void initSignal();
 };
 
 }

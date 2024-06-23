@@ -2,6 +2,7 @@
 #define NOTEEDITOR_H
 
 #include <QPlainTextEdit>
+#include <Widgets/Highlighter/NoteHighlighter.h>
 
 class QTreeWidgetItem;
 class QVBoxLayout;
@@ -33,6 +34,10 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
+    //高亮
+    void resetHighlighting();
+    void loadStyleFromStylesheet(const QString &fileName);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
@@ -55,6 +60,8 @@ private:
     LineNumberArea *m_pLineNumberArea;
 
     static NoteEditor *m_pInstance;
+
+    NoteHighlighter *m_pHighlighter;
 };
 
 class LineNumberArea : public QWidget

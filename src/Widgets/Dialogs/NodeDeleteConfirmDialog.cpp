@@ -18,7 +18,7 @@ NodeDeleteConfirmDialog::~NodeDeleteConfirmDialog() {
 void NodeDeleteConfirmDialog::setupUi() {
     setDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    setWindowTitle(tr("Delete Confirm?"));
+    setWindowTitle(tr("Delete node and all subnode Confirm?"));
 
     QLabel *confirmLabel = new QLabel(tr("ensure delete?"), this);
 

@@ -125,7 +125,9 @@ int Node::Save() {
     // 这里不应该依赖NoteEditor
     // 暂时先这样写
     if (NeedSave()) {
-        write(QByteArray().append(NoteEditor::getInstance()->getText().toUtf8()));
+        QByteArray editorByteArr = QByteArray().append(NoteEditor::getInstance()->getText().toUtf8());
+        QString editorStr = QString::fromUtf8(editorByteArr);
+        write(editorByteArr);
         // qDebug() << "save succ, node: " << this->getPath() << "\n";
         m_bIsMod = false;
         emit SignalModStatusChanged(this);
@@ -170,8 +172,9 @@ QJsonObject Node::toJson() const {
     jsonObj["path"] = m_sPath;
     jsonObj["create_at"] = m_sCreateAt;
     jsonObj["update_at"] = m_sCreateAt;
+    jsonObj["delete_at"] = m_sDeleteAt;
     jsonObj["style"] = m_sSytle;
-
+    jsonObj["is_del"] = m_bIsDel;
 
     QJsonArray subNode;
     for (const Node *node : m_vChilds) {
@@ -210,9 +213,11 @@ Error Node::fromJson(QJsonObject obj) {
     m_sID = obj["id"].toString("");
     m_sTitle = obj["title"].toString("");
     m_sPath = obj["path"].toString("");
+    m_sSytle = obj["style"].toString("");
+    m_bIsDel = obj["is_del"].toBool(false);
     m_sCreateAt = obj["create_at"].toString("");
     m_sUpdateAt = obj["update_at"].toString("");
-    m_sSytle = obj["style"].toString("");
+    m_sDeleteAt = obj["delete_at"].toString("");
 
     return Error::success();
 }
@@ -261,5 +266,12 @@ Error Node::copy(Node *node) {
 
     for (auto node : m_vChilds) {
         m_vChilds.append(node->clone());
+    }
+}
+
+void Node::setDel(bool isDel) {
+    m_bIsDel = isDel;
+    if (m_bIsDel) {
+        m_sDeleteAt = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
     }
 }

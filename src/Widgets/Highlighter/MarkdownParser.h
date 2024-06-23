@@ -1,0 +1,4 @@
+#ifndef MARKDOWNPARSER_H
+#define MARKDOWNPARSER_H
+
+#endif // MARKDOWNPARSER_H

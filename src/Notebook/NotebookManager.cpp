@@ -128,10 +128,13 @@ Error NoteMgr::createNewNote(QString path, QString name) {
     noteJson["id"] = Utils::GetUUID();
     noteJson["title"] = name;
     noteJson["path"] = DEF_NODE_FILE;
+    noteJson["is_del"] = false;
     noteJson["create_at"] = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
     noteJson["update_at"] = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
+    noteJson["delete_at"] = "";
     noteJson["style"] = "";
     noteJson["subnotes"] = "[]";
+
 
     // 将 JSON 对象封装进 JSON 文档
     QJsonDocument jsonDoc(noteJson);

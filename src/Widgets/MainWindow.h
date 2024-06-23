@@ -27,6 +27,7 @@ public:
     void initCentralWindow();
     void initDock();
     void initStatusBar();
+    void initGlobalShortcut();
 
     void saveStateAndGeometry();
     void loadStateAndGeometry();

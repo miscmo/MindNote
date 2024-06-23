@@ -21,6 +21,7 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QDebug>
+#include <QShortcut>
 
 #define TEST_NOTE_PATH "D:\\Temp"
 
@@ -46,6 +47,8 @@ void MainWindow::initUi() {
     initDock();
 
     initStatusBar();
+
+    initGlobalShortcut();
 
     loadStateAndGeometry();
 }
@@ -91,6 +94,11 @@ void MainWindow::initDock() {
     m_pNotebookDock = new QDockWidget("Notebook", this);
     m_pNotebookDock->setWidget(m_pNoteExplorer);
     m_pNotebookDock->setFocusProxy(m_pNoteExplorer);
+    //m_pNotebookDock->setWindowFlags(Qt::FramelessWindowHint);
+    // 隐藏掉dockwidget的标题栏
+    QWidget *emptyTitleBar = new QWidget(m_pNotebookDock);
+    emptyTitleBar->setFixedHeight(0); // 确保标题栏高度为 0
+    m_pNotebookDock->setTitleBarWidget(emptyTitleBar);
 
     addDockWidget(Qt::LeftDockWidgetArea, m_pNotebookDock);
 
@@ -102,7 +110,36 @@ void MainWindow::initDock() {
     //tabifyDockWidget(m_pNotebookDock, m_pFileDock);
 
     //开始时显示notebook tab页
-    m_pNotebookDock->raise();
+    //m_pNotebookDock->raise();
+}
+
+void MainWindow::initGlobalShortcut() {
+
+    auto onToggleVisiable = [=]() {
+        bool isVisible = NoteMenuBar::getInstance()->isVisible();
+
+        NoteMenuBar::getInstance()->setVisible(!isVisible);
+        for (QToolBar *toolBar : findChildren<QToolBar *>()) {
+            toolBar->setVisible(!isVisible);
+        }
+    };
+
+    auto onToggleFullScreen = [=]() {
+        if (isFullScreen()) {
+            showNormal();
+        } else {
+            showFullScreen();
+        }
+    };
+
+
+    // 设置全局快捷键 F1 来隐藏/显示菜单栏和工具栏
+    QShortcut *shortcutF1 = new QShortcut(QKeySequence("F1"), this);
+    connect(shortcutF1, &QShortcut::activated, onToggleVisiable);
+
+    // 设置全局快捷键 F11 来进入/退出全屏模式
+    QShortcut *shortcutF11 = new QShortcut(QKeySequence("F11"), this);
+    connect(shortcutF11, &QShortcut::activated, onToggleFullScreen);
 }
 
 void MainWindow::loadStateAndGeometry() {
