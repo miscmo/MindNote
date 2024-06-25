@@ -78,7 +78,7 @@ void MainWindow::initCentralWindow() {
     setCentralWidget(m_pViewArea);
 
     m_pNoteExplorer = NoteExplorer::getInstance();
-    m_pFileExplorer = FileExplorer::getInstance();
+    //m_pFileExplorer = FileExplorer::getInstance();
 }
 
 void MainWindow::initDock() {
