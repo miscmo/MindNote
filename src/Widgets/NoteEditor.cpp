@@ -37,7 +37,7 @@ NoteEditor *NoteEditor::getInstance() {
 }
 
 NoteEditor::NoteEditor(QWidget *parent)
-    : QPlainTextEdit(parent) {
+    : QTextEdit(parent) {
 
     initUi();
 
@@ -96,7 +96,7 @@ const QFont &NoteEditor::getCurFont() {
 
 int NoteEditor::lineNumberAreaWidth() {
     int digits = 1;
-    int max = qMax(1, blockCount());
+    int max = qMax(1, document()->blockCount());
     while (max >= 10) {
         max /= 10;
         ++digits;
@@ -133,7 +133,7 @@ void NoteEditor::updateLineNumberArea(const QRect &rect, int dy)
 
 void NoteEditor::resizeEvent(QResizeEvent *e)
 {
-    QPlainTextEdit::resizeEvent(e);
+    QTextEdit::resizeEvent(e);
 
     QRect cr = contentsRect();
     m_pLineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
@@ -168,7 +168,7 @@ void NoteEditor::keyPressEvent(QKeyEvent *event) {
         return;  // 防止进一步处理回车键
     }
 
-    QPlainTextEdit::keyPressEvent(event);
+    QTextEdit::keyPressEvent(event);
 }
 
 //![resizeEvent]
