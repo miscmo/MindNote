@@ -1,7 +1,7 @@
 #ifndef NOTEEDITOR_H
 #define NOTEEDITOR_H
 
-#include <QPlainTextEdit>
+#include <QTextEdit>
 #include <Widgets/Highlighter/NoteHighlighter.h>
 
 class QTreeWidgetItem;
@@ -13,7 +13,7 @@ class Buffer;
 class LineNumberArea;
 class Node;
 
-class NoteEditor : public QPlainTextEdit {
+class NoteEditor : public QTextEdit {
     Q_OBJECT
 public:
     static NoteEditor *getInstance();
