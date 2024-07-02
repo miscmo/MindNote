@@ -21,6 +21,7 @@
 #include <QTextBlock>
 #include <QShortcut>
 #include <QScrollBar>
+#include <QAbstractTextDocumentLayout>
 
 #include <QDebug>
 
@@ -206,10 +207,12 @@ void NoteEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 //![extraAreaPaintEvent_0]
 
 //![extraAreaPaintEvent_1]
-    QTextBlock block = firstVisibleBlock();
+    QTextBlock block = document()->begin();
     int blockNumber = block.blockNumber();
-    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int) blockBoundingRect(block).height();
+    //int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
+    //int bottom = top + (int) blockBoundingRect(block).height();
+    int top = (int)document()->documentLayout()->blockBoundingRect(block).translated(QPoint(0, -verticalScrollBar()->value())).top();
+    int bottom = top + (int)document()->documentLayout()->blockBoundingRect(block).height();
 //![extraAreaPaintEvent_1]
 
 //![extraAreaPaintEvent_2]
@@ -223,7 +226,8 @@ void NoteEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
         block = block.next();
         top = bottom;
-        bottom = top + (int) blockBoundingRect(block).height();
+        //bottom = top + (int) blockBoundingRect(block).height();
+        bottom = top + (int)document()->documentLayout()->blockBoundingRect(block).height();
         ++blockNumber;
     }
 }
