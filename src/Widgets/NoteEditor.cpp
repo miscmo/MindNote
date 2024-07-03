@@ -58,6 +58,10 @@ void NoteEditor::initUi() {
 
     //loadStyleFromStylesheet(":/Res/markdown.css");
     loadStyleFromStylesheet("D:\\Code\\cloose-CuteMarkEd\\cloose-CuteMarkEd-64915b4\\app\\scripts\\highlight.js\\highlight.pack.js");
+    //loadStyleFromStylesheet(":/Res/default.style");
+    //loadStyleFromStylesheet(":/Res/solarized-light.style");
+    loadStyleFromStylesheet(":/Res/solarized-dark-subtle.style");
+
 
     QFont defFont("Courier New", 12);
     QString fontString = Config::getInstance()->get(CONF_FONT_KEY, QVariant(defFont.toString())).toString();

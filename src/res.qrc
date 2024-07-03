@@ -12,5 +12,10 @@
         <file>Res/hdd.svg</file>
         <file>Res/mindnote_icon.png</file>
         <file>Res/markdown.css</file>
+        <file>Res/default.style</file>
+        <file>Res/solarized-dark-subtle.style</file>
+        <file>Res/solarized-dark.style</file>
+        <file>Res/solarized-light-subtle.style</file>
+        <file>Res/solarized-light.style</file>
     </qresource>
 </RCC>
