@@ -60,7 +60,7 @@ void NoteEditor::initUi() {
     loadStyleFromStylesheet("D:\\Code\\cloose-CuteMarkEd\\cloose-CuteMarkEd-64915b4\\app\\scripts\\highlight.js\\highlight.pack.js");
     //loadStyleFromStylesheet(":/Res/default.style");
     //loadStyleFromStylesheet(":/Res/solarized-light.style");
-    loadStyleFromStylesheet(":/Res/solarized-dark-subtle.style");
+    loadStyleFromStylesheet(":/Res/solarized-dark.style");
 
 
     QFont defFont("Courier New", 12);

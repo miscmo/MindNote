@@ -182,11 +182,31 @@ void NoteMenuBar::initMenuSetting() {
 
     QAction *actionShortcut = menuSetting->addAction(tr("Shortcut"));
 
+    menuSetting->addSeparator();
+
+    QMenu *menuTheme = menuSetting->addMenu(tr("Theme"));
+    menuTheme->addAction(":/Res/default.style");
+    menuTheme->addAction(":/Res/solarized-dark.style");
+    menuTheme->addAction(":/Res/solarized-dark-subtle.style");
+    menuTheme->addAction(":/Res/solarized-light.style");
+    menuTheme->addAction(":/Res/solarized-light-subtle.style");
+
+    auto onReloadTheme = [=](const QAction *action) {
+        QString path = action->text();
+
+        qDebug() << "open recently note, path: " << path << "\n";
+
+        NoteEditor::getInstance()->loadStyleFromStylesheet(path);
+    };
+
+
+
     QAction *actionMore = menuSetting->addAction(tr("More"));
 
     connect(actionFont, &QAction::triggered, fontSelecter);
     connect(actionMore, &QAction::triggered, SettingMore);
     connect(actionShortcut, &QAction::triggered, WidgetMgr::GetInstance(), &WidgetMgr::TodoDialog);
+    connect(menuTheme, &QMenu::triggered, onReloadTheme);
 }
 
 void NoteMenuBar::initMenuAbout() {
