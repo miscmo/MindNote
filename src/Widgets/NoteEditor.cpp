@@ -73,9 +73,10 @@ void NoteEditor::initUi() {
         setCurFont(defFont);
     }
 
-    m_pLineNumberArea = new LineNumberArea(this);
+    // 暂时先不显示
+    // m_pLineNumberArea = new LineNumberArea(this);
 
-    updateLineNumberAreaWidth(0);
+    // updateLineNumberAreaWidth(0);
     highlightCurrentLine();
 
 
@@ -139,8 +140,9 @@ void NoteEditor::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
 
-    QRect cr = contentsRect();
-    m_pLineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+    // todo:行号暂不显示
+    // QRect cr = contentsRect();
+    // m_pLineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
 void NoteEditor::keyPressEvent(QKeyEvent *event) {
@@ -239,8 +241,9 @@ void NoteEditor::setupSignal() {
     connect(NoteMgr::GetInstance(), &NoteMgr::signalCurNodeChanged,
             this, &NoteEditor::onCurrentNodeChanged);
 
-    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
-    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
+    // 暂时不显示行号
+    //connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
+    //connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
     //connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(onTextModify(bool)));
