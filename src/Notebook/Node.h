@@ -91,6 +91,8 @@ private:
     QString m_sUpdateAt;
     QString m_sDeleteAt;
 
+    QVector<QVector<Block*> > m_vLayout;
+
     QVector<Node *> m_vChilds;
     Node *m_pParentNode;
     int m_bLastEditPos;		// 编辑位置

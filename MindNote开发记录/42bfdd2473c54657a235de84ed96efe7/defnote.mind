@@ -220,7 +220,29 @@ hhhh，突然发现多笔记打开已经默认支持了
 
 ## 2024.7.4：
 
-
+1. 单个笔记结点的结构：
+{
+    "node": {
+        "config": "",
+        "font": "",
+        "bgStyle": "",
+        "fgStyle": "",
+        "layout": [
+            [
+                {"type": "Markdown", "content":""},
+                {"type": "PlainText", "content":""}
+            ],
+            [],
+            []
+        ] 
+    }
+    
+    
+    "type": "PlainText",   // Markdown、RichText、Drawing
+    "content": "",    // file
+    "content_type": "", // text，file
+    "site": "",
+}
 
 
 
