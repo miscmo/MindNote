@@ -14,6 +14,7 @@
 #include <Widgets/NoteToolBar.h>
 #include <Widgets/NoteStatusBar.h>
 #include <Model/DBMgr.h>
+#include <Widgets/NotePanel.h>
 
 #include <QRect>
 #include <QVariant>

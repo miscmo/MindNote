@@ -46,6 +46,8 @@ public:
     QByteArray read();
     void write(const QByteArray &ctx);
 
+    QVector<QVector<Block*> > readBlocks();
+
     //bool hasChildName(const QString &name);
     bool hasChild(const QString &ID);
 

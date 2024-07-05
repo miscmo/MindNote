@@ -1,6 +1,8 @@
 #ifndef NOTEPANEL_H
 #define NOTEPANEL_H
 
+#include <QWidget>
+
 namespace MyNote {
 
 class NotePanel : public QWidget {
@@ -9,15 +11,15 @@ class NotePanel : public QWidget {
 public:
     static NotePanel *getInstance();
     ~NotePanel();
-    addNoteBlock();
+    void addNoteBlock();
 
 private:
     NotePanel(QWidget *parent);
 
 private:
     static NotePanel *m_pInstance;
-    QWidget *contentWidget;
-    vector<NoteBlock> noteBlocks;
+    QWidget *m_pContentWidget;
+    //vector<NoteBlock> noteBlocks;
 };
 
 

@@ -265,6 +265,7 @@ void NoteEditor::onCurrentNodeChanged(Node *node) {
     verticalScrollBar()->setValue(node->getLastVScrollPos());
     horizontalScrollBar()->setValue(node->getLastHScrollPos());
     setFocus();
+    
 
     connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 }

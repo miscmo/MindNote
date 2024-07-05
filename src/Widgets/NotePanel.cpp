@@ -1,6 +1,11 @@
 #include "NotePanel.h"
 
+#include <MyNote.h>
+#include <Widgets/MainWindow.h>
+
 #include <QWidget>
+#include <QVBoxLayout>
+#include <QScrollArea>
 
 using namespace MyNote;
 
@@ -22,9 +27,9 @@ NotePanel::NotePanel(QWidget *parent)
         QScrollArea *scrollArea = new QScrollArea(this);
         scrollArea->setWidgetResizable(true);
 
-        contentWidget = new QWidget;
+        m_pContentWidget = new QWidget;
 
-        contentLayout = new QVBoxLayout(contentWidget);
+        contentLayout = new QVBoxLayout(m_pContentWidget);
         scrollArea->setWidget(contentWidget);
 
         mainLayout->addWidget(scrollArea);
@@ -35,7 +40,7 @@ NotePanel::NotePanel(QWidget *parent)
         connect(addButton, &QPushButton::clicked, this, &NoteComponent::addNoteBlock);
 
         // 添加初始行
-        addNewRow();
+        //addNewRow();
 }
 
 void NotePanel::addNoteBlock() {

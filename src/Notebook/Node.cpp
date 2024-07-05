@@ -111,6 +111,61 @@ QByteArray Node::read() {
     return getBuffer()->read();
 }
 
+/* 
+read返回的是一个json,格式如下:
+
+    "node": {
+        "config": "",
+        "font": "",
+        "bgStyle": "",
+        "fgStyle": "",
+        "layout": [
+            [
+                {"type": "Markdown", "content":""},
+                {"type": "PlainText", "content":""}
+            ],
+            [],
+            []
+        ] 
+    }
+    
+    
+    "type": "PlainText",   // Markdown、RichText、Drawing
+    "content": "",    // file
+    "content_type": "", // text，file
+    "site": "",
+}
+
+将json中node.layout中的每一个元素解析成一个Block对象，然后将Block对象放入QVector中，最后将QVector放入QVector中返回
+*/
+QVector<QVector<Block *> > Node::readBlocks() {
+    QByteArray ctx = read();
+    QVector<QVector<Block *> > layout;
+    // 将ctx转为json object
+    QJsonObject jsonObj = QJsonDocument::fromJson(ctx).object();
+    // 获取json object中的layout
+    QJsonArray layoutArr = jsonObj["layout"].toArray();
+    // 遍历layout
+
+    for (const QJsonValueRef layoutItem : layoutArr) {
+        QVector<Block *> blocks;
+        QJsonArray blockArr = layoutItem.toArray();
+
+        for (const QJsonValueRef blockItem : blockArr) {
+            QString type = blockItem.toObject()["type"].toString();
+            QString content = blockItem.toObject()["content"].toString();
+            Block *block = new Block();
+
+            block->setType(type);
+            block->setContent(content);
+            blocks.append(block);
+        }
+
+        layout.append(blocks);
+    }
+    return layout;
+}
+
 void Node::write(const QByteArray &ctx) {
     getBuffer()->write(ctx);
 }
