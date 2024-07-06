@@ -3,9 +3,11 @@
 #include <QDebug>
 #include <QDir>
 #include <QJsonArray>
+#include <QJsonDocument>
 
 #include <Notebook/Buffer.h>
 #include <Notebook/BufferManager.h>
+#include <Notebook/Block.h>
 #include <Widgets/NoteEditor.h>
 #include <Notebook/Notebook.h>
 #include <Utils/Utils.h>
@@ -138,32 +140,64 @@ read返回的是一个json,格式如下:
 
 将json中node.layout中的每一个元素解析成一个Block对象，然后将Block对象放入QVector中，最后将QVector放入QVector中返回
 */
-QVector<QVector<Block *> > Node::readBlocks() {
-    QByteArray ctx = read();
-    QVector<QVector<Block *> > layout;
-    // 将ctx转为json object
-    QJsonObject jsonObj = QJsonDocument::fromJson(ctx).object();
-    // 获取json object中的layout
-    QJsonArray layoutArr = jsonObj["layout"].toArray();
-    // 遍历layout
+Error Node::buildBlocks(const QJsonArray &blockArr, QVector<QVector<Block *> > &blocks) {
 
-    for (const QJsonValueRef layoutItem : layoutArr) {
+    for (const QJsonValueRef layoutItem : blockArr) {
         QVector<Block *> blocks;
         QJsonArray blockArr = layoutItem.toArray();
 
         for (const QJsonValueRef blockItem : blockArr) {
-            QString type = blockItem.toObject()["type"].toString();
-            QString content = blockItem.toObject()["content"].toString();
-            Block *block = new Block();
+            QString type = blockItem.toObject()["type"].toString(BLOCK_TYPE_TEXT);
+            QString content = blockItem.toObject()["content"].toString("");
+            QString contentType = blockItem.toObject()["content_type"].toString(BLOCK_CONTENT_TYPE_TEXT);
+            Block *block = new Block(type, content, contentType);
 
-            block->setType(type);
-            block->setContent(content);
             blocks.append(block);
         }
 
-        layout.append(blocks);
     }
-    return layout;
+
+    return Error::success();
+}
+
+void Node::buildNode() {
+    QByteArray ctx = read();
+    if (ctx.isNull() || ctx.isEmpty()) {
+        return ;
+    }
+
+    // blocks非空说明已经构建过，不需要重复构建，重复构建使用reBuild
+    if (!m_vBlocks.empty()) {
+        return ;
+    }
+
+    // 先判断ctx是否为json
+    QJsonParseError jsonErr;
+    QJsonDocument jsonObj = QJsonDocument::fromJson(ctx, &jsonErr);
+    if (jsonErr.error != QJsonParseError::NoError) {
+        // 非json格式，默认以text文本格式展示
+        QVector<Block *> inBlcok;
+        QString type = BLOCK_TYPE_TEXT;
+        QString content = QString::fromUtf8(ctx);
+        QString contentType = BLOCK_CONTENT_TYPE_TEXT;
+        Block *block = new Block(type, content, contentType);
+        inBlcok.append(block);
+
+        m_vBlocks.append(inBlcok);
+        return ;
+    }
+
+    QJsonArray blockArr = jsonObj["blocks"].toArray(QJsonArray());
+    // 检查是否有blocks
+    if (blockArr.isEmpty()) {
+        return ;
+    }
+
+    // todo 这里要错误处理
+    Error err = buildBlocks(blockArr, m_vBlocks);
+    if (!err.isSuccess()) {
+        qDebug() << "build blocks error: " << err.message << Qt::endl;
+    }
 }
 
 void Node::write(const QByteArray &ctx) {
@@ -183,7 +217,8 @@ int Node::Save() {
     if (NeedSave()) {
         QByteArray editorByteArr = QByteArray().append(NoteEditor::getInstance()->getText().toUtf8());
         QString editorStr = QString::fromUtf8(editorByteArr);
-        write(editorByteArr);
+        //write(editorByteArr);
+        saveAllBlocks();
         // qDebug() << "save succ, node: " << this->getPath() << "\n";
         m_bIsMod = false;
         emit SignalModStatusChanged(this);
@@ -202,6 +237,33 @@ int Node::SaveAll() {
     }
 
     return ret;
+}
+
+// 将所有的block保存到json中
+Error Node::saveAllBlocks() {
+    QJsonArray blockArr;
+    for (auto blocks : m_vBlocks) {
+        QJsonArray blockItem;
+        for (auto block : blocks) {
+            QJsonObject blockObj;
+            blockObj["type"] = block->getType();
+            blockObj["content"] = block->getContent();
+            blockObj["content_type"] = block->getContentType();
+            blockItem.append(blockObj);
+        }
+
+        blockArr.append(blockItem);
+    }
+
+    QJsonObject jsonObj;
+    jsonObj["blocks"] = blockArr;
+
+    QJsonDocument jsonDoc(jsonObj);
+    QByteArray ctx = jsonDoc.toJson();
+
+    write(ctx);
+
+    return Error::success();
 }
 
 

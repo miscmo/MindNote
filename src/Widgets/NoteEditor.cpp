@@ -255,6 +255,7 @@ void NoteEditor::onCurrentNodeChanged(Node *node) {
     disconnect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 
     QString nodeContent = QString::fromUtf8(node->read());
+    node->buildNode();
 
     setPlainText(nodeContent);
 

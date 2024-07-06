@@ -20,6 +20,7 @@ SOURCES += \
     $$PWD/NotePanel.cpp \
     $$PWD/NoteStatusBar.cpp \
     $$PWD/NoteToolBar.cpp \
+    $$PWD/NoteWidget.cpp \
     $$PWD/Settings/NoteFontSetting.cpp \
     $$PWD/ViewArea.cpp \
     $$PWD/ViewWindow.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     $$PWD/NotePanel.h \
     $$PWD/NoteStatusBar.h \
     $$PWD/NoteToolBar.h \
+    $$PWD/NoteWidget.h \
     $$PWD/Settings/NoteFontSetting.h \
     $$PWD/ViewArea.h \
     $$PWD/ViewWindow.h \

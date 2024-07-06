@@ -222,12 +222,11 @@ hhhh，突然发现多笔记打开已经默认支持了
 
 1. 单个笔记结点的结构：
 {
-    "node": {
         "config": "",
         "font": "",
         "bgStyle": "",
         "fgStyle": "",
-        "layout": [
+        "blocks": [
             [
                 {"type": "Markdown", "content":""},
                 {"type": "PlainText", "content":""}
@@ -236,13 +235,10 @@ hhhh，突然发现多笔记打开已经默认支持了
             []
         ] 
     }
-    
-    
-    "type": "PlainText",   // Markdown、RichText、Drawing
-    "content": "",    // file
-    "content_type": "", // text，file
-    "site": "",
 }
+
+
+## 2024.7.5：
 
 
 

@@ -2,6 +2,8 @@
 #define NOTEPANEL_H
 
 #include <QWidget>
+#include <Notebook/Node.h>
+#include <QGridLayout>
 
 namespace MyNote {
 
@@ -12,6 +14,15 @@ public:
     static NotePanel *getInstance();
     ~NotePanel();
     void addNoteBlock();
+    void setupSignal();
+    void setupUI();
+    void clear();
+    void reload();
+
+
+private slots:
+    void onCurrentNodeChanged(Node *node);
+    void showBlockSelectMenu();
 
 private:
     NotePanel(QWidget *parent);
@@ -19,7 +30,8 @@ private:
 private:
     static NotePanel *m_pInstance;
     QWidget *m_pContentWidget;
-    //vector<NoteBlock> noteBlocks;
+    QGridLayout *m_pMainLayout;
+    Node *m_pNode;
 };
 
 
