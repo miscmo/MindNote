@@ -23,11 +23,14 @@ ViewArea *ViewArea::getInstance() {
 }
 
 ViewArea::ViewArea(QWidget *parent)
-    :QWidget(parent) {
+    : QWidget(parent)
+    , m_pMainLayout(nullptr) {
     initUi();
 }
 
 void ViewArea::initUi() {
+    //setStyleSheet("background-color: blue;");
+
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_pMainLayout = new QVBoxLayout(this);

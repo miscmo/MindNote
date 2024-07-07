@@ -17,11 +17,11 @@ class NoteEditor : public QPlainTextEdit {
     Q_OBJECT
 public:
     static NoteEditor *getInstance();
+    NoteEditor(QWidget *parent);
     ~NoteEditor();
 
     void initUi();
     void setupSignal();
-    void setupUi();
 
     void setCurFont(const QFont &font);
     const QFont &getCurFont();
@@ -37,6 +37,9 @@ public:
     //高亮
     void resetHighlighting();
     void loadStyleFromStylesheet(const QString &fileName);
+
+    // 调整高度
+    void adjustHeight();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -54,7 +57,6 @@ private slots:
     void onTextModify(bool isMod);
 
 private:
-    NoteEditor(QWidget *parent);
 
 private:
     LineNumberArea *m_pLineNumberArea;

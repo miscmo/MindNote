@@ -1,18 +1,17 @@
 #include "NoteExplorer.h"
 
-#include "NoteEditor.h"
-#include "MainWindow.h"
-#include "NodeItem.h"
-
 #include <MyNote.h>
 #include <Notebook/Notebook.h>
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
 #include <Notebook/Node.h>
-#include <Widgets/NoteExplorerPopMenu.h>
+#include <Widgets/NoteExplorer/NoteExplorerPopMenu.h>
 #include <Widgets/WidgetFactory.h>
 #include <Widgets/Dialogs/NewNodeDialog.h>
 #include <Widgets/Dialogs/NodeDeleteConfirmDialog.h>
+#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/MainWindow.h>
+#include <Widgets/NoteExplorer/NodeItem.h>
 
 #include <QDebug>
 #include <QScrollBar>
@@ -235,9 +234,10 @@ void NoteExplorer::onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetIte
         if (preNode->NeedSave()) {
             preNode->Save();
         }
-        preNode->setLastEditPos(NoteEditor::getInstance()->textCursor().position());
-        preNode->setLastHScrollPos(NoteEditor::getInstance()->horizontalScrollBar()->value());
-        preNode->setLastVScrollPos(NoteEditor::getInstance()->verticalScrollBar()->value());
+        // 保存上次的编辑位置，先注释掉，切换到panel后要重新设计
+        //preNode->setLastEditPos(NoteEditor::getInstance()->textCursor().position());
+        //preNode->setLastHScrollPos(NoteEditor::getInstance()->horizontalScrollBar()->value());
+        //preNode->setLastVScrollPos(NoteEditor::getInstance()->verticalScrollBar()->value());
     }
 
     // 再切换到新的结点

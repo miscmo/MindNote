@@ -1,5 +1,11 @@
-测试
-
-测试自动保存
-
-测试
+{
+    "blocks": [
+        [
+            {
+                "content": "测试\n\n测试自动保存\n\n测试",
+                "content_type": "text",
+                "type": "text"
+            }
+        ]
+    ]
+}

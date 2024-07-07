@@ -2,7 +2,7 @@
 
 #include <MyNote.h>
 #include <Widgets/MainWindow.h>
-#include <Widgets/NoteEditor.h>
+#include <Widgets/NotePanel/NoteEditor.h>
 #include <Notebook/NotebookManager.h>
 #include <Config/AppState.h>
 #include <Widgets/WidgetMgr.h>

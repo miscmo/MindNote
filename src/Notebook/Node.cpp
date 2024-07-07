@@ -8,7 +8,7 @@
 #include <Notebook/Buffer.h>
 #include <Notebook/BufferManager.h>
 #include <Notebook/Block.h>
-#include <Widgets/NoteEditor.h>
+#include <Widgets/NotePanel/NoteEditor.h>
 #include <Notebook/Notebook.h>
 #include <Utils/Utils.h>
 
@@ -143,7 +143,7 @@ read返回的是一个json,格式如下:
 Error Node::buildBlocks(const QJsonArray &blockArr, QVector<QVector<Block *> > &blocks) {
 
     for (const QJsonValueRef layoutItem : blockArr) {
-        QVector<Block *> blocks;
+        QVector<Block *> inBlocks;
         QJsonArray blockArr = layoutItem.toArray();
 
         for (const QJsonValueRef blockItem : blockArr) {
@@ -152,23 +152,32 @@ Error Node::buildBlocks(const QJsonArray &blockArr, QVector<QVector<Block *> > &
             QString contentType = blockItem.toObject()["content_type"].toString(BLOCK_CONTENT_TYPE_TEXT);
             Block *block = new Block(type, content, contentType);
 
-            blocks.append(block);
+            inBlocks.append(block);
         }
 
+        blocks.append(inBlocks);
     }
+
 
     return Error::success();
 }
 
-void Node::buildNode() {
+Error Node::buildNode() {
+    // todo 如果已经构建并且未修改过，直接返回，不需要重新构建
     QByteArray ctx = read();
     if (ctx.isNull() || ctx.isEmpty()) {
-        return ;
+        return {ErrorCode::CONTENT_IS_EMPTY, "read  is empty"};
     }
 
     // blocks非空说明已经构建过，不需要重复构建，重复构建使用reBuild
     if (!m_vBlocks.empty()) {
-        return ;
+        // 非空暂时清空，重复构建
+        for (auto blocks : m_vBlocks) {
+            for (auto block : blocks) {
+                delete block;
+            }
+        }
+        m_vBlocks.clear();
     }
 
     // 先判断ctx是否为json
@@ -184,13 +193,13 @@ void Node::buildNode() {
         inBlcok.append(block);
 
         m_vBlocks.append(inBlcok);
-        return ;
+        return Error::success();
     }
 
     QJsonArray blockArr = jsonObj["blocks"].toArray(QJsonArray());
     // 检查是否有blocks
     if (blockArr.isEmpty()) {
-        return ;
+        return {ErrorCode::CONTENT_IS_EMPTY, "blocks is empty"};
     }
 
     // todo 这里要错误处理
@@ -198,6 +207,8 @@ void Node::buildNode() {
     if (!err.isSuccess()) {
         qDebug() << "build blocks error: " << err.message << Qt::endl;
     }
+
+    return Error::success();
 }
 
 void Node::write(const QByteArray &ctx) {
@@ -215,13 +226,13 @@ int Node::Save() {
     // 这里不应该依赖NoteEditor
     // 暂时先这样写
     if (NeedSave()) {
-        QByteArray editorByteArr = QByteArray().append(NoteEditor::getInstance()->getText().toUtf8());
-        QString editorStr = QString::fromUtf8(editorByteArr);
+        //QByteArray editorByteArr = QByteArray().append(NoteEditor::getInstance()->getText().toUtf8());
+        //QString editorStr = QString::fromUtf8(editorByteArr);
         //write(editorByteArr);
         saveAllBlocks();
         // qDebug() << "save succ, node: " << this->getPath() << "\n";
         m_bIsMod = false;
-        emit SignalModStatusChanged(this);
+        emit signalModStatusChanged(this);
     }
 }
 
@@ -275,7 +286,7 @@ bool Node::NeedSave() {
 void Node::TextChanged() {
     if (m_bIsMod == false) {
         m_bIsMod = true;
-        emit SignalModStatusChanged(this);
+        emit signalModStatusChanged(this);
     }
 }
 

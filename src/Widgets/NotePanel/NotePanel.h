@@ -4,8 +4,14 @@
 #include <QWidget>
 #include <Notebook/Node.h>
 #include <QGridLayout>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QToolBar>
 
 namespace MyNote {
+
+class LeftPanel;
+class RightPanel;
 
 class NotePanel : public QWidget {
     Q_OBJECT
@@ -19,10 +25,13 @@ public:
     void clear();
     void reload();
 
+protected:
 
 private slots:
     void onCurrentNodeChanged(Node *node);
-    void showBlockSelectMenu();
+    void onAddBlock(QAction *action);
+    void onShowBlockSelectMenu();
+    void onRefreshLayout();
 
 private:
     NotePanel(QWidget *parent);
@@ -30,12 +39,16 @@ private:
 private:
     static NotePanel *m_pInstance;
     QWidget *m_pContentWidget;
-    QGridLayout *m_pMainLayout;
+    QVBoxLayout *m_pMainLayout;
+    QVBoxLayout *m_pScrollLayout;
     Node *m_pNode;
+    LeftPanel *m_pLeftPanel;
+    RightPanel *m_pRightPanel;
+    QToolBar *m_pToolBar;
 };
 
 
 
-};
+}
 
 #endif // NOTEPANEL_H

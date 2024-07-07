@@ -40,6 +40,8 @@ public:
 
     QString getNodeFullPath();
 
+    QVector<QVector<Block*> > getBlocks() {return m_vBlocks;}
+
     bool deleteDir();
     bool deleteChild(Node *node);
 
@@ -68,7 +70,7 @@ public:
 
     Error saveAllBlocks();
 
-    void buildNode();
+    Error buildNode();
     void rebuildNode();
 
     // 根据json构建Block
@@ -87,7 +89,7 @@ public:
     Node *getParentNode() { return m_pParentNode; }
 
 signals:
-    void SignalModStatusChanged(Node *node);
+    void signalModStatusChanged(Node *node);
 
 private:
     QString m_sID;

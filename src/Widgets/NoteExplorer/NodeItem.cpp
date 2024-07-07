@@ -26,7 +26,7 @@ NodeItem::~NodeItem() {
 }
 
 void NodeItem::ConnNodeIsMod(Node *node) {
-    connect(node, &Node::SignalModStatusChanged, this, &NodeItem::HandleNodeIsMod);
+    connect(node, &Node::signalModStatusChanged, this, &NodeItem::HandleNodeIsMod);
 }
 
 void NodeItem::HandleNodeIsMod(Node *node) {

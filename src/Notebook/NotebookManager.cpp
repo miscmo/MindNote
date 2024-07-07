@@ -5,8 +5,8 @@
 #include <Config/AppState.h>
 #include <Notebook/Notebook.h>
 #include <Notebook/Node.h>
-#include <Widgets/NoteExplorer.h>
-#include <Widgets/NoteEditor.h>
+#include <Widgets/NoteExplorer/NoteExplorer.h>
+#include <Widgets/NotePanel/NoteEditor.h>
 
 
 #include <QDebug>

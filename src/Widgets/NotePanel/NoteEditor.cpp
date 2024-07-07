@@ -1,7 +1,5 @@
 #include "NoteEditor.h"
 
-#include "MainWindow.h"
-
 #include <MyNote.h>
 #include <Utils/Utils.h>
 #include <Notebook/BufferManager.h>
@@ -12,6 +10,7 @@
 #include <Config/Config.h>
 #include <Widgets/Highlighter/NoteHighlighter.h>
 #include <Widgets/Highlighter/StyleParser.h>
+#include <Widgets/MainWindow.h>
 
 #include <QWidget>
 #include <QTextEdit>
@@ -54,6 +53,11 @@ QString NoteEditor::getText() {
 }
 
 void NoteEditor::initUi() {
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     m_pHighlighter = new NoteHighlighter(this->document());
 
     //loadStyleFromStylesheet(":/Res/markdown.css");
@@ -78,6 +82,8 @@ void NoteEditor::initUi() {
 
     // updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+
+    adjustHeight();
 
 
     // 初始化快捷键
@@ -234,9 +240,6 @@ void NoteEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 }
 
-void NoteEditor::setupUi() {
-}
-
 void NoteEditor::setupSignal() {
     connect(NoteMgr::GetInstance(), &NoteMgr::signalCurNodeChanged,
             this, &NoteEditor::onCurrentNodeChanged);
@@ -252,28 +255,69 @@ void NoteEditor::setupSignal() {
 
 void NoteEditor::onCurrentNodeChanged(Node *node) {
     // 切换笔记前先断联笔记修改检测，防止将笔记切换误认为是用户修改内容
-    disconnect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
+    //disconnect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 
-    QString nodeContent = QString::fromUtf8(node->read());
-    node->buildNode();
+    //QString nodeContent = QString::fromUtf8(node->read());
+    //setPlainText(nodeContent);
 
-    setPlainText(nodeContent);
+    Error err = node->buildNode();
+    if (!err.isSuccess()) {
+        switch (err.code) {
+        case ErrorCode::CONTENT_IS_EMPTY:
+            //QMessageBox.warning(this, "笔记内容为空", err.message);
+            break;
+        default:
+            break;
+        }
+    }
 
-    QTextCursor cursor = textCursor();
-    cursor.setPosition(node->getLastEditPos());
-    setTextCursor(cursor);
+    // QTextCursor cursor = textCursor();
+    // cursor.setPosition(node->getLastEditPos());
+    // setTextCursor(cursor);
 
-    verticalScrollBar()->setValue(node->getLastVScrollPos());
-    horizontalScrollBar()->setValue(node->getLastHScrollPos());
-    setFocus();
+    // verticalScrollBar()->setValue(node->getLastVScrollPos());
+    // horizontalScrollBar()->setValue(node->getLastHScrollPos());
+    // setFocus();
+
+    adjustHeight();
     
 
-    connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
+    // connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 }
 
 void NoteEditor::onTextChanged() {
     qDebug() << "text changed\n";
     NoteMgr::GetInstance()->TextChanged();
+
+    // 自适应大小
+    adjustHeight();
+}
+
+void NoteEditor::adjustHeight() {
+    // 自适应大小
+    // 获取文本文档
+    QTextDocument *doc = document();
+
+    // 计算文本内容的高度
+    int contentHeight = 0;
+    for (QTextBlock block = doc->begin(); block != doc->end(); block = block.next()) {
+        // 获取当前文本块的高度
+        QRectF rect = doc->documentLayout()->blockBoundingRect(block);
+        contentHeight += rect.height();
+    }
+
+    // 获取当前的固定高度
+    int currentHeight = height();
+
+    // 计算新的高度
+    int newHeight = contentHeight + 10;  // 10 是一个合理的边距，用于显示文本光标
+
+    // 仅在高度需要改变时才进行调整
+    if (currentHeight != newHeight) {
+        setFixedHeight(newHeight);
+        // 更新滚动区域的总高度
+        //updateScrollAreaHeight();
+    }
 }
 
 void NoteEditor::onTextModify(bool isMod) {
