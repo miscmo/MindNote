@@ -1,8 +1,8 @@
 #include "MyNote.h"
 
 #include <Widgets/MainWindow.h>
-#include <Widgets/NoteEditor.h>
-#include <Widgets/NoteExplorer.h>
+#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NoteExplorer/NoteExplorer.h>
 #include <Widgets/FileExplorer.h>
 
 namespace MyNote {

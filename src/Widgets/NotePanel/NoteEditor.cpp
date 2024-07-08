@@ -66,6 +66,8 @@ void NoteEditor::initUi() {
     //loadStyleFromStylesheet(":/Res/solarized-light.style");
     loadStyleFromStylesheet(":/Res/solarized-dark.style");
 
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
 
     QFont defFont("Courier New", 12);
     QString fontString = Config::getInstance()->get(CONF_FONT_KEY, QVariant(defFont.toString())).toString();

@@ -142,7 +142,7 @@ read返回的是一个json,格式如下:
 */
 Error Node::buildBlocks(const QJsonArray &blockArr, QVector<QVector<Block *> > &blocks) {
 
-    for (const QJsonValueRef layoutItem : blockArr) {
+    for (auto layoutItem : blockArr) {
         QVector<Block *> inBlocks;
         QJsonArray blockArr = layoutItem.toArray();
 

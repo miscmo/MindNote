@@ -1,6 +1,6 @@
 #include "NoteExplorerPopMenu.h"
 
-#include <Widgets/NoteExplorer.h>
+#include <Widgets/NoteExplorer/NoteExplorer.h>
 #include <QMessageBox>
 #include <Widgets/WidgetMgr.h>
 

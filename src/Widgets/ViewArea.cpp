@@ -1,11 +1,11 @@
 #include "ViewArea.h"
 
-#include "NoteEditor.h"
 #include "MainWindow.h"
 
 #include <MyNote.h>
 #include <Utils/Utils.h>
-#include <Widgets/NotePanel.h>
+#include <Widgets/NotePanel/NotePanel.h>
+#include <Widgets/NotePanel/NoteEditor.h>
 
 #include <QVBoxLayout>
 #include <QDebug>

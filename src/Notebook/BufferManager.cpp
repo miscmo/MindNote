@@ -2,7 +2,7 @@
 
 #include "Buffer.h"
 
-#include <Widgets/NoteEditor.h>
+#include <Widgets/NotePanel/NoteEditor.h>
 
 #include <Utils/Utils.h>
 
