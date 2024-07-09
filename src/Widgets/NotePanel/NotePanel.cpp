@@ -17,6 +17,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QSplitter>
+#include <QShortcut>
 
 using namespace MyNote;
 
@@ -32,7 +33,14 @@ NotePanel *NotePanel::getInstance() {
 }
 
 NotePanel::NotePanel(QWidget *parent)
-    : QWidget(parent) {
+    : QWidget(parent)
+    , m_pContentWidget(nullptr)
+    , m_pMainLayout(nullptr)
+    , m_pScrollLayout(nullptr)
+    , m_pNode(nullptr)
+    , m_pLeftPanel(nullptr)
+    , m_pRightPanel(nullptr)
+    , m_pToolBar(nullptr){
     //setFixedSize(300, 400);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     //setAttribute(Qt::WA_StyledBackground);
@@ -43,6 +51,11 @@ NotePanel::NotePanel(QWidget *parent)
     setupUI();
 
     setupSignal();
+
+    // 初始化快捷键
+    // ctrl-s 保存
+    QShortcut *saveShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
+    connect(saveShortcut, &QShortcut::activated, this, &NotePanel::onSave);
 }
 
 NotePanel::~NotePanel() {
@@ -105,6 +118,10 @@ void NotePanel::onCurrentNodeChanged(Node *node) {
         default:
             break;
         }
+    }
+
+    if (m_pNode != nullptr) {
+        m_pNode->Save();
     }
 
     clear();
@@ -178,4 +195,8 @@ void NotePanel::onAddBlock(QAction *action) {
 
 void NotePanel::onRefreshLayout() {
     //m_pRightPanel->update();
+}
+
+void NotePanel::onSave() {
+    m_pRightPanel->Save();
 }

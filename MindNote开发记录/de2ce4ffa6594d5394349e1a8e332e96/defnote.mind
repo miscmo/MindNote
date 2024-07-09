@@ -2,7 +2,7 @@
     "blocks": [
         [
             {
-                "content": "CuteMarkEd：Markdown编辑器，https://github.com/cloose/CuteMarkEd.git\r\n\r\nCuteMarkED-NG: https://github.com/Waqar144/CuteMarkEd-NG/tree/develop\r\n\r\n[PEG高亮](https://hasseg.org/peg-markdown-highlight/)\r\n\r\n\r\n",
+                "content": "CuteMarkEd：Markdown编辑器，https://github.com/cloose/CuteMarkEd.git\n\nCuteMarkED-NG: https://github.com/Waqar144/CuteMarkEd-NG/tree/develop\n\n[PEG高亮](https://hasseg.org/peg-markdown-highlight/)\n\n\n\n\n\n",
                 "content_type": "text",
                 "type": "text"
             }

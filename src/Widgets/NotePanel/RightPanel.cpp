@@ -13,7 +13,9 @@ using namespace MyNote;
 
 RightPanel::RightPanel(QWidget *parent)
     : QWidget(parent)
-    , m_pMainLayout(nullptr) {
+    , m_pMainLayout(nullptr)
+    , m_pToolBar(nullptr)
+    , m_pNode(nullptr) {
     //setAttribute(Qt::WA_StyledBackground);
     //setStyleSheet("background-color: gray;");
     setupUI();
@@ -73,6 +75,7 @@ void RightPanel::buildLayout(Node *node) {
     // 根据Node中block的类型，创建对应的Widget
 
     auto blocks = node->getBlocks();
+    m_pNode = node;
 
     for (auto block : blocks) {
         if (block.empty()) {
@@ -85,17 +88,15 @@ void RightPanel::buildLayout(Node *node) {
         }
 
         if (b->getType() == BLOCK_TYPE_TEXT) {
-            auto mdBlock = new NoteEditor(this);
-            mdBlock->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            mdBlock->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-            // 调整 QTextEdit 的大小策略
+            auto mdBlock = new NoteEditor(this, b);
+            m_pEditor = mdBlock;
 
-            mdBlock->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            mdBlock->setMinimumHeight(200); // 设置一个合理的最小高度，以便内容可以完全展示
+            connect(mdBlock, &NoteEditor::signalHeightChanged, this, &RightPanel::onAdjustHeight);
 
-            mdBlock->setPlainText(b->getContent());
             m_pMainLayout->addWidget(mdBlock);
+
+            onAdjustHeight();
 
         } else if (b->getType() == BLOCK_TYPE_TEXT) {
 
@@ -115,4 +116,12 @@ void RightPanel::buildLayout(Node *node) {
         }
     }
 
+}
+
+void RightPanel::Save() {
+    m_pNode->Save();
+}
+
+void RightPanel::onAdjustHeight() {
+    setFixedHeight(m_pEditor->GetHeight());
 }

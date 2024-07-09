@@ -32,6 +32,7 @@ private slots:
     void onAddBlock(QAction *action);
     void onShowBlockSelectMenu();
     void onRefreshLayout();
+    void onSave();
 
 private:
     NotePanel(QWidget *parent);
@@ -43,6 +44,7 @@ private:
     QVBoxLayout *m_pScrollLayout;
     Node *m_pNode;
     LeftPanel *m_pLeftPanel;
+    // todo 这里可以考虑使用QTabWidget实现多窗口选项卡
     RightPanel *m_pRightPanel;
     QToolBar *m_pToolBar;
 };

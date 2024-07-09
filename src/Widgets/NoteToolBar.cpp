@@ -111,11 +111,11 @@ void NoteToolBar::initNotebookManage() {
 
     auto fontSelecter = [=]() {
         bool ok;
-        QFont curFont = NoteEditor::getInstance()->getCurFont();
-        QFont font = QFontDialog::getFont(&ok, curFont, this, tr("Choose Font"));
-        if (ok) {
-            NoteEditor::getInstance()->setCurFont(font);
-        }
+        // QFont curFont = NoteEditor::getInstance()->getCurFont();
+        // QFont font = QFontDialog::getFont(&ok, curFont, this, tr("Choose Font"));
+        // if (ok) {
+        //     NoteEditor::getInstance()->setCurFont(font);
+        // }
     };
 
     connect(actionFont, &QAction::triggered, fontSelecter);

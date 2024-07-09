@@ -16,19 +16,25 @@ namespace MyNote {
 #define BLOCK_CONTENT_TYPE_LOCALFILE "localfile"
 #define BLOCK_CONTENT_TYPE_URL "url"
 
+class Node;
+
 class Block {
 
 public:
-    Block(QString type, QString content, QString contentType);
+    Block(Node *node, QString type, QString content, QString contentType);
     ~Block();
 
     // getter and setter
     void setType(QString type);
     void setContent(QString content, QString contentType);
+    void setContentType(QString contentType) { m_sContentType = contentType; }
 
+    Node *getNode() { return m_pNode; }
     QString getType() { return m_sType; }
     QString getContent() { return m_sContent; }
     QString getContentType() { return m_sContentType; }
+
+    void ContentChanged();
 
 signals:
     void signalContentChanged();
@@ -36,6 +42,7 @@ signals:
 
 private:
     bool m_bNeedSave;
+    Node *m_pNode;
     QString m_sType;
     QString m_sContent;
     QString m_sContentType;

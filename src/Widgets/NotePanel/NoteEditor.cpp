@@ -25,18 +25,9 @@
 
 using namespace MyNote;
 
-NoteEditor *NoteEditor::m_pInstance = nullptr;
-
-NoteEditor *NoteEditor::getInstance() {
-    if (m_pInstance == nullptr) {
-        m_pInstance = new NoteEditor(MyNote::getInstance()->GetMainWindow());
-    }
-
-    return m_pInstance;
-}
-
-NoteEditor::NoteEditor(QWidget *parent)
-    : QPlainTextEdit(parent) {
+NoteEditor::NoteEditor(QWidget *parent, Block *block)
+    : QPlainTextEdit(parent)
+    , m_pBlock(block) {
 
     initUi();
 
@@ -45,7 +36,7 @@ NoteEditor::NoteEditor(QWidget *parent)
 
 NoteEditor::~NoteEditor() {
     qDebug() << "~NodeEditor" << Qt::endl;
-    Config::getInstance()->set(CONF_FONT_KEY, QVariant(getCurFont().toString()));
+    //Config::getInstance()->set(CONF_FONT_KEY, QVariant(getCurFont().toString()));
 }
 
 QString NoteEditor::getText() {
@@ -56,18 +47,11 @@ void NoteEditor::initUi() {
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_pHighlighter = new NoteHighlighter(this->document());
 
-    //loadStyleFromStylesheet(":/Res/markdown.css");
-    loadStyleFromStylesheet("D:\\Code\\cloose-CuteMarkEd\\cloose-CuteMarkEd-64915b4\\app\\scripts\\highlight.js\\highlight.pack.js");
-    //loadStyleFromStylesheet(":/Res/default.style");
-    //loadStyleFromStylesheet(":/Res/solarized-light.style");
     loadStyleFromStylesheet(":/Res/solarized-dark.style");
-
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
 
     QFont defFont("Courier New", 12);
     QString fontString = Config::getInstance()->get(CONF_FONT_KEY, QVariant(defFont.toString())).toString();
@@ -79,24 +63,26 @@ void NoteEditor::initUi() {
         setCurFont(defFont);
     }
 
-    // 暂时先不显示
-    // m_pLineNumberArea = new LineNumberArea(this);
+    disconnect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
 
-    // updateLineNumberAreaWidth(0);
+    setMinimumHeight(200); // 设置一个合理的最小高度，以便内容可以完全展示
+    if (m_pBlock != nullptr) {
+        setPlainText(m_pBlock->getContent());
+        adjustHeight();
+    }
+
+    connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
+
     highlightCurrentLine();
+}
 
-    adjustHeight();
-
-
-    // 初始化快捷键
-    // ctrl-s 保存
-    QShortcut *saveShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_S), this);
-    connect(saveShortcut, &QShortcut::activated, NoteMgr::GetInstance(), &NoteMgr::SaveCurNode);
-
-
-    // 高亮
-    //NoteHighlighter *highlighter = new NoteHighlighter(document());
-
+void NoteEditor::setupSignal() {
+    // 暂时不显示行号
+    //connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
+    //connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
+    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
+    connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
+    //connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(onTextModify(bool)));
 }
 
 void NoteEditor::setCurFont(const QFont &font) {
@@ -106,43 +92,6 @@ void NoteEditor::setCurFont(const QFont &font) {
 const QFont &NoteEditor::getCurFont() {
     return font();
 }
-
-int NoteEditor::lineNumberAreaWidth() {
-    int digits = 1;
-    int max = qMax(1, blockCount());
-    while (max >= 10) {
-        max /= 10;
-        ++digits;
-    }
-
-    int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
-
-    return space;
-}
-
-void NoteEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
-{
-    setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
-}
-
-//![slotUpdateExtraAreaWidth]
-
-//![slotUpdateRequest]
-
-void NoteEditor::updateLineNumberArea(const QRect &rect, int dy)
-{
-    if (dy)
-        m_pLineNumberArea->scroll(0, dy);
-    else
-        m_pLineNumberArea->update(0, rect.y(), m_pLineNumberArea->width(), rect.height());
-
-    if (rect.contains(viewport()->rect()))
-        updateLineNumberAreaWidth(0);
-}
-
-//![slotUpdateRequest]
-
-//![resizeEvent]
 
 void NoteEditor::resizeEvent(QResizeEvent *e)
 {
@@ -185,10 +134,6 @@ void NoteEditor::keyPressEvent(QKeyEvent *event) {
     QPlainTextEdit::keyPressEvent(event);
 }
 
-//![resizeEvent]
-
-//![cursorPositionChanged]
-
 void NoteEditor::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
@@ -208,88 +153,12 @@ void NoteEditor::highlightCurrentLine()
     setExtraSelections(extraSelections);
 }
 
-//![cursorPositionChanged]
-
-//![extraAreaPaintEvent_0]
-
-void NoteEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
-{
-    QPainter painter(m_pLineNumberArea);
-    painter.fillRect(event->rect(), Qt::lightGray);
-
-//![extraAreaPaintEvent_0]
-
-//![extraAreaPaintEvent_1]
-    QTextBlock block = firstVisibleBlock();
-    int blockNumber = block.blockNumber();
-    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int) blockBoundingRect(block).height();
-//![extraAreaPaintEvent_1]
-
-//![extraAreaPaintEvent_2]
-    while (block.isValid() && top <= event->rect().bottom()) {
-        if (block.isVisible() && bottom >= event->rect().top()) {
-            QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::black);
-            painter.drawText(0, top, m_pLineNumberArea->width(), fontMetrics().height(),
-                             Qt::AlignRight, number);
-        }
-
-        block = block.next();
-        top = bottom;
-        bottom = top + (int) blockBoundingRect(block).height();
-        ++blockNumber;
-    }
-}
-
-void NoteEditor::setupSignal() {
-    connect(NoteMgr::GetInstance(), &NoteMgr::signalCurNodeChanged,
-            this, &NoteEditor::onCurrentNodeChanged);
-
-    // 暂时不显示行号
-    //connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
-    //connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
-    connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
-    //connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(onTextModify(bool)));
-}
-
-
-void NoteEditor::onCurrentNodeChanged(Node *node) {
-    // 切换笔记前先断联笔记修改检测，防止将笔记切换误认为是用户修改内容
-    //disconnect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
-
-    //QString nodeContent = QString::fromUtf8(node->read());
-    //setPlainText(nodeContent);
-
-    Error err = node->buildNode();
-    if (!err.isSuccess()) {
-        switch (err.code) {
-        case ErrorCode::CONTENT_IS_EMPTY:
-            //QMessageBox.warning(this, "笔记内容为空", err.message);
-            break;
-        default:
-            break;
-        }
-    }
-
-    // QTextCursor cursor = textCursor();
-    // cursor.setPosition(node->getLastEditPos());
-    // setTextCursor(cursor);
-
-    // verticalScrollBar()->setValue(node->getLastVScrollPos());
-    // horizontalScrollBar()->setValue(node->getLastHScrollPos());
-    // setFocus();
-
-    adjustHeight();
-    
-
-    // connect(this, SIGNAL(textChanged()), this, SLOT(onTextChanged()));
-}
-
 void NoteEditor::onTextChanged() {
     qDebug() << "text changed\n";
-    NoteMgr::GetInstance()->TextChanged();
+    //NoteMgr::GetInstance()->TextChanged();
+
+    m_pBlock->setContent(toPlainText(), m_pBlock->getContentType());
+    m_pBlock->ContentChanged();
 
     // 自适应大小
     adjustHeight();
@@ -319,7 +188,12 @@ void NoteEditor::adjustHeight() {
         setFixedHeight(newHeight);
         // 更新滚动区域的总高度
         //updateScrollAreaHeight();
+        emit signalHeightChanged();
     }
+}
+
+int NoteEditor::GetHeight() {
+    return height();
 }
 
 void NoteEditor::onTextModify(bool isMod) {

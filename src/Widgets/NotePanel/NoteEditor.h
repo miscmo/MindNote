@@ -4,6 +4,8 @@
 #include <QPlainTextEdit>
 #include <Widgets/Highlighter/NoteHighlighter.h>
 
+#include <Notebook/Block.h>
+
 class QTreeWidgetItem;
 class QVBoxLayout;
 
@@ -15,9 +17,9 @@ class Node;
 
 class NoteEditor : public QPlainTextEdit {
     Q_OBJECT
+
 public:
-    static NoteEditor *getInstance();
-    NoteEditor(QWidget *parent);
+    NoteEditor(QWidget *parent, Block *block);
     ~NoteEditor();
 
     void initUi();
@@ -30,60 +32,31 @@ public:
 
     void onCurBufferChanged(Buffer* buffer);
 
-    //行号
-    void lineNumberAreaPaintEvent(QPaintEvent *event);
-    int lineNumberAreaWidth();
-
     //高亮
     void resetHighlighting();
     void loadStyleFromStylesheet(const QString &fileName);
 
     // 调整高度
     void adjustHeight();
+    int GetHeight();
+
+signals:
+    void signalHeightChanged();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
-    void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
-    void updateLineNumberArea(const QRect &, int);
-
-    void onCurrentNodeChanged(Node *node);
 
     void onTextChanged();
 
     void onTextModify(bool isMod);
 
 private:
-
-private:
-    LineNumberArea *m_pLineNumberArea;
-
-    static NoteEditor *m_pInstance;
-
     NoteHighlighter *m_pHighlighter;
-};
-
-class LineNumberArea : public QWidget
-{
-public:
-    LineNumberArea(NoteEditor *editor) : QWidget(editor) {
-        m_pNoTeEditor = editor;
-    }
-
-    QSize sizeHint() const override {
-        return QSize(m_pNoTeEditor->lineNumberAreaWidth(), 0);
-    }
-
-protected:
-    void paintEvent(QPaintEvent *event) override {
-        m_pNoTeEditor->lineNumberAreaPaintEvent(event);
-    }
-
-private:
-    NoteEditor *m_pNoTeEditor;
+    Block *m_pBlock;
 };
 
 }

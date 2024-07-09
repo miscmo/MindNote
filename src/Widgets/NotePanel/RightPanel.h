@@ -10,6 +10,8 @@
 
 namespace MyNote {
 
+class NoteEditor;
+
 class RightPanel : public QWidget {
     Q_OBJECT
 
@@ -24,11 +26,17 @@ public:
 
     void buildLayout(Node *node);
 
+    void Save();
+
 private slots:
+    void onAdjustHeight();
 
 private:
     QVBoxLayout *m_pMainLayout;
     QToolBar *m_pToolBar;
+    Node *m_pNode;
+    // todo 暂时使用NoteEditor，后续需要考虑多种类型的编辑器
+    NoteEditor *m_pEditor;
 };
 
 }

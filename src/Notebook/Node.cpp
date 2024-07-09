@@ -150,7 +150,7 @@ Error Node::buildBlocks(const QJsonArray &blockArr, QVector<QVector<Block *> > &
             QString type = blockItem.toObject()["type"].toString(BLOCK_TYPE_TEXT);
             QString content = blockItem.toObject()["content"].toString("");
             QString contentType = blockItem.toObject()["content_type"].toString(BLOCK_CONTENT_TYPE_TEXT);
-            Block *block = new Block(type, content, contentType);
+            Block *block = new Block(this, type, content, contentType);
 
             inBlocks.append(block);
         }
@@ -189,7 +189,7 @@ Error Node::buildNode() {
         QString type = BLOCK_TYPE_TEXT;
         QString content = QString::fromUtf8(ctx);
         QString contentType = BLOCK_CONTENT_TYPE_TEXT;
-        Block *block = new Block(type, content, contentType);
+        Block *block = new Block(this, type, content, contentType);
         inBlcok.append(block);
 
         m_vBlocks.append(inBlcok);
