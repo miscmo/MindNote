@@ -87,8 +87,6 @@ void NotePanel::setupUI() {
     //m_pLeftPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_pRightPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    m_pRightPanel->setMinimumHeight(5000);
-
 
     scrollArea->setWidget(m_pRightPanel);
 

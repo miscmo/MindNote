@@ -53,6 +53,8 @@ void MainWindow::initUi() {
     initGlobalShortcut();
 
     loadStateAndGeometry();
+
+    setAttribute(Qt::WA_StaticContents, true);
 }
 
 void MainWindow::initToolBar() {

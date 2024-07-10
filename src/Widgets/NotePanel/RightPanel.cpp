@@ -123,5 +123,7 @@ void RightPanel::Save() {
 }
 
 void RightPanel::onAdjustHeight() {
-    setFixedHeight(m_pEditor->GetHeight());
+    int newHeight = m_pEditor->GetHeight();
+    setFixedHeight(newHeight);
+    updateGeometry();
 }
