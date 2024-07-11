@@ -6,7 +6,7 @@
 #include <Notebook/Notebook.h>
 #include <Notebook/Node.h>
 #include <Widgets/NoteExplorer/NoteExplorer.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 
 
 #include <QDebug>

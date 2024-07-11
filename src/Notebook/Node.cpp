@@ -8,7 +8,7 @@
 #include <Notebook/Buffer.h>
 #include <Notebook/BufferManager.h>
 #include <Notebook/Block.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 #include <Notebook/Notebook.h>
 #include <Utils/Utils.h>
 

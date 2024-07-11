@@ -1,21 +1,14 @@
 #ifndef NOTEEDITOR_H
 #define NOTEEDITOR_H
 
-#include <QPlainTextEdit>
-#include <Widgets/Highlighter/NoteHighlighter.h>
-
-#include <Notebook/Block.h>
-
-class QTreeWidgetItem;
-class QVBoxLayout;
+#include <QWidget>
+#include <Utils/Errors.h>
 
 namespace MyNote {
 
-class Buffer;
-class LineNumberArea;
-class Node;
+class Block;
 
-class NoteEditor : public QPlainTextEdit {
+class NoteEditor : public virtual QWidget {
     Q_OBJECT
 
 public:
@@ -25,37 +18,19 @@ public:
     void initUi();
     void setupSignal();
 
-    void setCurFont(const QFont &font);
-    const QFont &getCurFont();
+    virtual int getHeight();
+    virtual int autoAdjustHeight();
 
-    QString getText();
-
-    void onCurBufferChanged(Buffer* buffer);
-
-    //高亮
-    void resetHighlighting();
-    void loadStyleFromStylesheet(const QString &fileName);
-
-    // 调整高度
-    void adjustHeight();
-    int GetHeight();
+    virtual Error save();
 
 signals:
-    void signalHeightChanged();
+    void signalHeightChanged(int height);
 
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
+public slots:
 
-private slots:
-    void highlightCurrentLine();
 
-    void onTextChanged();
-
-    void onTextModify(bool isMod);
 
 private:
-    NoteHighlighter *m_pHighlighter;
     Block *m_pBlock;
 };
 

@@ -6,7 +6,7 @@
 #include <QTextEdit>
 
 #include <Utils/Utils.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 
 using namespace MyNote;
 
@@ -89,10 +89,10 @@ void RightPanel::buildLayout(Node *node) {
 
         if (b->getType() == BLOCK_TYPE_TEXT) {
 
-            auto mdBlock = new NoteEditor(this, b);
+            auto mdBlock = new TextEditor(this, b);
             m_pEditor = mdBlock;
 
-            connect(mdBlock, &NoteEditor::signalHeightChanged, this, &RightPanel::onAdjustHeight);
+            connect(mdBlock, &TextEditor::signalHeightChanged, this, &RightPanel::onAdjustHeight);
 
             m_pMainLayout->addWidget(mdBlock);
 

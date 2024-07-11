@@ -9,7 +9,7 @@
 #include <Widgets/WidgetFactory.h>
 #include <Widgets/Dialogs/NewNodeDialog.h>
 #include <Widgets/Dialogs/NodeDeleteConfirmDialog.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 #include <Widgets/MainWindow.h>
 #include <Widgets/NoteExplorer/NodeItem.h>
 

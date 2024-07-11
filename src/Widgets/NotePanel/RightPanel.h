@@ -10,7 +10,7 @@
 
 namespace MyNote {
 
-class NoteEditor;
+class TextEditor;
 
 class RightPanel : public QWidget {
     Q_OBJECT
@@ -36,7 +36,7 @@ private:
     QToolBar *m_pToolBar;
     Node *m_pNode;
     // todo 暂时使用NoteEditor，后续需要考虑多种类型的编辑器
-    NoteEditor *m_pEditor;
+    TextEditor *m_pEditor;
 };
 
 }

@@ -5,7 +5,7 @@
 #include <MyNote.h>
 #include <Utils/Utils.h>
 #include <Widgets/NotePanel/NotePanel.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 
 #include <QVBoxLayout>
 #include <QDebug>

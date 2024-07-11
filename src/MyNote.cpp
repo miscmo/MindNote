@@ -1,7 +1,7 @@
 #include "MyNote.h"
 
 #include <Widgets/MainWindow.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 #include <Widgets/NoteExplorer/NoteExplorer.h>
 #include <Widgets/FileExplorer.h>
 

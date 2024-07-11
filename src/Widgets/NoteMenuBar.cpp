@@ -7,7 +7,7 @@
 #include <Config/AppState.h>
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 #include <Model/DBMgr.h>
 #include <Widgets/WidgetMgr.h>
 #include <Widgets/Dialogs/NoteInfoDialog.h>

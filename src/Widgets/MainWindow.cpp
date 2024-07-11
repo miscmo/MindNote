@@ -15,7 +15,7 @@
 #include <Model/DBMgr.h>
 #include <Widgets/NotePanel/NotePanel.h>
 #include <Widgets/NoteExplorer/NoteExplorer.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 
 #include <QRect>
 #include <QVariant>

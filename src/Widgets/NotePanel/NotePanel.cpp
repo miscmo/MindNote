@@ -3,7 +3,7 @@
 #include <MyNote.h>
 #include <Widgets/MainWindow.h>
 #include <Notebook/NotebookManager.h>
-#include <Widgets/NotePanel/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 #include <Widgets/NotePanel/NoteWidget.h>
 #include <Widgets/NotePanel/LeftPanel.h>
 #include <Widgets/NotePanel/RightPanel.h>
