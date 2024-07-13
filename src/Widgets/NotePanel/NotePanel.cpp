@@ -18,6 +18,7 @@
 #include <QMessageBox>
 #include <QSplitter>
 #include <QShortcut>
+#include <QToolButton>
 
 using namespace MyNote;
 
@@ -46,7 +47,7 @@ NotePanel::NotePanel(QWidget *parent)
     //setAttribute(Qt::WA_StyledBackground);
     //setStyleSheet("background-color: blue;");
 
-    QPushButton *addBtn = new QPushButton(tr("+"), this);
+    //QPushButton *addBtn = new QPushButton(tr("+"), this);
 
     setupUI();
 
@@ -68,11 +69,23 @@ void NotePanel::setupUI() {
 
     // 创建工具栏
     m_pToolBar = new QToolBar(this);
-    auto addBlockAction = new QAction(tr("Add Block"), this);
     auto refreshAction = new QAction(tr("Refresh"), this);
-    m_pToolBar->addAction(addBlockAction);
+
+    QToolButton *btnAddBlock = new QToolButton(this);
+    QMenu *menuAddBlock = new QMenu();
+
+    menuAddBlock->addAction(tr(BLOCK_TYPE_TEXT));
+    menuAddBlock->addAction(tr(BLOCK_TYPE_MARKDOWN));
+    menuAddBlock->addAction(tr(BLOCK_TYPE_FLOWCHART));
+    btnAddBlock->setMenu(menuAddBlock);
+    btnAddBlock->setPopupMode(QToolButton::MenuButtonPopup);
+    btnAddBlock->setLayoutDirection(Qt::LeftToRight);
+    btnAddBlock->setText(tr("Add Block"));
+
+    m_pToolBar->addWidget(btnAddBlock);
+
     m_pToolBar->addAction(refreshAction);
-    connect(addBlockAction, &QAction::triggered, this, &NotePanel::onShowBlockSelectMenu);
+    connect(menuAddBlock, &QMenu::triggered, this, &NotePanel::onAddBlock);
     connect(refreshAction, &QAction::triggered, this, &NotePanel::onRefreshLayout);
 
     // 将工具栏添加到 RightPanel 中，而不是布局中
@@ -169,26 +182,11 @@ void NotePanel::addNoteBlock() {
     // }
 }
 
-
-void NotePanel::onShowBlockSelectMenu() {
-    // Create a menu and add actions
-    QMenu addMenu(this);
-    QAction *textBlockAction = addMenu.addAction(tr("plain text block"));
-    QAction *mdBlockAction = addMenu.addAction("markdown block");
-    QAction *flowChartAction = addMenu.addAction("flow chart block");
-
-    connect(&addMenu, &QMenu::triggered, this, &NotePanel::onAddBlock);
-
-    // Get the position of the button and show the menu there
-    QPushButton *button = qobject_cast<QPushButton*>(sender());
-    if (button) {
-        QPoint pos = button->mapToGlobal(QPoint(0, button->height()));
-        addMenu.exec(pos);
-    }
-}
-
 void NotePanel::onAddBlock(QAction *action) {
     QMessageBox::information(nullptr, tr("Add Block"), action->text());
+    Block *newBlock = NoteMgr::GetInstance()->getNewBlock(m_pNode, action->text());
+
+    m_pRightPanel->addNewBlock(newBlock);
 }
 
 void NotePanel::onRefreshLayout() {

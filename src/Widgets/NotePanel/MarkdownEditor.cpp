@@ -12,6 +12,11 @@ MarkdownEditor::MarkdownEditor(QWidget *parent, Block *block)
 MarkdownEditor::~MarkdownEditor() {
 }
 
+void MarkdownEditor::init() {
+    initUi();
+    setupSignal();
+}
+
 void MarkdownEditor::initUi() {
 }
 

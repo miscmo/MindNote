@@ -404,3 +404,8 @@ void Node::setDel(bool isDel) {
         m_sDeleteAt = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
     }
 }
+
+void Node::addBlock(Block *block) {
+    QVector<Block *> bs = {block};
+    m_vBlocks.append(bs);
+}

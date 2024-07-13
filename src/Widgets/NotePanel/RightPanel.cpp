@@ -71,7 +71,17 @@ void RightPanel::buildLayout(Node *node) {
         m_pMainLayout->addWidget(editor);
         onAdjustHeight();
     }
+}
 
+void RightPanel::addNewBlock(Block *b) {
+    if (b == nullptr) {
+        return;
+    }
+
+    NoteEditor *editor = new NoteEditor(this, b);
+    connect(editor, &NoteEditor::signalHeightChanged, this, &RightPanel::onAdjustHeight);
+    m_pMainLayout->addWidget(editor);
+    onAdjustHeight();
 }
 
 void RightPanel::Save() {

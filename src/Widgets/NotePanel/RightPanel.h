@@ -25,6 +25,7 @@ public:
     void clear();
 
     void buildLayout(Node *node);
+    void addNewBlock(Block *block);
 
     void Save();
 

@@ -27,11 +27,8 @@ using namespace MyNote;
 
 TextEditor::TextEditor(QWidget *parent, Block *block)
     : QPlainTextEdit(parent)
-    , m_pBlock(block) {
-
-    initUi();
-
-    setupSignal();
+    , m_pBlock(block)
+    , m_bNeedUpdateSize(true) {
 }
 
 TextEditor::~TextEditor() {
@@ -41,6 +38,11 @@ TextEditor::~TextEditor() {
 
 QString TextEditor::getText() {
     return toPlainText();
+}
+
+void TextEditor::init() {
+    initUi();
+    setupSignal();
 }
 
 void TextEditor::initUi() {
@@ -95,11 +97,16 @@ const QFont &TextEditor::getCurFont() {
 
 void TextEditor::resizeEvent(QResizeEvent *e)
 {
+
     QPlainTextEdit::resizeEvent(e);
 
     // todo:行号暂不显示
     // QRect cr = contentsRect();
     // m_pLineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+    if (m_bNeedUpdateSize) {
+        adjustHeight();
+        m_bNeedUpdateSize = false;
+    }
 }
 
 void TextEditor::keyPressEvent(QKeyEvent *event) {
@@ -168,6 +175,7 @@ int TextEditor::adjustHeight() {
     // 自适应大小
     // 获取文本文档
     QTextDocument *doc = document();
+    doc->adjustSize();
 
     // 计算文本内容的高度
     int contentHeight = 0;
@@ -186,6 +194,7 @@ int TextEditor::adjustHeight() {
     // 仅在高度需要改变时才进行调整
     if (currentHeight != newHeight) {
         setFixedHeight(newHeight);
+        m_bNeedUpdateSize = true;
         // 更新滚动区域的总高度
         //updateScrollAreaHeight();
         emit signalHeightChanged(newHeight);

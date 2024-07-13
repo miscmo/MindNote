@@ -15,8 +15,10 @@ public:
     MarkdownEditor(QWidget *parent, Block *block);
     ~MarkdownEditor();
 
-    virtual void initUi () override;
-    virtual void setupSignal () override;
+    void init();
+
+    void initUi();
+    void setupSignal();
 
     virtual int adjustHeight() override;
     virtual int getHeight() override;

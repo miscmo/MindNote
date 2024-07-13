@@ -30,7 +30,6 @@ protected:
 private slots:
     void onCurrentNodeChanged(Node *node);
     void onAddBlock(QAction *action);
-    void onShowBlockSelectMenu();
     void onRefreshLayout();
     void onSave();
 

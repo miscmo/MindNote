@@ -5,6 +5,7 @@
 #include <Config/AppState.h>
 #include <Notebook/Notebook.h>
 #include <Notebook/Node.h>
+#include <Notebook/Block.h>
 #include <Widgets/NoteExplorer/NoteExplorer.h>
 #include <Widgets/NotePanel/TextEditor.h>
 
@@ -232,6 +233,14 @@ void NoteMgr::openNotes(QStringList notes) {
             qDebug() << "open note failed, note: " << path << Qt::endl;
         }
     }
+}
+
+Block *NoteMgr::getNewBlock(Node *node, QString type) {
+    Block *block = new Block(node, type, "", BLOCK_CONTENT_TYPE_TEXT);
+
+    node->addBlock(block);
+
+    return block;
 }
 
 NoteMgr::~NoteMgr() {

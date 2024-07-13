@@ -9,7 +9,7 @@ namespace MyNote {
 #define BLOCK_TYPE_TEXT "text"
 #define BLOCK_TYPE_MARKDOWN  "markdown"
 #define BLOCK_TYPE_HTML "html"
-#define BLOCK_TYPE_FLOWCHART "FLOWCHART"
+#define BLOCK_TYPE_FLOWCHART "flowchart"
 
 // Block 内容类型
 #define BLOCK_CONTENT_TYPE_TEXT "text"

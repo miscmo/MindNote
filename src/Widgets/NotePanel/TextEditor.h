@@ -23,8 +23,10 @@ public:
     TextEditor(QWidget *parent, Block *block);
     ~TextEditor();
 
-    virtual void initUi() override;
-    virtual void setupSignal () override;
+    virtual void init() override;
+
+    void initUi();
+    void setupSignal ();
 
     // 调整高度
     virtual int adjustHeight() override;
@@ -60,6 +62,7 @@ private slots:
 private:
     NoteHighlighter *m_pHighlighter;
     Block *m_pBlock;
+    bool m_bNeedUpdateSize;
 };
 
 }

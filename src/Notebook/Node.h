@@ -41,6 +41,7 @@ public:
     QString getNodeFullPath();
 
     QVector<QVector<Block*> > getBlocks() {return m_vBlocks;}
+    void addBlock(Block *block);
 
     bool deleteDir();
     bool deleteChild(Node *node);

@@ -5,6 +5,7 @@
 #include <Widgets/NotePanel/MarkdownEditor.h>>
 
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 using namespace MyNote;
 
@@ -31,16 +32,19 @@ void NoteEditor::initUi() {
     // todo 这里后面改成工厂模式
     if (m_pBlock->getType() == BLOCK_TYPE_TEXT) {
         TextEditor *editor = new TextEditor(this, m_pBlock);
+        editor->init();
         connect(editor, &TextEditor::signalHeightChanged, this, &NoteEditor::signalHeightChanged);
         mainLayout->addWidget(editor);
         m_pEditor = editor;
     } else if (m_pBlock->getType() == BLOCK_TYPE_MARKDOWN) {
         MarkdownEditor *editor = new MarkdownEditor(this, m_pBlock);
+        editor->init();
         connect(editor, &MarkdownEditor::signalHeightChanged, this, &NoteEditor::signalHeightChanged);
         mainLayout->addWidget(editor);
         m_pEditor = editor;
     } else {
         qDebug() << "NoteEditor::initUi: unknown block type";
+        QMessageBox::warning(this, tr("Warning"), tr("Unknown block type"));
     }
 
     setLayout(mainLayout);

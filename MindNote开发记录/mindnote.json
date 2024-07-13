@@ -1,12 +1,16 @@
 {
     "create_at": "2024-06-17 22:43:24",
+    "delete_at": "",
     "id": "7a221d3a65ae40e29c86e57d2883fee3",
+    "is_del": false,
     "path": "defnote.mind",
     "style": "",
     "subnodes": [
         {
             "create_at": "2024-06-17 22:43:52",
+            "delete_at": "",
             "id": "85f935ba2f1e4e5eb4edd4a08921bd97",
+            "is_del": false,
             "path": "defnote.mind",
             "style": "",
             "subnodes": [
@@ -16,7 +20,9 @@
         },
         {
             "create_at": "2024-06-17 22:44:37",
+            "delete_at": "",
             "id": "2a976788f157401781914e3ed4ff50b1",
+            "is_del": false,
             "path": "defnote.mind",
             "style": "",
             "subnodes": [
@@ -26,7 +32,9 @@
         },
         {
             "create_at": "2024-06-17 22:45:13",
+            "delete_at": "",
             "id": "42bfdd2473c54657a235de84ed96efe7",
+            "is_del": false,
             "path": "defnote.mind",
             "style": "",
             "subnodes": [
@@ -36,13 +44,27 @@
         },
         {
             "create_at": "2024-06-21 21:47:43",
+            "delete_at": "",
             "id": "de2ce4ffa6594d5394349e1a8e332e96",
+            "is_del": false,
             "path": "defnote.mind",
             "style": "",
             "subnodes": [
             ],
             "title": "同品类分析",
             "update_at": "2024-06-21 21:47:43"
+        },
+        {
+            "create_at": "2024-07-13 23:47:15",
+            "delete_at": "",
+            "id": "8b89c07c04b84cfa8afa0c5c813f7912",
+            "is_del": false,
+            "path": "defnote.mind",
+            "style": "",
+            "subnodes": [
+            ],
+            "title": "测试",
+            "update_at": "2024-07-13 23:47:15"
         }
     ],
     "title": "MindNote开发记录",

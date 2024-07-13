@@ -10,8 +10,8 @@ class Block;
 
 class EditorInterface {
 public:
-    virtual void initUi() = 0;
-    virtual void setupSignal() = 0;
+    virtual void init() = 0;
+    //virtual void setupSignal() = 0;
     virtual int adjustHeight() = 0;
     virtual int getHeight() = 0;
     virtual Error save() = 0;

@@ -11,6 +11,7 @@ namespace MyNote {
 
 class Note;
 class Node;
+class Block;
 
 class NoteMgr : public QObject {
     Q_OBJECT
@@ -36,6 +37,8 @@ public:
 
     QStringList getOpenNotes();
     void openNotes(QStringList notes);
+
+    Block *getNewBlock(Node *node, QString type);
 
 public slots:
     void OnItemChanged(QTreeWidgetItem *item, int column);
