@@ -7,7 +7,7 @@
 #include <Config/AppState.h>
 #include <Notebook/NotebookManager.h>
 #include <Notebook/BufferManager.h>
-#include <Widgets/NoteEditor.h>
+#include <Widgets/NotePanel/TextEditor.h>
 #include <Model/DBMgr.h>
 #include <Widgets/WidgetMgr.h>
 #include <Widgets/Dialogs/NoteInfoDialog.h>
@@ -162,11 +162,11 @@ void NoteMenuBar::initMenuSetting() {
     // todo 这里做一个通用的字体管理控件，可以分别设置中文和英文字体
     auto fontSelecter = [=]() {
         bool ok;
-        QFont curFont = NoteEditor::getInstance()->getCurFont();
-        QFont font = QFontDialog::getFont(&ok, curFont, this, tr("Choose Font"));
-        if (ok) {
-            NoteEditor::getInstance()->setCurFont(font);
-        }
+        //QFont curFont = NoteEditor::getInstance()->getCurFont();
+        //QFont font = QFontDialog::getFont(&ok, curFont, this, tr("Choose Font"));
+        //if (ok) {
+            //NoteEditor::getInstance()->setCurFont(font);
+        //}
     };
 
     auto SettingMore = [=]() {
@@ -196,7 +196,7 @@ void NoteMenuBar::initMenuSetting() {
 
         qDebug() << "open recently note, path: " << path << "\n";
 
-        NoteEditor::getInstance()->loadStyleFromStylesheet(path);
+        //NoteEditor::getInstance()->loadStyleFromStylesheet(path);
     };
 
 

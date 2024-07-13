@@ -3,10 +3,12 @@
 #include <QDebug>
 #include <QDir>
 #include <QJsonArray>
+#include <QJsonDocument>
 
 #include <Notebook/Buffer.h>
 #include <Notebook/BufferManager.h>
-#include <Widgets/NoteEditor.h>
+#include <Notebook/Block.h>
+#include <Widgets/NotePanel/TextEditor.h>
 #include <Notebook/Notebook.h>
 #include <Utils/Utils.h>
 
@@ -111,6 +113,104 @@ QByteArray Node::read() {
     return getBuffer()->read();
 }
 
+/* 
+read返回的是一个json,格式如下:
+
+    "node": {
+        "config": "",
+        "font": "",
+        "bgStyle": "",
+        "fgStyle": "",
+        "layout": [
+            [
+                {"type": "Markdown", "content":""},
+                {"type": "PlainText", "content":""}
+            ],
+            [],
+            []
+        ] 
+    }
+    
+    
+    "type": "PlainText",   // Markdown、RichText、Drawing
+    "content": "",    // file
+    "content_type": "", // text，file
+    "site": "",
+}
+
+将json中node.layout中的每一个元素解析成一个Block对象，然后将Block对象放入QVector中，最后将QVector放入QVector中返回
+*/
+Error Node::buildBlocks(const QJsonArray &blockArr, QVector<QVector<Block *> > &blocks) {
+
+    for (auto layoutItem : blockArr) {
+        QVector<Block *> inBlocks;
+        QJsonArray blockArr = layoutItem.toArray();
+
+        for (const QJsonValueRef blockItem : blockArr) {
+            QString type = blockItem.toObject()["type"].toString(BLOCK_TYPE_TEXT);
+            QString content = blockItem.toObject()["content"].toString("");
+            QString contentType = blockItem.toObject()["content_type"].toString(BLOCK_CONTENT_TYPE_TEXT);
+            Block *block = new Block(this, type, content, contentType);
+
+            inBlocks.append(block);
+        }
+
+        blocks.append(inBlocks);
+    }
+
+
+    return Error::success();
+}
+
+Error Node::buildNode() {
+    // todo 如果已经构建并且未修改过，直接返回，不需要重新构建
+    QByteArray ctx = read();
+    if (ctx.isNull() || ctx.isEmpty()) {
+        return {ErrorCode::CONTENT_IS_EMPTY, "read  is empty"};
+    }
+
+    // blocks非空说明已经构建过，不需要重复构建，重复构建使用reBuild
+    if (!m_vBlocks.empty()) {
+        // 非空暂时清空，重复构建
+        for (auto blocks : m_vBlocks) {
+            for (auto block : blocks) {
+                delete block;
+            }
+        }
+        m_vBlocks.clear();
+    }
+
+    // 先判断ctx是否为json
+    QJsonParseError jsonErr;
+    QJsonDocument jsonObj = QJsonDocument::fromJson(ctx, &jsonErr);
+    if (jsonErr.error != QJsonParseError::NoError) {
+        // 非json格式，默认以text文本格式展示
+        QVector<Block *> inBlcok;
+        QString type = BLOCK_TYPE_TEXT;
+        QString content = QString::fromUtf8(ctx);
+        QString contentType = BLOCK_CONTENT_TYPE_TEXT;
+        Block *block = new Block(this, type, content, contentType);
+        inBlcok.append(block);
+
+        m_vBlocks.append(inBlcok);
+        return Error::success();
+    }
+
+    QJsonArray blockArr = jsonObj["blocks"].toArray(QJsonArray());
+    // 检查是否有blocks
+    if (blockArr.isEmpty()) {
+        return {ErrorCode::CONTENT_IS_EMPTY, "blocks is empty"};
+    }
+
+    // todo 这里要错误处理
+    Error err = buildBlocks(blockArr, m_vBlocks);
+    if (!err.isSuccess()) {
+        qDebug() << "build blocks error: " << err.message << Qt::endl;
+    }
+
+    return Error::success();
+}
+
 void Node::write(const QByteArray &ctx) {
     getBuffer()->write(ctx);
 }
@@ -126,12 +226,13 @@ int Node::Save() {
     // 这里不应该依赖NoteEditor
     // 暂时先这样写
     if (NeedSave()) {
-        QByteArray editorByteArr = QByteArray().append(NoteEditor::getInstance()->getText().toUtf8());
-        QString editorStr = QString::fromUtf8(editorByteArr);
-        write(editorByteArr);
+        //QByteArray editorByteArr = QByteArray().append(NoteEditor::getInstance()->getText().toUtf8());
+        //QString editorStr = QString::fromUtf8(editorByteArr);
+        //write(editorByteArr);
+        saveAllBlocks();
         // qDebug() << "save succ, node: " << this->getPath() << "\n";
         m_bIsMod = false;
-        emit SignalModStatusChanged(this);
+        emit signalModStatusChanged(this);
     }
 }
 
@@ -149,6 +250,33 @@ int Node::SaveAll() {
     return ret;
 }
 
+// 将所有的block保存到json中
+Error Node::saveAllBlocks() {
+    QJsonArray blockArr;
+    for (auto blocks : m_vBlocks) {
+        QJsonArray blockItem;
+        for (auto block : blocks) {
+            QJsonObject blockObj;
+            blockObj["type"] = block->getType();
+            blockObj["content"] = block->getContent();
+            blockObj["content_type"] = block->getContentType();
+            blockItem.append(blockObj);
+        }
+
+        blockArr.append(blockItem);
+    }
+
+    QJsonObject jsonObj;
+    jsonObj["blocks"] = blockArr;
+
+    QJsonDocument jsonDoc(jsonObj);
+    QByteArray ctx = jsonDoc.toJson();
+
+    write(ctx);
+
+    return Error::success();
+}
+
 
 bool Node::NeedSave() {
     return m_bIsMod;
@@ -158,7 +286,7 @@ bool Node::NeedSave() {
 void Node::TextChanged() {
     if (m_bIsMod == false) {
         m_bIsMod = true;
-        emit SignalModStatusChanged(this);
+        emit signalModStatusChanged(this);
     }
 }
 
@@ -275,4 +403,9 @@ void Node::setDel(bool isDel) {
     if (m_bIsDel) {
         m_sDeleteAt = QDateTime::currentDateTime().toString(DATETIME_FORMAT);
     }
+}
+
+void Node::addBlock(Block *block) {
+    QVector<Block *> bs = {block};
+    m_vBlocks.append(bs);
 }

@@ -1,6 +1,6 @@
 #include "WidgetFactory.h"
 
-#include "NodeItem.h"
+#include <Widgets/NoteExplorer/NodeItem.h>
 
 #include <QFormLayout>
 #include <QTreeWidget>

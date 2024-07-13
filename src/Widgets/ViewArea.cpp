@@ -1,10 +1,11 @@
 #include "ViewArea.h"
 
-#include "NoteEditor.h"
 #include "MainWindow.h"
 
 #include <MyNote.h>
 #include <Utils/Utils.h>
+#include <Widgets/NotePanel/NotePanel.h>
+#include <Widgets/NotePanel/TextEditor.h>
 
 #include <QVBoxLayout>
 #include <QDebug>
@@ -22,18 +23,24 @@ ViewArea *ViewArea::getInstance() {
 }
 
 ViewArea::ViewArea(QWidget *parent)
-    :QWidget(parent) {
+    : QWidget(parent)
+    , m_pMainLayout(nullptr) {
     initUi();
 }
 
 void ViewArea::initUi() {
+    //setStyleSheet("background-color: blue;");
+
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_pMainLayout = new QVBoxLayout(this);
     m_pMainLayout->setContentsMargins(0, 0, 0, 0);
 
-    auto noteEditor = NoteEditor::getInstance();
-    m_pMainLayout->addWidget(noteEditor);
+    //auto noteEditor = NoteEditor::getInstance();
+    //m_pMainLayout->addWidget(noteEditor);
+
+    auto notePanel = NotePanel::getInstance();
+    m_pMainLayout->addWidget(notePanel);
 }
 
 ViewArea::~ViewArea() {

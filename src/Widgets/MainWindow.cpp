@@ -1,10 +1,9 @@
 #include "MainWindow.h"
 
 #include "FileExplorer.h"
-#include "NoteExplorer.h"
-#include "NoteEditor.h"
 #include "ViewArea.h"
 #include "NoteMenuBar.h"
+
 
 #include <MyNote.h>
 #include <Config/Config.h>
@@ -14,6 +13,9 @@
 #include <Widgets/NoteToolBar.h>
 #include <Widgets/NoteStatusBar.h>
 #include <Model/DBMgr.h>
+#include <Widgets/NotePanel/NotePanel.h>
+#include <Widgets/NoteExplorer/NoteExplorer.h>
+#include <Widgets/NotePanel/TextEditor.h>
 
 #include <QRect>
 #include <QVariant>
@@ -51,6 +53,8 @@ void MainWindow::initUi() {
     initGlobalShortcut();
 
     loadStateAndGeometry();
+
+    setAttribute(Qt::WA_StaticContents, true);
 }
 
 void MainWindow::initToolBar() {

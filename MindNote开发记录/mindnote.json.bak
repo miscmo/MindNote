@@ -33,6 +33,16 @@
             ],
             "title": "记录",
             "update_at": "2024-06-17 22:45:13"
+        },
+        {
+            "create_at": "2024-06-21 21:47:43",
+            "id": "de2ce4ffa6594d5394349e1a8e332e96",
+            "path": "defnote.mind",
+            "style": "",
+            "subnodes": [
+            ],
+            "title": "同品类分析",
+            "update_at": "2024-06-21 21:47:43"
         }
     ],
     "title": "MindNote开发记录",

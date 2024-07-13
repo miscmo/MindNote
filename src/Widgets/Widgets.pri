@@ -12,11 +12,17 @@ SOURCES += \
     $$PWD/Highlighter/peg-markdown-highlight/pmh_parser.cpp \
     $$PWD/Highlighter/peg-markdown-highlight/pmh_styleparser.cpp \
     $$PWD/MainWindow.cpp \
-    $$PWD/NodeItem.cpp \
-    $$PWD/NoteEditor.cpp \
-    $$PWD/NoteExplorer.cpp \
-    $$PWD/NoteExplorerPopMenu.cpp \
+    $$PWD/NoteExplorer/NodeItem.cpp \
+    $$PWD/NoteExplorer/NoteExplorer.cpp \
+    $$PWD/NoteExplorer/NoteExplorerPopMenu.cpp \
     $$PWD/NoteMenuBar.cpp \
+    $$PWD/NotePanel/LeftPanel.cpp \
+    $$PWD/NotePanel/MarkdownEditor.cpp \
+    $$PWD/NotePanel/NoteEditor.cpp \
+    $$PWD/NotePanel/NotePanel.cpp \
+    $$PWD/NotePanel/NoteWidget.cpp \
+    $$PWD/NotePanel/RightPanel.cpp \
+    $$PWD/NotePanel/TextEditor.cpp \
     $$PWD/NoteStatusBar.cpp \
     $$PWD/NoteToolBar.cpp \
     $$PWD/Settings/NoteFontSetting.cpp \
@@ -41,11 +47,17 @@ HEADERS += \
     $$PWD/Highlighter/peg-markdown-highlight/pmh_parser.h \
     $$PWD/Highlighter/peg-markdown-highlight/pmh_styleparser.h \
     $$PWD/MainWindow.h \
-    $$PWD/NodeItem.h \
-    $$PWD/NoteEditor.h \
-    $$PWD/NoteExplorer.h \
-    $$PWD/NoteExplorerPopMenu.h \
+    $$PWD/NoteExplorer/NodeItem.h \
+    $$PWD/NoteExplorer/NoteExplorer.h \
+    $$PWD/NoteExplorer/NoteExplorerPopMenu.h \
     $$PWD/NoteMenuBar.h \
+    $$PWD/NotePanel/LeftPanel.h \
+    $$PWD/NotePanel/MarkdownEditor.h \
+    $$PWD/NotePanel/NoteEditor.h \
+    $$PWD/NotePanel/NotePanel.h \
+    $$PWD/NotePanel/NoteWidget.h \
+    $$PWD/NotePanel/RightPanel.h \
+    $$PWD/NotePanel/TextEditor.h \
     $$PWD/NoteStatusBar.h \
     $$PWD/NoteToolBar.h \
     $$PWD/Settings/NoteFontSetting.h \

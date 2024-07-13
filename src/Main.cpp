@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
 
     // 设置环境变量以禁用自动主题同步
-    qputenv("QT_QUICK_CONTROLS_STYLE", "Fusion");
+    //qputenv("QT_QUICK_CONTROLS_STYLE", "Fusion");
 
     QApplication a(argc, argv);
     a.setWindowIcon(QIcon(":/Res/mindnote_icon.png"));
