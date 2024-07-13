@@ -8,18 +8,23 @@ namespace MyNote {
 
 class Block;
 
-class MarkdownEditor : public QTextEdit, public NoteEditor {
+class MarkdownEditor : public QTextEdit, public EditorInterface {
     Q_OBJECT
 
 public:
     MarkdownEditor(QWidget *parent, Block *block);
     ~MarkdownEditor();
 
-    void initUi();
-    void setupSignal();
+    virtual void initUi () override;
+    virtual void setupSignal () override;
 
-    virtual int autoAdjustHeight() override;
+    virtual int adjustHeight() override;
+    virtual int getHeight() override;
+
     virtual Error save() override;
+
+signals:
+    void signalHeightChanged(int height);
 
 private:
 };

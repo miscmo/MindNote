@@ -4,10 +4,12 @@
 using namespace MyNote;
 
 MarkdownEditor::MarkdownEditor(QWidget *parent, Block *block)
-    : QTextEdit(parent)
-    , NoteEditor(parent, block) {
-    initUi();
-    setupSignal();
+    : QTextEdit(parent) {
+    //initUi();
+    //setupSignal();
+}
+
+MarkdownEditor::~MarkdownEditor() {
 }
 
 void MarkdownEditor::initUi() {
@@ -19,7 +21,7 @@ void MarkdownEditor::setupSignal() {
 
 
 
-int MarkdownEditor::autoAdjustHeight() {
+int MarkdownEditor::adjustHeight() {
     // 自适应大小
     // 获取文本文档
     QTextDocument *doc = document();
@@ -36,9 +38,14 @@ int MarkdownEditor::autoAdjustHeight() {
         QTextEdit::setFixedHeight(newHeight);
         // 更新滚动区域的总高度
         //updateScrollAreaHeight();
-        emit signalHeightChanged();
+        emit signalHeightChanged(newHeight);
     }
 
+    return newHeight;
+}
+
+int MarkdownEditor::getHeight() {
+    return height();
 }
 
 Error MarkdownEditor::save() {

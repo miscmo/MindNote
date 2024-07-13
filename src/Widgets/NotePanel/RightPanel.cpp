@@ -32,27 +32,6 @@ void RightPanel::setupUI() {
     m_pMainLayout->setContentsMargins(0, 0, 0, 0);
     m_pMainLayout->setAlignment(Qt::AlignTop);
 
-    // auto scrollWidget = new QWidget(this);
-    // auto scrollLayout = new QVBoxLayout(scrollWidget);
-    // scrollWidget->setLayout(scrollLayout);
-
-    // scrollLayout->addWidget(NoteEditor::getInstance());
-    // auto textEditor = new QTextEdit(this);
-    // textEditor->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    // textEditor->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    // // 调整 QTextEdit 的大小策略
-    // textEditor->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    // textEditor->setMinimumHeight(200); // 设置一个合理的最小高度，以便内容可以完全展示
-
-    // scrollLayout->addWidget(textEditor);
-
-    //auto m_pScrollArea = new QScrollArea(this);
-    // m_pScrollArea->setWidget(scrollWidget);
-    // m_pScrollArea->setWidgetResizable(true);
-
-    //m_pMainLayout->addWidget(NoteEditor::getInstance());
-
     setLayout(m_pMainLayout);
 }
 
@@ -87,33 +66,10 @@ void RightPanel::buildLayout(Node *node) {
             continue ;
         }
 
-        if (b->getType() == BLOCK_TYPE_TEXT) {
-
-            auto mdBlock = new TextEditor(this, b);
-            m_pEditor = mdBlock;
-
-            connect(mdBlock, &TextEditor::signalHeightChanged, this, &RightPanel::onAdjustHeight);
-
-            m_pMainLayout->addWidget(mdBlock);
-
-            onAdjustHeight();
-
-        } else if (b->getType() == BLOCK_TYPE_TEXT) {
-
-                auto textBlock = new QTextEdit(this);
-                textBlock->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-                textBlock->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-                // 调整 QTextEdit 的大小策略
-                textBlock->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                textBlock->setMinimumHeight(200); // 设置一个合理的最小高度，以便内容可以完全展示
-
-                textBlock->setText(b->getContent());
-                m_pMainLayout->addWidget(textBlock);
-
-        } else {
-
-        }
+        NoteEditor *editor = new NoteEditor(this, b);
+        connect(editor, &NoteEditor::signalHeightChanged, this, &RightPanel::onAdjustHeight);
+        m_pMainLayout->addWidget(editor);
+        onAdjustHeight();
     }
 
 }
@@ -123,7 +79,21 @@ void RightPanel::Save() {
 }
 
 void RightPanel::onAdjustHeight() {
-    int newHeight = m_pEditor->GetHeight();
-    setFixedHeight(newHeight);
-    updateGeometry();
+
+    int panelNewHeight = 0;
+    int panelCurrHeight = height();
+
+    for (int i = 0; i < m_pMainLayout->count(); ++i) {
+        QLayoutItem *item = m_pMainLayout->itemAt(i);
+
+        if (item->widget()) {
+            QWidget *widget = item->widget();
+            NoteEditor *editor = qobject_cast<NoteEditor*>(widget);
+            panelNewHeight += editor->getHeight();
+        }
+    }
+
+    if (panelNewHeight != panelCurrHeight) {
+        setFixedHeight(panelNewHeight);
+    }
 }

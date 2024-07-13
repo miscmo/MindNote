@@ -3,6 +3,7 @@
 
 #include <QPlainTextEdit>
 #include <Widgets/Highlighter/NoteHighlighter.h>
+#include <Widgets/NotePanel/NoteEditor.h>
 
 #include <Notebook/Block.h>
 
@@ -15,15 +16,21 @@ class Buffer;
 class LineNumberArea;
 class Node;
 
-class TextEditor : public QPlainTextEdit {
+class TextEditor : public QPlainTextEdit, public EditorInterface {
     Q_OBJECT
 
 public:
     TextEditor(QWidget *parent, Block *block);
     ~TextEditor();
 
-    void initUi();
-    void setupSignal();
+    virtual void initUi() override;
+    virtual void setupSignal () override;
+
+    // 调整高度
+    virtual int adjustHeight() override;
+    virtual int getHeight() override;
+
+    virtual Error save() override;
 
     void setCurFont(const QFont &font);
     const QFont &getCurFont();
@@ -36,12 +43,8 @@ public:
     void resetHighlighting();
     void loadStyleFromStylesheet(const QString &fileName);
 
-    // 调整高度
-    void adjustHeight();
-    int GetHeight();
-
 signals:
-    void signalHeightChanged();
+    void signalHeightChanged(int height);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

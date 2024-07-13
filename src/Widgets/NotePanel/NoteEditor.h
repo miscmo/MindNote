@@ -8,7 +8,17 @@ namespace MyNote {
 
 class Block;
 
-class NoteEditor : public virtual QWidget {
+class EditorInterface {
+public:
+    virtual void initUi() = 0;
+    virtual void setupSignal() = 0;
+    virtual int adjustHeight() = 0;
+    virtual int getHeight() = 0;
+    virtual Error save() = 0;
+};
+
+
+class NoteEditor : public QWidget {
     Q_OBJECT
 
 public:
@@ -19,19 +29,16 @@ public:
     void setupSignal();
 
     virtual int getHeight();
-    virtual int autoAdjustHeight();
 
     virtual Error save();
 
 signals:
     void signalHeightChanged(int height);
 
-public slots:
-
-
 
 private:
     Block *m_pBlock;
+    EditorInterface *m_pEditor;
 };
 
 }

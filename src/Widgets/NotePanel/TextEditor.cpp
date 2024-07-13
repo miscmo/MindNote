@@ -164,7 +164,7 @@ void TextEditor::onTextChanged() {
     adjustHeight();
 }
 
-void TextEditor::adjustHeight() {
+int TextEditor::adjustHeight() {
     // 自适应大小
     // 获取文本文档
     QTextDocument *doc = document();
@@ -188,12 +188,18 @@ void TextEditor::adjustHeight() {
         setFixedHeight(newHeight);
         // 更新滚动区域的总高度
         //updateScrollAreaHeight();
-        emit signalHeightChanged();
+        emit signalHeightChanged(newHeight);
     }
+
+    return newHeight;
 }
 
-int TextEditor::GetHeight() {
+int TextEditor::getHeight() {
     return height();
+}
+
+Error TextEditor::save() {
+    m_pBlock->setContent(toPlainText(), m_pBlock->getContentType());
 }
 
 void TextEditor::onTextModify(bool isMod) {
