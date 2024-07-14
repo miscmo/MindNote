@@ -222,10 +222,10 @@ QString Node::getNodeFullPath() {
 }
 
 
-int Node::Save() {
+int Node::Save(bool force) {
     // 这里不应该依赖NoteEditor
     // 暂时先这样写
-    if (NeedSave()) {
+    if (NeedSave() || force) {
         //QByteArray editorByteArr = QByteArray().append(NoteEditor::getInstance()->getText().toUtf8());
         //QString editorStr = QString::fromUtf8(editorByteArr);
         //write(editorByteArr);

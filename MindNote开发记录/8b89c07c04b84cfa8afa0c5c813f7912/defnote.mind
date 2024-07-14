@@ -9,9 +9,37 @@
         ],
         [
             {
-                "content": "这是个测试的内容\n这是个测试的内容\n\n\n这是个测试的内容\n\n\n\n\n\n\n\n\n\n显示个测试的内容\n\n",
+                "content": "这是个测试的内容\n这是个测试的内容\n\n\n这是个测试的内容\n\n\n\n\n\n\n\n\n\n\n\n显示个测试的内容\n\n",
                 "content_type": "text",
                 "type": "text"
+            }
+        ],
+        [
+            {
+                "content": "D:/照片/个人发展分析.png",
+                "content_type": "localfile",
+                "type": "image"
+            }
+        ],
+        [
+            {
+                "content": "D:/照片/个人发展分析.png",
+                "content_type": "localfile",
+                "type": "image"
+            }
+        ],
+        [
+            {
+                "content": "D:/照片/个人发展分析.png",
+                "content_type": "localfile",
+                "type": "image"
+            }
+        ],
+        [
+            {
+                "content": "D:/照片/EA账号.png",
+                "content_type": "localfile",
+                "type": "image"
             }
         ]
     ]

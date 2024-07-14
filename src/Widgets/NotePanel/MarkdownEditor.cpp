@@ -18,6 +18,8 @@ void MarkdownEditor::init() {
 }
 
 void MarkdownEditor::initUi() {
+    setFrameStyle(QFrame::NoFrame);
+
 }
 
 void MarkdownEditor::setupSignal() {

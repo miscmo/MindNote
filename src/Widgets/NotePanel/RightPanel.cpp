@@ -30,6 +30,7 @@ RightPanel::~RightPanel() {
 void RightPanel::setupUI() {
     m_pMainLayout = new QVBoxLayout(this);
     m_pMainLayout->setContentsMargins(0, 0, 0, 0);
+    m_pMainLayout->setSpacing(0);
     m_pMainLayout->setAlignment(Qt::AlignTop);
 
     setLayout(m_pMainLayout);

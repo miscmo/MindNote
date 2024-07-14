@@ -17,6 +17,7 @@ public:
 
 
     void TodoDialog();
+    QString ImgOpenDialog(QWidget *parent);
 };
 
 }

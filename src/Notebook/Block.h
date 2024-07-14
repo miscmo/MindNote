@@ -10,6 +10,9 @@ namespace MyNote {
 #define BLOCK_TYPE_MARKDOWN  "markdown"
 #define BLOCK_TYPE_HTML "html"
 #define BLOCK_TYPE_FLOWCHART "flowchart"
+#define BLOCK_TYPE_IMG "image"
+#define BLOCK_TYPE_AUDIO "audio"
+#define BLOCK_TYPE_VIDEO "video"
 
 // Block 内容类型
 #define BLOCK_CONTENT_TYPE_TEXT "text"

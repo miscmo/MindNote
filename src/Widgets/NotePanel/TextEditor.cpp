@@ -49,6 +49,8 @@ void TextEditor::initUi() {
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    setFrameStyle(QFrame::NoFrame);
+
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_pHighlighter = new NoteHighlighter(this->document());

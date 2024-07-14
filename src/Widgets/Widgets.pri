@@ -16,6 +16,7 @@ SOURCES += \
     $$PWD/NoteExplorer/NoteExplorer.cpp \
     $$PWD/NoteExplorer/NoteExplorerPopMenu.cpp \
     $$PWD/NoteMenuBar.cpp \
+    $$PWD/NotePanel/ImgEditor.cpp \
     $$PWD/NotePanel/LeftPanel.cpp \
     $$PWD/NotePanel/MarkdownEditor.cpp \
     $$PWD/NotePanel/NoteEditor.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     $$PWD/NoteExplorer/NoteExplorer.h \
     $$PWD/NoteExplorer/NoteExplorerPopMenu.h \
     $$PWD/NoteMenuBar.h \
+    $$PWD/NotePanel/ImgEditor.h \
     $$PWD/NotePanel/LeftPanel.h \
     $$PWD/NotePanel/MarkdownEditor.h \
     $$PWD/NotePanel/NoteEditor.h \

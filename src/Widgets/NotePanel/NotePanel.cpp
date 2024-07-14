@@ -8,6 +8,7 @@
 #include <Widgets/NotePanel/LeftPanel.h>
 #include <Widgets/NotePanel/RightPanel.h>
 #include <Utils/Utils.h>
+#include <Widgets/WidgetMgr.h>
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -77,6 +78,11 @@ void NotePanel::setupUI() {
     menuAddBlock->addAction(tr(BLOCK_TYPE_TEXT));
     menuAddBlock->addAction(tr(BLOCK_TYPE_MARKDOWN));
     menuAddBlock->addAction(tr(BLOCK_TYPE_FLOWCHART));
+
+    menuAddBlock->addAction(tr(BLOCK_TYPE_IMG));
+    menuAddBlock->addAction(tr(BLOCK_TYPE_AUDIO));
+    menuAddBlock->addAction(tr(BLOCK_TYPE_VIDEO));
+
     btnAddBlock->setMenu(menuAddBlock);
     btnAddBlock->setPopupMode(QToolButton::MenuButtonPopup);
     btnAddBlock->setLayoutDirection(Qt::LeftToRight);
@@ -183,8 +189,14 @@ void NotePanel::addNoteBlock() {
 }
 
 void NotePanel::onAddBlock(QAction *action) {
-    QMessageBox::information(nullptr, tr("Add Block"), action->text());
     Block *newBlock = NoteMgr::GetInstance()->getNewBlock(m_pNode, action->text());
+
+    if (newBlock->getType() == BLOCK_TYPE_IMG && newBlock->getContent().isEmpty()) {
+        QString imgPath = WidgetMgr::GetInstance()->ImgOpenDialog(this);
+        newBlock->setContent(imgPath, BLOCK_CONTENT_TYPE_LOCALFILE);
+    }
+
+    m_pNode->TextChanged();
 
     m_pRightPanel->addNewBlock(newBlock);
 }

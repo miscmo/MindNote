@@ -1,6 +1,7 @@
 #include "WidgetMgr.h"
 
 #include <QMessageBox>
+#include <QFileDialog>
 
 
 namespace MyNote {
@@ -21,6 +22,13 @@ void WidgetMgr::TodoDialog() {
 
     // 显示消息框
     messageBox.exec();
+}
+
+QString WidgetMgr::ImgOpenDialog(QWidget *parent) {
+    QString fileName = QFileDialog::getOpenFileName(parent, "Open Image File", "",
+                                                    "Images (*.png *.xpm *.jpg *.jpeg *.bmp *.gif)");
+
+    return fileName;
 }
 
 }

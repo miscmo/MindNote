@@ -3,6 +3,7 @@
 #include <Notebook/Block.h>
 #include <Widgets/NotePanel/TextEditor.h>
 #include <Widgets/NotePanel/MarkdownEditor.h>>
+#include <Widgets/NotePanel/ImgEditor.h>
 
 #include <QVBoxLayout>
 #include <QMessageBox>
@@ -40,6 +41,12 @@ void NoteEditor::initUi() {
         MarkdownEditor *editor = new MarkdownEditor(this, m_pBlock);
         editor->init();
         connect(editor, &MarkdownEditor::signalHeightChanged, this, &NoteEditor::signalHeightChanged);
+        mainLayout->addWidget(editor);
+        m_pEditor = editor;
+    } else if (m_pBlock->getType() == BLOCK_TYPE_IMG) {
+        ImgEditor *editor = new ImgEditor(this, m_pBlock);
+        editor->init();
+        connect(editor, &ImgEditor::signalHeightChanged, this, &NoteEditor::signalHeightChanged);
         mainLayout->addWidget(editor);
         m_pEditor = editor;
     } else {

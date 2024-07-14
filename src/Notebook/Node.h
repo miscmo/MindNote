@@ -61,7 +61,7 @@ public:
     void write(const QByteArray &ctx);
     Buffer *getBuffer();
     // 只保存当前结点内容
-    int Save();
+    int Save(bool force = false);
     // 保存当前结点和所有子结点
     int SaveAll();
 
