@@ -20,6 +20,9 @@
 #include <QSplitter>
 #include <QShortcut>
 #include <QToolButton>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
 
 using namespace MyNote;
 
@@ -193,7 +196,27 @@ void NotePanel::onAddBlock(QAction *action) {
 
     if (newBlock->getType() == BLOCK_TYPE_IMG && newBlock->getContent().isEmpty()) {
         QString imgPath = WidgetMgr::GetInstance()->ImgOpenDialog(this);
-        newBlock->setContent(imgPath, BLOCK_CONTENT_TYPE_LOCALFILE);
+        QFile imgFile(imgPath);
+        if (!imgFile.exists()) {
+            return ;
+        }
+
+        // 复制文件，
+        QFileInfo imginfo(imgPath);
+        QString imgExt = imginfo.suffix();
+        QDir newImgDir(m_pNode->getNodeFullPath());
+        QString newImgName =  Utils::GetUUID() + "." + imgExt;
+        QString newImgPath = newImgDir.filePath(newImgName);
+
+        qDebug() << "copy file, from " << imgPath << ", to " << newImgPath << Qt::endl;
+
+        if (!imgFile.copy(newImgPath)) {
+            QMessageBox::warning(this, "error", "add block failed, copy img file failed");
+            return;
+        }
+
+        newBlock->setContent(newImgPath, BLOCK_CONTENT_TYPE_LOCALFILE);
+
     }
 
     m_pNode->TextChanged();
