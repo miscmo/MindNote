@@ -204,7 +204,8 @@ void NotePanel::onAddBlock(QAction *action) {
         // 复制文件，
         QFileInfo imginfo(imgPath);
         QString imgExt = imginfo.suffix();
-        QDir newImgDir(m_pNode->getNodeFullPath());
+
+        QDir newImgDir(m_pNode->getNodeDir());
         QString newImgName =  Utils::GetUUID() + "." + imgExt;
         QString newImgPath = newImgDir.filePath(newImgName);
 
@@ -215,7 +216,7 @@ void NotePanel::onAddBlock(QAction *action) {
             return;
         }
 
-        newBlock->setContent(newImgPath, BLOCK_CONTENT_TYPE_LOCALFILE);
+        newBlock->setContent(newImgName, BLOCK_CONTENT_TYPE_LOCALFILE);
 
     }
 

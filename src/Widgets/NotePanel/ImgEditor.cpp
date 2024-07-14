@@ -49,7 +49,7 @@ void ImgEditor::initUi() {
     m_pPixmapItem = new QGraphicsPixmapItem();
     m_pScene->addItem(m_pPixmapItem);
 
-    QPixmap pixmap(m_pBlock->getContent());
+    QPixmap pixmap(m_pBlock->getLocalFilePath());
     m_pPixmapItem->setPixmap(pixmap);
     m_pPixmapItem->setTransformOriginPoint(pixmap.rect().center());
     m_pScene->setSceneRect(pixmap.rect());

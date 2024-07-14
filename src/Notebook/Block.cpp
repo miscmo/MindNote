@@ -1,5 +1,7 @@
 #include "Block.h"
 
+#include <QDir>
+
 #include <Notebook/Node.h>
 
 using namespace MyNote;
@@ -29,4 +31,13 @@ void Block::setContent(QString content, QString contentType) {
 
 void Block::ContentChanged() {
     m_pNode->TextChanged();
+}
+
+QString Block::getLocalFilePath() {
+    if (m_sContentType == BLOCK_CONTENT_TYPE_LOCALFILE) {
+        QDir nodePath(m_pNode->getNodeDir());
+        return nodePath.filePath(m_sContent);
+    }
+
+    return "";
 }

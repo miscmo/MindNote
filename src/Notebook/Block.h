@@ -37,6 +37,8 @@ public:
     QString getContent() { return m_sContent; }
     QString getContentType() { return m_sContentType; }
 
+    QString getLocalFilePath();
+
     void ContentChanged();
 
 signals:

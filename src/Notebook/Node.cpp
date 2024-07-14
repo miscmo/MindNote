@@ -221,6 +221,11 @@ QString Node::getNodeFullPath() {
     return filePath;
 }
 
+QString Node::getNodeDir() {
+    QString nodePath = QDir(m_pNote->GetPath()).filePath(m_sID);
+    return nodePath;
+}
+
 
 int Node::Save(bool force) {
     // 这里不应该依赖NoteEditor

@@ -39,6 +39,7 @@ public:
     int getLastHScrollPos() {return m_bLastHScrollPos;}
 
     QString getNodeFullPath();
+    QString getNodeDir();
 
     QVector<QVector<Block*> > getBlocks() {return m_vBlocks;}
     void addBlock(Block *block);
