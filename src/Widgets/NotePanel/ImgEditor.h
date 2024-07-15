@@ -6,11 +6,14 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsSceneEvent>
 
 #include <Widgets/NotePanel/NoteEditor.h>
 #include <Notebook/Block.h>
 
 namespace MyNote {
+
+class ResizableRectItem;
 
 class ImgEditor : public QGraphicsView, public EditorInterface {
     Q_OBJECT
@@ -39,8 +42,13 @@ private slots:
 signals:
     void signalHeightChanged(int height);
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+
 private:
     void updateImage();
+    void fitImage();
 
 private:
     QGraphicsScene *m_pScene;
@@ -50,6 +58,24 @@ private:
     double m_bScaleFactor;
     bool m_bIsDragging;
     Block *m_pBlock;
+    ResizableRectItem *m_pResizableRectItem;
+};
+
+class ResizableRectItem : public QGraphicsRectItem {
+public:
+    ResizableRectItem(QGraphicsItem *parent = nullptr);
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
+private:
+    bool isResizingArea(const QPointF &pos) const;
+
+    bool resizing;
+    QRectF originalRect;
+    QPointF originalPos;
 };
 
 }
