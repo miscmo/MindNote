@@ -47,22 +47,22 @@ void ImgEditor::initUi() {
     setScene(m_pScene);
     setDragMode(QGraphicsView::ScrollHandDrag);
 
-    m_pPixmapItem = new QGraphicsPixmapItem();
-    m_pScene->addItem(m_pPixmapItem);
 
     QPixmap pixmap(m_pBlock->getLocalFilePath());
-    m_pPixmapItem->setPixmap(pixmap);
+    m_pPixmapItem = new ResizeablePixmapItem(pixmap);
+
+    m_pScene->addItem(m_pPixmapItem);
     m_pPixmapItem->setTransformOriginPoint(pixmap.rect().center());
     m_pScene->setSceneRect(pixmap.rect());
 
     setFixedHeight(pixmap.height()+20);
 
-    m_pResizableRectItem = new ResizableRectItem();
-    m_pResizableRectItem->setRect(m_pPixmapItem->boundingRect());
-    m_pResizableRectItem->setPen(QPen(Qt::white, 2, Qt::DashLine));
-    m_pResizableRectItem->setBrush(Qt::NoBrush);
-    m_pResizableRectItem->setVisible(false);
-    m_pScene->addItem(m_pResizableRectItem);
+    // m_pResizableRectItem = new ResizableRectItem();
+    // m_pResizableRectItem->setRect(m_pPixmapItem->boundingRect());
+    // m_pResizableRectItem->setPen(QPen(Qt::white, 2, Qt::DashLine));
+    // m_pResizableRectItem->setBrush(Qt::NoBrush);
+    // m_pResizableRectItem->setVisible(false);
+    // m_pScene->addItem(m_pResizableRectItem);
 
     //fitInView(m_pPixmapItem, Qt::KeepAspectRatio);
 
@@ -135,12 +135,12 @@ void ImgEditor::resizeEvent(QResizeEvent *event) {
 
 void ImgEditor::mousePressEvent(QMouseEvent *event) {
     QGraphicsView::mousePressEvent(event);
-    if (itemAt(event->pos())) {
-        m_pResizableRectItem->setVisible(true);
-        //m_pToolMenu->exec(mapToGlobal(event->pos()));
-    } else {
-        m_pResizableRectItem->setVisible(false);
-    }
+    // if (itemAt(event->pos())) {
+    //     m_pResizableRectItem->setVisible(true);
+    //     //m_pToolMenu->exec(mapToGlobal(event->pos()));
+    // } else {
+    //     m_pResizableRectItem->setVisible(false);
+    // }
 }
 
 void ImgEditor::updateImage() {
@@ -230,4 +230,143 @@ void ResizableRectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 bool ResizableRectItem::isResizingArea(const QPointF &pos) const {
     QRectF resizeArea = rect().adjusted(rect().width() - 10, rect().height() - 10, 0, 0);
     return resizeArea.contains(pos);
+}
+
+ResizeablePixmapItem::ResizeablePixmapItem(QGraphicsItem *parent)
+    : QGraphicsPixmapItem(parent)
+    , m_bResizing(false)
+    , m_pLeftUpResizeRect(nullptr)
+    , m_pRightDownResizeRect(nullptr)
+    , m_pLeftDownResizeRect(nullptr)
+    , m_pRightUpResizeRect(nullptr) {
+
+    setFlags(ItemIsSelectable);
+    setAcceptHoverEvents(true);
+    setZValue(1);
+}
+
+ResizeablePixmapItem::ResizeablePixmapItem(const QPixmap &pixmap, QGraphicsItem *parent)
+    : QGraphicsPixmapItem(parent)
+    , m_bResizing(false)
+    , m_bOriginalPixmap(pixmap)
+    , m_pLeftUpResizeRect(nullptr)
+    , m_pRightDownResizeRect(nullptr)
+    , m_pLeftDownResizeRect(nullptr)
+    , m_pRightUpResizeRect(nullptr) {
+
+    setFlags(ItemIsSelectable);
+    setAcceptHoverEvents(true);
+    setZValue(1);
+    setPixmap(m_bOriginalPixmap);
+
+}
+
+ResizeablePixmapItem::~ResizeablePixmapItem() {
+
+}
+
+void ResizeablePixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    if (isResizingArea(event->pos())) {
+        m_bResizing = true;
+        m_bResizeStartPos = event->pos();
+    } else {
+        QGraphicsPixmapItem::mousePressEvent(event);
+    }
+}
+
+void ResizeablePixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    if (m_bResizing) {
+        QPointF delta = event->pos() - m_bResizeStartPos;
+        int newWidth = m_bOriginalPixmap.width() + delta.x();
+        int newHeight = m_bOriginalPixmap.height() + delta.y();
+
+        if (newWidth > 1 && newHeight > 1) {
+            QPixmap newPixmap = m_bOriginalPixmap.scaled(newWidth, newHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            setPixmap(newPixmap);
+            setOffset(-newPixmap.width()/2, -newPixmap.height()/2);  // 保持图片居中
+            updateSceneSize();
+            update();
+        }
+    } else if (isResizingArea(event->pos())) {
+        setCursor(Qt::SizeFDiagCursor);
+    }
+    else {
+        QGraphicsPixmapItem::mouseMoveEvent(event);
+    }
+}
+
+void ResizeablePixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if (m_bResizing) {
+        m_bResizing = false;
+        setCursor(Qt::ArrowCursor);
+    } else {
+        QGraphicsPixmapItem::mouseReleaseEvent(event);
+    }
+}
+
+void ResizeablePixmapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    if (isSelected()) {
+        QPen pen(Qt::DashLine);
+        pen.setColor(Qt::red);
+        painter->setPen(pen);
+        //painter->drawRect(boundingRect());
+
+        // Draw resize handle
+        m_pLeftUpResizeRect = new QRectF(boundingRect().left(),
+                          boundingRect().top(),
+                          m_nResizeAreaWidth, m_nResizeAreaWidth);
+
+        m_pLeftDownResizeRect = new QRectF(boundingRect().left(),
+                          boundingRect().bottom() - m_nResizeAreaWidth,
+                          m_nResizeAreaWidth, m_nResizeAreaWidth);
+
+        m_pRightUpResizeRect = new QRectF(boundingRect().right() - m_nResizeAreaWidth,
+                          boundingRect().top(),
+                          m_nResizeAreaWidth, m_nResizeAreaWidth);
+
+        m_pRightDownResizeRect = new QRectF(boundingRect().right() - m_nResizeAreaWidth,
+                          boundingRect().bottom() - m_nResizeAreaWidth,
+                          m_nResizeAreaWidth, m_nResizeAreaWidth);
+
+        painter->fillRect(*m_pLeftDownResizeRect, Qt::blue);
+        painter->fillRect(*m_pRightUpResizeRect, Qt::blue);
+        painter->fillRect(*m_pLeftUpResizeRect, Qt::blue);
+        painter->fillRect(*m_pRightDownResizeRect, Qt::blue);
+    }
+}
+
+bool ResizeablePixmapItem::isResizingArea(const QPointF &pos) const {
+    if (m_pLeftDownResizeRect != nullptr) {
+        if (m_pLeftDownResizeRect->contains(pos)) {
+            return true;
+        }
+    }
+
+    if (m_pRightUpResizeRect != nullptr) {
+        if (m_pRightUpResizeRect->contains(pos)) {
+            return true;
+        }
+    }
+
+    if (m_pLeftUpResizeRect != nullptr) {
+        if (m_pLeftUpResizeRect->contains(pos)) {
+            return true;
+        }
+    }
+
+    if (m_pRightDownResizeRect != nullptr) {
+        if (m_pRightDownResizeRect->contains(pos)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void ResizeablePixmapItem::updateSceneSize() {
+    if (scene()) {
+        QRectF newRect = boundingRect();
+        scene()->setSceneRect(newRect.adjusted(-20, -20, 20, 20));
+    }
 }

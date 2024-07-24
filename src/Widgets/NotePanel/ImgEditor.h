@@ -78,6 +78,35 @@ private:
     QPointF originalPos;
 };
 
+class ResizeablePixmapItem : public QGraphicsPixmapItem {
+public:
+    ResizeablePixmapItem(QGraphicsItem *parent = nullptr);
+    ResizeablePixmapItem(const QPixmap &pixmap, QGraphicsItem *parent = nullptr);
+    ~ResizeablePixmapItem();
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+private:
+    bool isResizingArea(const QPointF &pos) const;
+    void updateSceneSize();
+
+    bool m_bResizing;
+    QPointF m_bResizeStartPos;
+    QPixmap m_bOriginalPixmap;
+    QRectF *m_pLeftUpResizeRect;
+    QRectF *m_pRightDownResizeRect;
+    QRectF *m_pLeftDownResizeRect;
+    QRectF *m_pRightUpResizeRect;
+
+    const int m_nResizeAreaWidth = 10;
+
+};
+
 }
 
 #endif // IMGEDITOR_H
