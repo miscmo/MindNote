@@ -28,7 +28,15 @@ void NoteEditor::initUi() {
         return ;
     }
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+
+    QWidget *controlWidget = new QWidget(this);
+    controlWidget->setFixedWidth(100);
+
+    QPushButton *controlBtn = new QPushButton(controlWidget);
+    controlBtn->setText(tr("setting"));
+
+    mainLayout->addWidget(controlWidget);
 
     // todo 这里后面改成工厂模式
     if (m_pBlock->getType() == BLOCK_TYPE_TEXT) {

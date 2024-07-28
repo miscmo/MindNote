@@ -14,6 +14,7 @@
 namespace MyNote {
 
 class ResizableRectItem;
+class ResizeablePixmapItem;
 
 class ImgEditor : public QGraphicsView, public EditorInterface {
     Q_OBJECT
@@ -32,6 +33,8 @@ public:
 
     virtual Error save() override;
 
+    void adjustPixmapSize(QSize size);
+
 private slots:
     void onZoomIn();
     void onZoomOut();
@@ -45,20 +48,34 @@ signals:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
     void updateImage();
     void fitImage();
+    void createResizeHandle();
+    void updateResizeHandle();
+    void updateSceneSize();
 
 private:
-    QGraphicsScene *m_pScene;
     QGraphicsPixmapItem *m_pPixmapItem;
-    QMenu *m_pToolMenu;
     QPixmap m_bOriginalPixmap;
+
+    QGraphicsRectItem *m_pRoundRectItem;
+    QGraphicsRectItem *m_pRDResizeRect;
+    bool m_bIsResizing;
+
+    QGraphicsPixmapItem *m_pSelectedItem;
+    QGraphicsRectItem *m_pResizableRectItem;
+    QMenu *m_pToolMenu;
     double m_bScaleFactor;
     bool m_bIsDragging;
     Block *m_pBlock;
-    ResizableRectItem *m_pResizableRectItem;
+    QPointF m_bResizeStartPos;
+    QPointF m_bStartPos;
 };
 
 class ResizableRectItem : public QGraphicsRectItem {
